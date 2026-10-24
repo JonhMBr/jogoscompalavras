@@ -10,7 +10,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Palavras">
-<title>Jogos de Palavras</title>
+<title>Jogo com Palavras</title>
 <style>
 :root{
   color-scheme:light;
@@ -43,9 +43,9 @@ select{flex:1;min-width:0}
 .stats b{color:var(--text);font-variant-numeric:tabular-nums}
 section{display:none;flex-direction:column;gap:10px}
 section.on{display:flex}
-.boardWrap{display:flex;justify-content:center;overflow:auto;padding:2px}
+.boardWrap{display:block;overflow:auto;padding:2px}
 /* caça-palavras */
-#board{display:grid;background:linear-gradient(var(--card1),var(--card2));border-radius:16px;padding:6px;touch-action:none;position:relative}
+#board{margin:0 auto;width:max-content;display:grid;background:linear-gradient(var(--card1),var(--card2));border-radius:16px;padding:6px;touch-action:none;position:relative}
 .cell{display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--text);border-radius:8px;transition:background .12s}
 .cell.sel{background:#8fb3f1;color:#0f2760;box-shadow:inset 0 0 0 2px var(--blue)}
 .cell.found{color:#14161c}
@@ -59,6 +59,13 @@ section.on{display:flex}
 .cw{position:relative;display:flex;align-items:center;justify-content:center;border-radius:6px;background:#fff;border:1px solid #c9ccd6;color:var(--text);font-weight:800;cursor:pointer}
 .cw.blk{background:transparent;border-color:transparent;cursor:default}
 .cw.w{background:var(--blue-bg);border-color:var(--blue-line)}
+.cw.ok{background:#e1f4e7;border-color:#9fd3b0}
+.cw.ok .l{color:#1f7a43}
+.cw.bad{background:#fde4e4;border-color:#e59a9a}
+.cw.flashok{animation:popok .4s}
+.cw.flashbad{animation:shake .4s}
+@keyframes popok{50%{transform:scale(1.18)}}
+@keyframes shake{20%{transform:translateX(-3px)}40%{transform:translateX(3px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
 .cw.s{background:#f7d77c;border-color:var(--amber);box-shadow:inset 0 0 0 2px var(--amber)}
 .cw.g .l{color:#6a6e7a}
 .cw.g:not(.w):not(.s){background:#e6e8ee}
@@ -92,12 +99,66 @@ body.mode-cw #kb{display:flex}
 .modal p{margin:6px 0;color:var(--muted);font-size:15px}
 .modal p b{color:var(--text)}
 .modal .btn{margin-top:14px;width:100%;flex:none}
+#home{display:none;position:fixed;inset:0;grid-template-rows:1fr auto 1fr;justify-items:center;padding:0 16px}
+body.home #home{display:grid}
+body.home h1,body.home .wrap{display:none}
+body.home footer{position:fixed;left:0;right:0;bottom:0;padding:10px 0}
+.homeHead{grid-row:1;align-self:end;display:flex;flex-direction:column;align-items:center;gap:14px;margin-bottom:30px}
+.logo{width:clamp(84px,24vw,112px);height:auto;filter:drop-shadow(0 4px 8px rgba(29,63,154,.28))}
+.homeTitle{text-align:center;font-size:clamp(38px,12vw,56px);font-weight:800;letter-spacing:.2px;line-height:1.05}
+.homeBtns{grid-row:2;display:flex;flex-direction:column;gap:12px;width:100%;max-width:240px}
+.homeBtn{height:50px;border-radius:14px;border:1px solid var(--line);background:linear-gradient(var(--card1),var(--card2));box-shadow:inset 5px 0 0 var(--blue),var(--shadow);font-size:16px;font-weight:800;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;touch-action:manipulation;font-family:inherit}
+.homeBtn span{font-size:19px}
+.homeBtn:active{transform:scale(.98)}
 footer{margin-top:auto;padding:16px 0 12px;font-size:12px;color:var(--muted);text-align:center}
+#cwClue{position:sticky;top:0;z-index:4}
+@media(min-width:700px){
+  .wrap{max-width:760px}
+  .krow{max-width:760px}
+  .key{max-width:56px;height:52px}
+  .logo{width:128px}
+  .homeBtns{max-width:300px}
+  .homeBtn{height:58px;font-size:18px}
+  body.mode-cw{padding-bottom:196px}
+}
+@media(max-width:699px) and (max-height:700px){
+  .key{height:40px}
+  #kb{gap:5px;padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+  body.mode-cw{padding-bottom:152px}
+}
+@media(max-height:520px) and (orientation:landscape){
+  #home{grid-template-columns:1fr 1fr;grid-template-rows:1fr;align-items:center;column-gap:20px}
+  .homeHead{grid-row:1;grid-column:1;align-self:center;justify-self:end;margin-bottom:0;flex-direction:row;gap:14px}
+  .logo{width:76px}
+  .homeTitle{font-size:32px;text-align:left}
+  .homeBtns{grid-row:1;grid-column:2;justify-self:start;align-self:center}
+  body.home footer{padding:4px 0}
+  h1{display:none}
+  body{padding-top:8px}
+  .wrap{gap:6px}
+  .tab{padding:7px 4px;font-size:13px}
+  .gtabs .tab{padding:8px 4px;font-size:14px}
+  select,.btn,#cwClue button{height:34px}
+  #cwClue button{width:34px}
+  #cwClue{min-height:44px;padding:5px 8px}
+  .stats{font-size:13px}
+  .key{height:34px}
+  #kb{gap:4px;padding:4px 6px calc(4px + env(safe-area-inset-bottom))}
+  body.mode-cw{padding-bottom:132px}
+}
 </style>
 </head>
-<body>
-<h1>Jogos de Palavras</h1>
+<body class="home">
+<h1>Jogo com Palavras</h1>
+<div id="home">
+  <div class="homeHead"><svg class="logo" viewBox="0 0 120 120" role="img" aria-label="Logotipo Jogo com Palavras"><rect width="120" height="120" rx="27" fill="#1d3f9a"/><rect x="10" y="23" width="22" height="22" rx="5" fill="#ffffff"/><text x="21" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">P</text><rect x="36" y="23" width="22" height="22" rx="5" fill="#ffffff"/><text x="47" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">A</text><rect x="62" y="23" width="22" height="22" rx="5" fill="#ffffff"/><text x="73" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">L</text><rect x="88" y="23" width="22" height="22" rx="5" fill="#ffffff"/><text x="99" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">A</text><rect x="10" y="49" width="22" height="22" rx="5" fill="#fbeab9"/><text x="21" y="65" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">J</text><rect x="36" y="49" width="22" height="22" rx="5" fill="#fbeab9"/><text x="47" y="65" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">O</text><rect x="62" y="49" width="22" height="22" rx="5" fill="#fbeab9"/><text x="73" y="65" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">G</text><rect x="88" y="49" width="22" height="22" rx="5" fill="#fbeab9"/><text x="99" y="65" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">O</text><rect x="10" y="75" width="22" height="22" rx="5" fill="#ffffff"/><text x="21" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">V</text><rect x="36" y="75" width="22" height="22" rx="5" fill="#ffffff"/><text x="47" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">R</text><rect x="62" y="75" width="22" height="22" rx="5" fill="#ffffff"/><text x="73" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">A</text><rect x="88" y="75" width="22" height="22" rx="5" fill="#ffffff"/><text x="99" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">S</text><rect x="8" y="49" width="104" height="26" rx="8" fill="none" stroke="#d9962b" stroke-width="3"/></svg><div class="homeTitle">Jogo com<br>Palavras</div></div>
+  <div class="homeBtns">
+    <button class="homeBtn" data-g="ws"><span>🔎</span>Caça-Palavras</button>
+    <button class="homeBtn" data-g="cw"><span>✏️</span>Palavras Cruzadas</button>
+  </div>
+</div>
 <div class="wrap">
+  <div class="row"><button class="btn" id="homeBtn">🏠 Início</button></div>
   <div class="tabs gtabs" id="gtabs">
     <button class="tab" data-g="ws">🔎 Caça-Palavras</button>
     <button class="tab" data-g="cw">✏️ Palavras Cruzadas</button>
@@ -135,8 +196,7 @@ footer{margin-top:auto;padding:16px 0 12px;font-size:12px;color:var(--muted);tex
     <div id="cwClue"><button id="cwPrev" aria-label="Dica anterior">‹</button><div class="txt" id="cwClueTxt">Toque em uma casa para começar</div><button id="cwNext" aria-label="Próxima dica">›</button></div>
     <div class="boardWrap"><div id="cwBoard"></div></div>
     <div class="row">
-      <button class="btn" id="cwCheck">✔ Verificar</button>
-      <button class="btn" id="cwReveal">💡 Revelar letra</button>
+      <button class="btn" id="cwReveal">💡 Revelar letra (3)</button>
     </div>
     <div id="cwMsg"></div>
     <div class="clues">
@@ -152,7 +212,7 @@ footer{margin-top:auto;padding:16px 0 12px;font-size:12px;color:var(--muted);tex
   <p id="res1"></p><p id="res2"></p>
   <button class="btn primary" id="again">Jogar de novo</button>
 </div></div>
-<footer>Versão: 24102026.8</footer>
+<footer>Versão: 24102026.11</footer>
 
 <script>
 'use strict';
@@ -497,8 +557,8 @@ function generateWS(){
 }
 function colorFor(i){return `hsl(${(i*47)%360} 70% 76%)`}
 function wsCellSize(n){
-  const avail = Math.min(window.innerWidth-24, 560) - 12;
-  return Math.max(20, Math.min(44, Math.floor(avail/n)));
+  const avail = Math.min(window.innerWidth-24, window.innerWidth>=700?760:560) - 16;
+  return Math.max(20, Math.min(56, Math.floor(avail/n)));
 }
 function wsBest(){return 'cp_best_'+wsDiff+'_'+wsTheme}
 function wsShowBest(){const b=store(wsBest());$('best').textContent = b? fmt(+b):'--'}
@@ -702,18 +762,19 @@ function cwModel({placed,x0,y0,W,H}){
   const user = Array.from({length:H},()=>Array(W).fill(''));
   const given = Array.from({length:H},()=>Array(W).fill(false));
   const bad = Array.from({length:H},()=>Array(W).fill(false));
+  const ok = Array.from({length:H},()=>Array(W).fill(false));
   const ratio = DIFFS[cwDiff].cw.given;
   if (ratio>0){
     const all=[]; for(let y=0;y<H;y++)for(let x=0;x<W;x++) if(ch[y][x]) all.push([x,y]);
     shuffle(all).slice(0,Math.round(all.length*ratio)).forEach(([x,y])=>{given[y][x]=true;user[y][x]=ch[y][x]});
   }
-  return {W,H,ch,num,cA,cD,across,down,user,given,bad,total:placed.length,placed,els:[]};
+  return {W,H,ch,num,cA,cD,across,down,user,given,bad,ok,total:placed.length,placed,els:[]};
 }
 function cwBest(){return 'cw_best_'+cwDiff+'_'+cwTheme}
 function cwShowBest(){const b=store(cwBest());$('cwBest').textContent = b? fmt(+b):'--'}
 function cwCellSize(){
-  const avail = Math.min(window.innerWidth-24, 560) - 12 - (cw.W-1)*2;
-  return Math.max(26, Math.min(46, Math.floor(avail/cw.W)));
+  const avail = Math.min(window.innerWidth-24, window.innerWidth>=700?760:560) - 16 - (cw.W-1)*2;
+  return Math.max(20, Math.min(56, Math.floor(avail/cw.W)));
 }
 function cwRender(){
   const cs = cwCellSize(), b = $('cwBoard');
@@ -755,6 +816,7 @@ function cwPaint(){
     if (aw && aw.cells.some(([a,b])=>a===x&&b===y)) c+=' w';
     if (sel && sel.x===x && sel.y===y) c+=' s';
     if (cw.given[y][x]) c+=' g';
+    if (cw.ok[y][x]) c+=' ok';
     if (cw.bad[y][x]) c+=' bad';
     d.className = c;
     d.querySelector('.l').textContent = cw.user[y][x];
@@ -764,7 +826,7 @@ function cwPaint(){
     w.li.classList.toggle('act', w===aw);
     w.li.classList.toggle('ok', cwWordDone(w));
   });
-  cwSave();
+  cwSave(); cwHintLabel(); cwEnsureVisible();
   const t = $('cwClueTxt');
   if (aw) t.innerHTML = `<b>${aw.num} ${aw.dir===0?'➡':'⬇'}</b> ${aw.clue} <span style="color:var(--muted)">(${aw.word.length} letras)</span>`;
   else t.textContent = 'Toque em uma casa para começar';
@@ -796,18 +858,51 @@ function cwMove(step){
   const i = w.cells.findIndex(([x,y])=>x===sel.x&&y===sel.y), j = i+step;
   if (j>=0 && j<w.cells.length){sel.x=w.cells[j][0];sel.y=w.cells[j][1]}
 }
+const CW_MAX_HINTS = 3;
+function cwEnsureVisible(){   // mantém a casa selecionada visível acima do teclado e abaixo da dica
+  if (onHome || gameKey!=='cw' || !sel || !cw.els || !cw.els[sel.y]) return;
+  const r = cw.els[sel.y][sel.x].getBoundingClientRect(), kb = $('kb').getBoundingClientRect();
+  const bottomLimit = kb.top - 10, topLimit = $('cwClue').getBoundingClientRect().bottom + 8;
+  if (r.bottom > bottomLimit) window.scrollBy(0, r.bottom - bottomLimit + 40);
+  else if (r.top < topLimit) window.scrollBy(0, r.top - topLimit - 40);
+}
+const cwLocked = (x,y) => cw.given[y][x] || cw.ok[y][x];
+function cwSay(txt,kind){const m=$('cwMsg'); m.textContent=txt; m.style.color = kind==='ok'?'var(--ok)':kind==='bad'?'var(--bad)':'var(--muted)'}
+function cwFlash(x,y,cls){const d=cw.els[y][x]; d.classList.remove('flashok','flashbad'); void d.offsetWidth; d.classList.add(cls); setTimeout(()=>d.classList.remove(cls),450)}
+function cwAdvance(){   // vai para a próxima casa ainda livre da palavra
+  const w = cwActive(); if (!w) return;
+  const i = w.cells.findIndex(([x,y])=>x===sel.x&&y===sel.y);
+  for (let j=i+1;j<w.cells.length;j++){const [x,y]=w.cells[j]; if(!cwLocked(x,y)){sel.x=x;sel.y=y;return}}
+}
+function cwHintLabel(){
+  const left = CW_MAX_HINTS-cwReveals, b = $('cwReveal');
+  b.textContent = `💡 Revelar letra (${Math.max(0,left)})`; b.style.opacity = left<=0 ? .5 : 1;
+}
 function cwType(letter){
   if (!sel || cwDone) return;
   tCW.start();
-  if (!cw.given[sel.y][sel.x]){cw.user[sel.y][sel.x]=letter; cw.bad[sel.y][sel.x]=false}
-  cwMove(1); $('cwMsg').textContent=''; cwPaint(); cwCheckWin();
+  const {x,y} = sel;
+  if (cwLocked(x,y)){cwAdvance(); cwPaint(); return}      // letra certa fica travada
+  cw.user[y][x] = letter;
+  if (letter===cw.ch[y][x]){
+    cw.ok[y][x]=true; cw.bad[y][x]=false; cwSay('✔ Letra certa!','ok');
+    cwAdvance(); cwPaint(); cwFlash(x,y,'flashok'); cwCheckWin();
+  } else {
+    cw.bad[y][x]=true; cwSay('✘ Letra errada, tente outra','bad');
+    cwPaint(); cwFlash(x,y,'flashbad');
+  }
 }
 function cwBack(){
   if (!sel || cwDone) return;
+  const w = cwActive(); if (!w) return;
   const {x,y} = sel;
-  if (cw.user[y][x] && !cw.given[y][x]){cw.user[y][x]='';cw.bad[y][x]=false}
-  else {cwMove(-1); const a=sel.x,b=sel.y; if(!cw.given[b][a]){cw.user[b][a]='';cw.bad[b][a]=false}}
-  cwPaint();
+  if (!cwLocked(x,y) && cw.user[y][x]){cw.user[y][x]='';cw.bad[y][x]=false;cwSay('','');cwPaint();return}
+  const i = w.cells.findIndex(([a,b])=>a===x&&b===y);
+  for (let j=i-1;j>=0;j--){
+    const [a,b] = w.cells[j];
+    if (!cwLocked(a,b)){sel.x=a;sel.y=b;cw.user[b][a]='';cw.bad[b][a]=false;break}
+  }
+  cwSay('',''); cwPaint();
 }
 function cwCheckWin(){
   for (let y=0;y<cw.H;y++) for (let x=0;x<cw.W;x++) if (cw.ch[y][x] && cw.user[y][x]!==cw.ch[y][x]) return;
@@ -817,20 +912,15 @@ function cwCheckWin(){
   cwShowBest();
   showWin(`Tempo: <b>${fmt(el)}</b> · Revelações: <b>${cwReveals}</b>`, rec, prev);
 }
-$('cwCheck').onclick = ()=>{
-  if (cwDone) return;
-  let wrong = 0;
-  for (let y=0;y<cw.H;y++) for (let x=0;x<cw.W;x++){
-    const b = !!(cw.user[y][x] && cw.user[y][x]!==cw.ch[y][x]); cw.bad[y][x]=b; if (b) wrong++;
-  }
-  $('cwMsg').textContent = wrong ? `${wrong} letra${wrong>1?'s':''} errada${wrong>1?'s':''} (em vermelho)` : 'Nenhuma letra errada até agora 👍';
-  cwPaint();
-};
 $('cwReveal').onclick = ()=>{
   if (!sel || cwDone) return;
-  const {x,y} = sel; if (cw.user[y][x]===cw.ch[y][x]) return;
-  cw.user[y][x]=cw.ch[y][x]; cw.given[y][x]=true; cw.bad[y][x]=false; cwReveals++; tCW.start();
-  cwPaint(); cwCheckWin();
+  if (cwReveals>=CW_MAX_HINTS){cwSay('Você já usou as 3 dicas desta fase','bad');return}
+  const {x,y} = sel;
+  if (cwLocked(x,y)){cwSay('Essa letra já está certa. Escolha uma casa vazia ou errada','muted');return}
+  tCW.start();
+  cw.user[y][x]=cw.ch[y][x]; cw.given[y][x]=true; cw.bad[y][x]=false; cwReveals++;
+  cwSay(`💡 Letra revelada (restam ${CW_MAX_HINTS-cwReveals})`,'muted');
+  cwAdvance(); cwPaint(); cwFlash(x,y,'flashok'); cwCheckWin();
 };
 $('cwPrev').onclick = ()=>cwStep(-1);
 $('cwNext').onclick = ()=>cwStep(1);
@@ -900,7 +990,7 @@ function cwSave(){
   if (!cw || !cw.placed || cwDone){drop('jp_cw_save');return}
   store('jp_cw_save', JSON.stringify({diff:cwDiff,theme:cwTheme,W:cw.W,H:cw.H,
     placed:cw.placed.map(p=>({word:p.word,clue:p.clue,x:p.x,y:p.y,dir:p.dir})),
-    user:cw.user,given:cw.given,bad:cw.bad,reveals:cwReveals,sel,acc:elapsedMs(tCW)}));
+    user:cw.user,given:cw.given,bad:cw.bad,ok:cw.ok,reveals:cwReveals,sel,acc:elapsedMs(tCW)}));
 }
 function cwLoad(){
   try{
@@ -911,6 +1001,7 @@ function cwLoad(){
     cwDiff=d.diff; cwTheme=d.theme; tCW.reset();
     const m = cwModel({placed:d.placed.map(p=>({...p})),x0:0,y0:0,W:d.W,H:d.H});
     m.user=d.user; m.given=d.given; m.bad=d.bad;
+    m.ok = Array.isArray(d.ok) ? d.ok : m.ch.map((r,y)=>r.map((c,x)=>!!(c && d.user[y][x]===c && !d.given[y][x])));
     cw = m; cwDone = false; cwReveals = d.reveals|0;
     tCW.acc = d.acc|0; tCW.draw();
     const f = cw.across[0] || cw.down[0];
@@ -962,6 +1053,19 @@ function setGame(g){
   const t = g==='ws'?tWS:tCW, done = g==='ws'?wsDone:cwDone;
   if (t.began && !done) t.start();
 }
+let onHome = true;
+function goHome(){
+  tWS.pause(); tCW.pause(); wsSave(); cwSave(); onHome = true;
+  document.body.classList.add('home'); document.body.classList.remove('mode-cw'); window.scrollTo(0,0);
+}
+function openGame(g){
+  onHome = false; document.body.classList.remove('home'); setGame(g);
+  try{history.pushState({g:1},'')}catch(e){}
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('.homeBtn').forEach(b=>b.onclick=()=>openGame(b.dataset.g));
+$('homeBtn').onclick = ()=>{ if (history.state && history.state.g) history.back(); else goHome(); };
+window.addEventListener('popstate',()=>{ if (!onHome) goHome(); });
 document.querySelectorAll('#gtabs .tab').forEach(b=>b.onclick=()=>setGame(b.dataset.g));
 $('wsNew').onclick = ()=>{hideWin(); newWS()};
 $('cwNew').onclick = ()=>{hideWin(); newCW()};
@@ -969,12 +1073,12 @@ $('again').onclick = ()=>{hideWin(); gameKey==='ws'?newWS():newCW()};
 document.addEventListener('visibilitychange',()=>{
   const t = gameKey==='ws'?tWS:tCW, done = gameKey==='ws'?wsDone:cwDone;
   if (document.hidden){wsSave();cwSave()}
-  if (document.hidden) t.pause(); else if (t.began && !done) t.start();
+  if (document.hidden) t.pause(); else if (t.began && !done && !onHome) t.start();
 });
 let rz; window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{if(ws&&ws.grid)wsRender();if(cw&&cw.els)cwRender()},150)});
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(()=>{});
-wsLoad() || newWS(); cwLoad() || newCW(); buildControls("ws"); buildControls("cw"); setGame(gameKey);
+wsLoad() || newWS(); cwLoad() || newCW(); buildControls("ws"); buildControls("cw"); setGame(gameKey); goHome();
 </script>
 </body>
 </html>

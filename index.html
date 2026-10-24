@@ -1,0 +1,908 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#f1f2f5">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Palavras">
+<title>Jogos de Palavras</title>
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f1f2f5; --text:#1c1d21; --muted:#6a6e7a; --line:#d5d8e0; --card1:#ffffff; --card2:#eef0f4;
+  --amber:#d9962b; --amber-bg:#fbeab9; --amber-line:#e7c874;
+  --blue:#1d3f9a; --blue-bg:#dce7fb; --blue-line:#abc1ee;
+  --info-bg:#f8efc9; --info-line:#e3d18f; --bad:#d93636; --ok:#2e9e57;
+  --shadow:0 2px 6px rgba(20,24,40,.10),0 1px 1px rgba(20,24,40,.06);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+body{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:12px 12px 0;user-select:none;-webkit-user-select:none}
+body.mode-cw{padding-bottom:178px}
+h1{font-size:20px;margin:4px 0 10px;letter-spacing:.2px;font-weight:800}
+.wrap{width:100%;max-width:560px;display:flex;flex-direction:column;gap:10px}
+.row{display:flex;gap:8px;align-items:center}
+.tabs{display:flex;gap:8px}
+/* cartões e botões no estilo do WellDesigner */
+.tab,.btn,select,.chip,.clues li,#cwClue,#board,#cwBoard{border:1px solid var(--line);box-shadow:var(--shadow)}
+.tab{flex:1;padding:11px 4px;border-radius:14px;background:linear-gradient(var(--card1),var(--card2));color:var(--muted);font-weight:700;font-size:14px;cursor:pointer;touch-action:manipulation}
+.tab.on{background:var(--amber-bg);border-color:var(--amber-line);box-shadow:inset 5px 0 0 var(--amber),var(--shadow);color:var(--text)}
+.gtabs .tab{padding:13px 4px;font-size:15px}
+.gtabs .tab.on{background:var(--blue-bg);border-color:var(--blue-line);box-shadow:inset 5px 0 0 var(--blue),var(--shadow);color:#12306f}
+select,.btn{height:42px;border-radius:14px;background:linear-gradient(var(--card1),var(--card2));color:var(--text);font-size:14px;font-weight:600;padding:0 12px;cursor:pointer;touch-action:manipulation}
+select{flex:1;min-width:0}
+.btn{flex:1}
+.btn.primary{background:#121316;border-color:#121316;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.28)}
+.btn:active,.tab:active,.key:active{transform:scale(.97)}
+.stats{display:flex;justify-content:space-between;font-size:14px;color:var(--muted);padding:0 4px}
+.stats b{color:var(--text);font-variant-numeric:tabular-nums}
+section{display:none;flex-direction:column;gap:10px}
+section.on{display:flex}
+.boardWrap{display:flex;justify-content:center;overflow:auto;padding:2px}
+/* caça-palavras */
+#board{display:grid;background:linear-gradient(var(--card1),var(--card2));border-radius:16px;padding:6px;touch-action:none;position:relative}
+.cell{display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--text);border-radius:8px;transition:background .12s}
+.cell.sel{background:#8fb3f1;color:#0f2760;box-shadow:inset 0 0 0 2px var(--blue)}
+.cell.found{color:#14161c}
+.cell.hint{animation:pulse .5s ease-in-out 3}
+@keyframes pulse{50%{background:var(--amber);color:#fff;transform:scale(1.15)}}
+#words{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.chip{padding:6px 12px;border-radius:999px;background:linear-gradient(var(--card1),var(--card2));font-size:13px;font-weight:700;letter-spacing:.4px}
+.chip.done{text-decoration:line-through;color:#14161c}
+/* palavras cruzadas */
+#cwBoard{display:grid;gap:2px;padding:6px;background:linear-gradient(var(--card1),var(--card2));border-radius:16px;margin:0 auto;width:max-content}
+.cw{position:relative;display:flex;align-items:center;justify-content:center;border-radius:6px;background:#fff;border:1px solid #c9ccd6;color:var(--text);font-weight:800;cursor:pointer}
+.cw.blk{background:transparent;border-color:transparent;cursor:default}
+.cw.w{background:var(--blue-bg);border-color:var(--blue-line)}
+.cw.s{background:#f7d77c;border-color:var(--amber);box-shadow:inset 0 0 0 2px var(--amber)}
+.cw.g .l{color:#6a6e7a}
+.cw.g:not(.w):not(.s){background:#e6e8ee}
+.cw.bad .l{color:var(--bad)}
+.cw .n{position:absolute;top:1px;left:2px;font-size:9px;font-weight:700;line-height:1;color:#555b6b}
+.cw .l{line-height:1}
+#cwClue{display:flex;align-items:center;gap:8px;background:var(--info-bg);border-color:var(--info-line);border-radius:16px;padding:8px 10px;min-height:54px}
+#cwClue .txt{flex:1;font-size:14px;line-height:1.25}
+#cwClue .txt b{color:var(--amber)}
+#cwClue button{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(var(--card1),var(--card2));color:var(--text);font-size:18px;font-weight:800;cursor:pointer;touch-action:manipulation;box-shadow:var(--shadow)}
+#cwMsg{min-height:18px;text-align:center;font-size:13px;color:var(--muted)}
+.clues{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:420px){.clues{grid-template-columns:1fr}}
+.clues h3{margin:0 0 8px;font-size:14px;color:var(--text)}
+.clues ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.clues li{display:flex;align-items:center;gap:10px;font-size:13px;line-height:1.25;padding:8px 10px;border-radius:14px;background:linear-gradient(var(--card1),var(--card2));cursor:pointer}
+.clues li .no{flex:none;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;border:2px solid #c3c7d1;background:#f4f5f8;color:var(--text)}
+.clues li.act{background:var(--amber-bg);border-color:var(--amber-line);box-shadow:inset 5px 0 0 var(--amber),var(--shadow)}
+.clues li.act .no{background:var(--amber);border-color:var(--amber);color:#fff}
+.clues li.ok .no{background:var(--ok);border-color:var(--ok);color:#fff}
+.clues li.ok .tx{color:var(--muted)}
+#kb{position:fixed;left:0;right:0;bottom:0;background:#e2e4ea;padding:8px 6px calc(8px + env(safe-area-inset-bottom));display:none;flex-direction:column;gap:6px;align-items:center;z-index:5;border-top:1px solid var(--line);box-shadow:0 -2px 8px rgba(20,24,40,.08)}
+body.mode-cw #kb{display:flex}
+.krow{display:flex;gap:5px;width:100%;max-width:560px;justify-content:center}
+.key{flex:1;max-width:44px;height:46px;border:1px solid var(--line);border-radius:10px;background:linear-gradient(#fff,#eef0f4);color:var(--text);font-size:17px;font-weight:700;cursor:pointer;touch-action:manipulation;box-shadow:var(--shadow)}
+.key.wide{flex:1.5;max-width:66px;background:linear-gradient(#e9ebf0,#d6d9e1)}
+#overlay{position:fixed;inset:0;background:rgba(20,24,40,.5);display:none;align-items:center;justify-content:center;padding:20px;z-index:9}
+#overlay.show{display:flex}
+.modal{background:linear-gradient(#fff,#f1f2f6);border:1px solid var(--line);border-radius:18px;padding:22px;max-width:320px;width:100%;text-align:center;box-shadow:0 10px 30px rgba(20,24,40,.25)}
+.modal h2{margin:0 0 8px;font-size:22px}
+.modal p{margin:6px 0;color:var(--muted);font-size:15px}
+.modal p b{color:var(--text)}
+.modal .btn{margin-top:14px;width:100%;flex:none}
+footer{margin-top:auto;padding:16px 0 12px;font-size:12px;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+<h1>Jogos de Palavras</h1>
+<div class="wrap">
+  <div class="tabs gtabs" id="gtabs">
+    <button class="tab" data-g="ws">🔎 Caça-Palavras</button>
+    <button class="tab" data-g="cw">✏️ Palavras Cruzadas</button>
+  </div>
+
+  <!-- Caça-palavras -->
+  <section id="wsPanel">
+    <div class="tabs" id="wsTabs"></div>
+    <div class="row">
+      <select id="wsTheme" aria-label="Tema do caça-palavras"></select>
+      <button class="btn primary" id="wsNew" style="flex:none">Novo jogo</button>
+    </div>
+    <div class="row"><button class="btn" id="hintBtn">💡 Dica</button></div>
+    <div class="stats">
+      <span>Achadas: <b id="found">0/0</b></span>
+      <span>Tempo: <b id="time">00:00</b></span>
+      <span>Recorde: <b id="best">--</b></span>
+    </div>
+    <div class="boardWrap"><div id="board"></div></div>
+    <div id="words"></div>
+  </section>
+
+  <!-- Palavras cruzadas -->
+  <section id="cwPanel">
+    <div class="tabs" id="cwTabs"></div>
+    <div class="row">
+      <select id="cwTheme" aria-label="Tema das palavras cruzadas"></select>
+      <button class="btn primary" id="cwNew" style="flex:none">Novo jogo</button>
+    </div>
+    <div class="stats">
+      <span>Letras: <b id="cwFilled">0/0</b></span>
+      <span>Tempo: <b id="cwTime">00:00</b></span>
+      <span>Recorde: <b id="cwBest">--</b></span>
+    </div>
+    <div id="cwClue"><button id="cwPrev" aria-label="Dica anterior">‹</button><div class="txt" id="cwClueTxt">Toque em uma casa para começar</div><button id="cwNext" aria-label="Próxima dica">›</button></div>
+    <div class="boardWrap"><div id="cwBoard"></div></div>
+    <div class="row">
+      <button class="btn" id="cwCheck">✔ Verificar</button>
+      <button class="btn" id="cwReveal">💡 Revelar letra</button>
+    </div>
+    <div id="cwMsg"></div>
+    <div class="clues">
+      <div><h3>➡ Horizontais</h3><ul id="cwAcross"></ul></div>
+      <div><h3>⬇ Verticais</h3><ul id="cwDown"></ul></div>
+    </div>
+  </section>
+</div>
+
+<div id="kb"></div>
+<div id="overlay"><div class="modal">
+  <h2>🎉 Parabéns!</h2>
+  <p id="res1"></p><p id="res2"></p>
+  <button class="btn primary" id="again">Jogar de novo</button>
+</div></div>
+<footer>Versão: 24102026.6</footer>
+
+<script>
+'use strict';
+/* ---------- Banco de palavras e dicas (sem acentos nas respostas) ---------- */
+const RAW = {
+geral:['Geral',`CASA|Onde moramos
+MESA|Móvel onde se come ou se trabalha
+LIVRO|Tem páginas e capítulos
+CADEIRA|Móvel para sentar
+JANELA|Abertura na parede com vidro
+PORTA|Fecha a entrada de um cômodo
+CAMINHO|Trajeto a seguir
+AMIGO|Companheiro de confiança
+FAMILIA|Pais, filhos e irmãos
+TRABALHO|Ocupação profissional
+ESCOLA|Lugar de estudar
+CIDADE|Maior que uma vila
+ESTRADA|Via para carros entre cidades
+JARDIM|Espaço com flores e plantas
+FLORESTA|Grande área de árvores
+MONTANHA|Grande elevação de terreno
+RIO|Curso de água doce
+PRAIA|Areia à beira-mar
+VENTO|Ar em movimento
+CHUVA|Água que cai das nuvens
+SOL|Estrela que ilumina o dia
+LUA|Satélite natural da Terra
+ESTRELA|Ponto brilhante no céu à noite
+NUVEM|Massa branca ou cinza no céu
+FOGO|Queima e dá calor
+TERRA|Nosso planeta
+MUSICA|Arte dos sons
+FESTA|Comemoração com convidados
+VIAGEM|Deslocamento a outro lugar
+SONHO|Imagem que vemos ao dormir
+FUTEBOL|Esporte com gol e bola
+CAFE|Bebida escura e quente
+PAO|Alimento do café da manhã, feito de farinha
+CARRO|Veículo de quatro rodas
+AVIAO|Voa levando passageiros
+BARCO|Navega na água
+TREM|Corre sobre trilhos
+RELOGIO|Marca as horas
+TELEFONE|Serve para ligar para alguém
+CAMA|Onde dormimos
+ESPELHO|Reflete nossa imagem
+TAPETE|Cobre o chão da sala
+LUZ|Faz o ambiente ficar claro
+VIDRO|Material transparente e frágil
+PAPEL|Onde se escreve e se desenha
+CANETA|Escreve com tinta
+MOCHILA|Bolsa levada nas costas
+BICICLETA|Veículo de duas rodas com pedais`],
+animais:['Animais',`CACHORRO|Melhor amigo do homem
+GATO|Felino doméstico que mia
+CAVALO|Animal montado em cavalgadas
+VACA|Dá leite
+PORCO|Animal da fazenda que grunhe
+GALINHA|Põe ovos
+PATO|Ave que faz "quá"
+COELHO|Orelhas longas, adora cenoura
+TARTARUGA|Tem casco e anda devagar
+JACARE|Réptil de boca grande que vive em rios
+ONCA|Grande felino pintado do Brasil
+MACACO|Primata que pula de galho em galho
+ELEFANTE|Maior animal terrestre
+GIRAFA|Animal de pescoço bem longo
+LEAO|Rei da selva
+TIGRE|Felino listrado
+ZEBRA|Cavalo listrado africano
+URSO|Grande mamífero que hiberna
+LOBO|Canídeo que uiva
+RAPOSA|Animal astuto de cauda peluda
+COBRA|Réptil sem patas
+SAPO|Anfíbio que coaxa
+BORBOLETA|Inseto de asas coloridas
+ABELHA|Produz mel
+FORMIGA|Inseto que vive em colônias e trabalha muito
+ARANHA|Tece teias
+GOLFINHO|Mamífero marinho muito inteligente
+BALEIA|Maior mamífero do mar
+TUBARAO|Peixe predador de nadadeira dorsal
+POLVO|Molusco de oito tentáculos
+CARANGUEJO|Crustáceo que anda de lado
+PAPAGAIO|Ave que imita a fala
+TUCANO|Ave de bico grande e colorido
+CORUJA|Ave noturna de olhos grandes
+AGUIA|Ave de rapina de visão aguçada
+PINGUIM|Ave que não voa e vive no gelo
+CAPIVARA|Maior roedor do mundo
+TAMANDUA|Come formigas com língua comprida
+PREGUICA|Mamífero muito lento
+CAMELO|Tem corcovas e vive no deserto
+HIPOPOTAMO|Grande animal dos rios africanos
+RINOCERONTE|Tem chifre no focinho
+GAVIAO|Ave de rapina de garras fortes
+BEIJAFLOR|Ave minúscula que paira no ar`],
+comidas:['Comidas',`ARROZ|Grão branco que acompanha o feijão
+FEIJAO|Caldo escuro do prato brasileiro
+FAROFA|Farinha de mandioca temperada
+MACARRAO|Massa cozida com molho
+LASANHA|Massa em camadas com queijo e molho
+PIZZA|Massa redonda italiana com cobertura
+CHURRASCO|Carne assada na brasa
+FRANGO|Carne de galinha
+PEIXE|Alimento tirado do mar ou do rio
+CARNE|Alimento de origem animal
+SALADA|Prato de folhas e legumes
+TOMATE|Fruto vermelho usado em molhos
+CEBOLA|Faz chorar ao ser cortada
+BATATA|Tubérculo frito, cozido ou assado
+MANDIOCA|Raiz também chamada aipim
+BANANA|Fruta amarela e curva
+LARANJA|Fruta cítrica do suco
+MELANCIA|Fruta grande, verde por fora e vermelha por dentro
+MORANGO|Fruta vermelha pequena
+ABACAXI|Fruta tropical com coroa de folhas
+MANGA|Fruta doce de caroço grande
+UVA|Fruta do vinho
+LIMAO|Fruta azeda da limonada
+MAMAO|Fruta alaranjada de sementes pretas
+GOIABA|Fruta de polpa rosada e muitas sementes
+BOLO|Sobremesa de aniversário
+BRIGADEIRO|Docinho de chocolate de festa
+SORVETE|Sobremesa gelada
+CHOCOLATE|Doce feito de cacau
+TAPIOCA|Beiju de goma de mandioca
+PAMONHA|Iguaria de milho verde
+COXINHA|Salgado em forma de gota, recheado com frango
+PASTEL|Salgado frito de feira
+MILHO|Grão amarelo da pipoca
+QUEIJO|Derivado do leite
+IOGURTE|Leite fermentado
+BISCOITO|Bolacha
+PIPOCA|Milho estourado no cinema
+ACAI|Fruta roxa da Amazônia
+CAJU|Fruta com a castanha do lado de fora
+FEIJOADA|Prato de feijão preto com carnes
+MOQUECA|Ensopado de peixe com dendê`],
+petroleo:['Petróleo e poços',`POCO|Furo perfurado para chegar ao reservatório
+SONDA|Equipamento que perfura o poço
+PLATAFORMA|Estrutura que produz petróleo no mar
+BROCA|Ferramenta que corta a rocha
+REVESTIMENTO|Tubo de aço que reveste as paredes do poço
+CIMENTO|Fixa o revestimento na rocha
+VALVULA|Dispositivo que abre e fecha o fluxo
+PRESSAO|Força por unidade de área
+RESERVATORIO|Rocha que armazena óleo e gás
+PETROLEO|Óleo bruto fóssil
+GAS|Fluido que ocupa todo o volume disponível
+FLUIDO|Líquido ou gás que escoa
+LAMA|Fluido de perfuração
+COLUNA|Conjunto de tubos descidos no poço
+PACKER|Isola o espaço anular no poço
+TUBING|Coluna de produção, em inglês
+ANULAR|Espaço entre dois tubos concêntricos
+CABECA|Parte do corpo onde fica o cérebro
+COMPLETACAO|Etapa que prepara o poço para produzir
+PERFURACAO|Ato de abrir o poço
+INTEGRIDADE|Capacidade do poço de manter suas barreiras
+ABANDONO|Encerramento definitivo de um poço
+BARREIRA|Elemento que impede fluxo indesejado
+TAMPAO|Plug de cimento ou mecânico
+SONDAGEM|Investigação do subsolo
+RISER|Tubo que liga o poço à plataforma
+BOP|Preventor de erupção (sigla)
+MANOMETRO|Mede pressão
+VAZAO|Volume que escoa por unidade de tempo
+DENSIDADE|Massa por unidade de volume
+PROFUNDIDADE|Distância da superfície ao fundo
+CANHONEIO|Furos feitos no revestimento
+FRATURA|Rachadura aberta na rocha
+SEPARADOR|Divide óleo, gás e água
+DUTO|Tubulação para transporte
+OLEODUTO|Duto que transporta petróleo
+REFINARIA|Transforma óleo bruto em derivados
+TUBULACAO|Conjunto de tubos
+FLANGE|Conexão aparafusada entre tubos
+CHOKE|Restritor que regula a vazão
+SUBSEA|Relativo ao fundo do mar, em inglês
+ARVORE|Planta de tronco, galhos e folhas`]
+};
+const THEMES = {};
+for (const k in RAW){
+  const seen = new Set(), entries = [];
+  RAW[k][1].split('\n').forEach(l=>{
+    const i = l.indexOf('|'); if (i<0) return;
+    const w = l.slice(0,i).trim(), c = l.slice(i+1).trim();
+    if (w && !seen.has(w)){seen.add(w);entries.push({w,c})}
+  });
+  THEMES[k] = {nome:RAW[k][0], entries, list:entries.map(e=>e.w)};
+}
+
+const DIFFS = {
+  facil:  {nome:'Fácil',         n:8,  count:6,  maxLen:7,  dirs:[[1,0],[0,1]],
+           cw:{ws:11, count:8,  maxLen:7,  given:.3}},
+  medio:  {nome:'Intermediário', n:11, count:10, maxLen:9,  dirs:[[1,0],[0,1],[1,1],[1,-1]],
+           cw:{ws:15, count:14, maxLen:9,  given:0}},
+  dificil:{nome:'Difícil',       n:14, count:18, maxLen:12, dirs:[[1,0],[0,1],[1,1],[1,-1],[-1,0],[0,-1],[-1,-1],[-1,1]],
+           cw:{ws:19, count:24, maxLen:12, given:0}}
+};
+const FILL = 'AAAAAEEEEEIIIOOOOUUSSRRNNTTMMCCDDLLPPVVBFGHJQXZ';
+
+/* ---------- Utilidades ---------- */
+const $ = id => document.getElementById(id);
+const rnd = n => Math.floor(Math.random()*n);
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
+const rev = s => s.split('').reverse().join('');
+function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+const fmt = s => String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+function mkTimer(id){
+  const t = {acc:0,t0:0,run:false,began:false,iv:null,
+    sec(){return Math.floor((t.acc+(t.run?Date.now()-t.t0:0))/1000)},
+    draw(){$(id).textContent = fmt(t.sec())},
+    start(){if(t.run)return;t.run=true;t.began=true;t.t0=Date.now();t.iv=setInterval(t.draw,500)},
+    pause(){if(!t.run)return;t.acc+=Date.now()-t.t0;t.run=false;clearInterval(t.iv);t.draw()},
+    reset(){t.pause();t.acc=0;t.began=false;t.draw()}};
+  return t;
+}
+const tWS = mkTimer('time'), tCW = mkTimer('cwTime');
+
+/* ---------- Estado global ---------- */
+const pick = (k,obj,def) => { const v = store(k); return (v && v in obj) ? v : def };
+let wsDiff  = pick('jp_ws_diff',  DIFFS,  'facil');
+let wsTheme = pick('jp_ws_theme', THEMES, 'geral');
+let cwDiff  = pick('jp_cw_diff',  DIFFS,  'facil');
+let cwTheme = pick('jp_cw_theme', THEMES, 'geral');
+let gameKey  = store('jp_game')==='cw' ? 'cw' : 'ws';
+let ws = null, wsFound = new Set(), wsHints = 0, wsDone = false, wsEls = [];
+let cw = null, cwDone = false, cwReveals = 0, sel = null;
+
+/* =====================================================================
+   CAÇA-PALAVRAS
+   ===================================================================== */
+function tryPlace(grid, n, word, dirs){
+  for (let t=0; t<300; t++){
+    const [dx,dy] = dirs[rnd(dirs.length)];
+    const x0 = rnd(n), y0 = rnd(n);
+    const x1 = x0+dx*(word.length-1), y1 = y0+dy*(word.length-1);
+    if (x1<0||x1>=n||y1<0||y1>=n) continue;
+    let ok = true, newCells = 0;
+    for (let i=0;i<word.length;i++){
+      const c = grid[y0+dy*i][x0+dx*i];
+      if (c && c!==word[i]) {ok=false;break}
+      if (!c) newCells++;
+    }
+    if (!ok || newCells===0) continue;
+    for (let i=0;i<word.length;i++) grid[y0+dy*i][x0+dx*i] = word[i];
+    return {x:x0,y:y0,dx,dy};
+  }
+  return null;
+}
+function generateWS(){
+  const d = DIFFS[wsDiff], n = d.n;
+  const pool = THEMES[wsTheme].list.filter(w => w.length<=d.maxLen && w.length<=n && w.length>=3);
+  for (let attempt=0; attempt<60; attempt++){
+    const grid = Array.from({length:n},()=>Array(n).fill(''));
+    const placed = [];
+    for (const w of shuffle(pool)){
+      if (placed.length>=d.count) break;
+      if (placed.some(p => p.word.includes(w) || w.includes(p.word) || p.word.includes(rev(w)) || w.includes(rev(p.word)))) continue;
+      const pos = tryPlace(grid, n, w, d.dirs);
+      if (pos) placed.push({word:w, ...pos});
+    }
+    if (placed.length < d.count) continue;
+    for (let y=0;y<n;y++) for (let x=0;x<n;x++) if(!grid[y][x]) grid[y][x] = FILL[rnd(FILL.length)];
+    return {grid, placed, n};
+  }
+  return null;
+}
+function colorFor(i){return `hsl(${(i*47)%360} 70% 76%)`}
+function wsCellSize(n){
+  const avail = Math.min(window.innerWidth-24, 560) - 12;
+  return Math.max(20, Math.min(44, Math.floor(avail/n)));
+}
+function wsBest(){return 'cp_best_'+wsDiff+'_'+wsTheme}
+function wsShowBest(){const b=store(wsBest());$('best').textContent = b? fmt(+b):'--'}
+function wsRender(){
+  const {grid,n,placed} = ws, cs = wsCellSize(n);
+  const b = $('board'); b.innerHTML='';
+  b.style.gridTemplateColumns = `repeat(${n},${cs}px)`;
+  b.style.gridAutoRows = cs+'px';
+  wsEls = [];
+  for (let y=0;y<n;y++){
+    wsEls.push([]);
+    for (let x=0;x<n;x++){
+      const c = document.createElement('div');
+      c.className='cell'; c.textContent = grid[y][x]; c.style.fontSize = Math.round(cs*.5)+'px';
+      b.appendChild(c); wsEls[y].push(c);
+    }
+  }
+  const w = $('words'); w.innerHTML='';
+  placed.forEach((p,i)=>{
+    const c = document.createElement('span'); c.className='chip'; c.id='chip'+i; c.textContent=p.word; w.appendChild(c);
+  });
+  wsFound.forEach(i=>{
+    const p = ws.placed[i];
+    for (let k=0;k<p.word.length;k++){const c=wsEls[p.y+p.dy*k][p.x+p.dx*k];c.classList.add('found');c.style.background=colorFor(i)}
+    $('chip'+i).classList.add('done'); $('chip'+i).style.background=colorFor(i);
+  });
+  wsStats();
+}
+function wsStats(){$('found').textContent = wsFound.size+'/'+ws.placed.length}
+function newWS(){
+  tWS.reset(); wsFound=new Set(); wsHints=0; wsDone=false;
+  ws = generateWS();
+  if (!ws){ $('words').textContent='Não consegui gerar a grade. Toque em Novo jogo.'; $('board').innerHTML=''; return }
+  wsShowBest(); wsRender(); wsSave();
+}
+
+/* seleção por arrasto */
+let wsSel = null;
+function wsCellAt(ev){
+  const r = $('board').getBoundingClientRect(), n = ws.n, pad = 6;
+  const cs = (r.width-pad*2)/n;
+  const x = Math.floor((ev.clientX-r.left-pad)/cs), y = Math.floor((ev.clientY-r.top-pad)/cs);
+  return [Math.max(0,Math.min(n-1,x)), Math.max(0,Math.min(n-1,y))];
+}
+function wsLine(sx,sy,cx,cy){
+  const n = ws.n, ddx=cx-sx, ddy=cy-sy;
+  if (!ddx && !ddy) return [[sx,sy]];
+  const step = Math.round(Math.atan2(ddy,ddx)/(Math.PI/4));
+  const dx = Math.round(Math.cos(step*Math.PI/4)), dy = Math.round(Math.sin(step*Math.PI/4));
+  let len = Math.round((ddx*dx+ddy*dy)/(dx*dx+dy*dy));
+  while (len>0 && (sx+dx*len<0||sx+dx*len>=n||sy+dy*len<0||sy+dy*len>=n)) len--;
+  const out=[]; for(let i=0;i<=len;i++) out.push([sx+dx*i,sy+dy*i]);
+  return out;
+}
+function wsPaintSel(){
+  document.querySelectorAll('.cell.sel').forEach(c=>c.classList.remove('sel'));
+  if (wsSel) wsSel.cells.forEach(([x,y])=>wsEls[y][x].classList.add('sel'));
+}
+const boardEl = $('board');
+boardEl.addEventListener('pointerdown', ev=>{
+  if (wsDone || !ws) return;
+  ev.preventDefault(); boardEl.setPointerCapture(ev.pointerId);
+  tWS.start();
+  const [x,y] = wsCellAt(ev); wsSel = {sx:x,sy:y,cells:[[x,y]]}; wsPaintSel();
+});
+boardEl.addEventListener('pointermove', ev=>{
+  if (!wsSel) return;
+  const [x,y] = wsCellAt(ev); wsSel.cells = wsLine(wsSel.sx,wsSel.sy,x,y); wsPaintSel();
+});
+boardEl.addEventListener('pointerup', ()=>{
+  if (!wsSel) return;
+  const word = wsSel.cells.map(([x,y])=>ws.grid[y][x]).join('');
+  const cells = wsSel.cells; wsSel = null; wsPaintSel();
+  if (word.length<2) return;
+  const idx = ws.placed.findIndex((p,i)=>!wsFound.has(i) && (p.word===word || p.word===rev(word)));
+  if (idx>=0){
+    wsFound.add(idx);
+    const col = colorFor(idx);
+    cells.forEach(([x,y])=>{const c=wsEls[y][x];c.classList.add('found');c.style.background=col});
+    const chip = $('chip'+idx); chip.classList.add('done'); chip.style.background=col;
+    wsStats(); wsSave();
+    if (wsFound.size===ws.placed.length) wsWin();
+  }
+});
+boardEl.addEventListener('pointercancel', ()=>{wsSel=null;wsPaintSel()});
+$('hintBtn').onclick = () => {
+  if (wsDone || !ws) return;
+  const rest = ws.placed.map((p,i)=>i).filter(i=>!wsFound.has(i));
+  if (!rest.length) return;
+  const p = ws.placed[rest[rnd(rest.length)]];
+  wsHints++; wsSave();
+  const c = wsEls[p.y][p.x]; c.classList.remove('hint'); void c.offsetWidth; c.classList.add('hint');
+  setTimeout(()=>c.classList.remove('hint'),1600);
+};
+function wsWin(){
+  wsDone = true; tWS.pause(); wsSave(); const el = tWS.sec();
+  const prev = +store(wsBest()) || 0; let rec = false;
+  if (!prev || el<prev){store(wsBest(),String(el));rec=true}
+  wsShowBest();
+  showWin(`Tempo: <b>${fmt(el)}</b> · Dicas: <b>${wsHints}</b>`, rec, prev);
+}
+
+/* =====================================================================
+   PALAVRAS CRUZADAS
+   ===================================================================== */
+function cwFit(g, m, N, word, x, y, dir){
+  const dx = dir===0?1:0, dy = dir===1?1:0, L = word.length;
+  const ex = x+dx*(L-1), ey = y+dy*(L-1);
+  if (x<0||y<0||ex>=N||ey>=N) return -1;
+  const bx = x-dx, by = y-dy, ax = ex+dx, ay = ey+dy;
+  if (bx>=0&&by>=0&&g[by][bx]) return -1;
+  if (ax<N&&ay<N&&g[ay][ax]) return -1;
+  const bit = dir===0?1:2; let cross = 0;
+  for (let i=0;i<L;i++){
+    const cx = x+dx*i, cy = y+dy*i, ch = g[cy][cx];
+    if (ch){
+      if (ch!==word[i] || (m[cy][cx]&bit)) return -1;
+      cross++;
+    } else {
+      const sx1 = cx+dy, sy1 = cy+dx, sx2 = cx-dy, sy2 = cy-dx;
+      if (sx1<N&&sy1<N&&g[sy1][sx1]) return -1;
+      if (sx2>=0&&sy2>=0&&g[sy2][sx2]) return -1;
+    }
+  }
+  return cross;
+}
+function cwBuild(entries, N, target){
+  const g = Array.from({length:N},()=>Array(N).fill(''));
+  const m = Array.from({length:N},()=>Array(N).fill(0));
+  const placed = [], used = new Set();
+  const put = (e,x,y,dir)=>{
+    const dx = dir===0?1:0, dy = dir===1?1:0;
+    for (let i=0;i<e.w.length;i++){g[y+dy*i][x+dx*i]=e.w[i]; m[y+dy*i][x+dx*i] |= dir===0?1:2}
+    placed.push({word:e.w,clue:e.c,x,y,dir}); used.add(e.w);
+  };
+  const order = shuffle(entries);
+  const first = order[0];
+  put(first, Math.floor((N-first.w.length)/2), Math.floor(N/2), 0);
+  for (let pass=0; pass<3 && placed.length<target; pass++){
+    for (const e of order){
+      if (placed.length>=target) break;
+      if (used.has(e.w)) continue;
+      let best = [], bs = 0;
+      for (const p of placed){
+        for (let i=0;i<p.word.length;i++) for (let j=0;j<e.w.length;j++){
+          if (p.word[i]!==e.w[j]) continue;
+          const dir = 1-p.dir;
+          const x = p.dir===0 ? p.x+i : p.x-j;
+          const y = p.dir===0 ? p.y-j : p.y+i;
+          const s = cwFit(g,m,N,e.w,x,y,dir);
+          if (s<1) continue;
+          if (s>bs){bs=s;best=[[x,y,dir]]} else if (s===bs) best.push([x,y,dir]);
+        }
+      }
+      if (best.length){const [x,y,dir]=best[rnd(best.length)]; put(e,x,y,dir)}
+    }
+  }
+  return placed;
+}
+function generateCW(){
+  const d = DIFFS[cwDiff].cw, N = d.ws;
+  const pool = THEMES[cwTheme].entries.filter(e=>e.w.length>=3 && e.w.length<=Math.min(d.maxLen,N));
+  let best = null, bestScore = -1;
+  for (let at=0; at<40; at++){
+    const placed = cwBuild(pool, N, d.count);
+    let x0=N,y0=N,x1=0,y1=0;
+    placed.forEach(p=>{
+      const ex = p.dir===0?p.x+p.word.length-1:p.x, ey = p.dir===1?p.y+p.word.length-1:p.y;
+      x0=Math.min(x0,p.x);y0=Math.min(y0,p.y);x1=Math.max(x1,ex);y1=Math.max(y1,ey);
+    });
+    const W = x1-x0+1, H = y1-y0+1;
+    const score = placed.length*1000 - W*H;     // mais palavras, depois grade mais compacta
+    if (score>bestScore){bestScore=score;best={placed,x0,y0,W,H}}
+    if (placed.length>=d.count && at>=6) break;
+  }
+  return best && cwModel(best);
+}
+function cwModel({placed,x0,y0,W,H}){
+  const ch = Array.from({length:H},()=>Array(W).fill(''));
+  const num = Array.from({length:H},()=>Array(W).fill(0));
+  const cA = Array.from({length:H},()=>Array(W).fill(null));
+  const cD = Array.from({length:H},()=>Array(W).fill(null));
+  placed.forEach(p=>{p.x-=x0;p.y-=y0;
+    for(let i=0;i<p.word.length;i++){const x=p.x+(p.dir===0?i:0),y=p.y+(p.dir===1?i:0);ch[y][x]=p.word[i]}});
+  let n = 0; const across=[], down=[];
+  for (let y=0;y<H;y++) for (let x=0;x<W;x++){
+    if (!ch[y][x]) continue;
+    const sa = (x===0||!ch[y][x-1]) && x+1<W && ch[y][x+1];
+    const sd = (y===0||!ch[y-1][x]) && y+1<H && ch[y+1][x];
+    if (!sa && !sd) continue;
+    n++; num[y][x]=n;
+    for (const [dir,flag] of [[0,sa],[1,sd]]){
+      if (!flag) continue;
+      const p = placed.find(q=>q.x===x&&q.y===y&&q.dir===dir); if (!p) continue;
+      const cells=[]; for(let i=0;i<p.word.length;i++) cells.push([x+(dir===0?i:0), y+(dir===1?i:0)]);
+      const w = {num:n,dir,word:p.word,clue:p.clue,cells,x,y};
+      cells.forEach(([cx,cy])=>{(dir===0?cA:cD)[cy][cx]=w});
+      (dir===0?across:down).push(w);
+    }
+  }
+  const user = Array.from({length:H},()=>Array(W).fill(''));
+  const given = Array.from({length:H},()=>Array(W).fill(false));
+  const bad = Array.from({length:H},()=>Array(W).fill(false));
+  const ratio = DIFFS[cwDiff].cw.given;
+  if (ratio>0){
+    const all=[]; for(let y=0;y<H;y++)for(let x=0;x<W;x++) if(ch[y][x]) all.push([x,y]);
+    shuffle(all).slice(0,Math.round(all.length*ratio)).forEach(([x,y])=>{given[y][x]=true;user[y][x]=ch[y][x]});
+  }
+  return {W,H,ch,num,cA,cD,across,down,user,given,bad,total:placed.length,placed,els:[]};
+}
+function cwBest(){return 'cw_best_'+cwDiff+'_'+cwTheme}
+function cwShowBest(){const b=store(cwBest());$('cwBest').textContent = b? fmt(+b):'--'}
+function cwCellSize(){
+  const avail = Math.min(window.innerWidth-24, 560) - 12 - (cw.W-1)*2;
+  return Math.max(26, Math.min(46, Math.floor(avail/cw.W)));
+}
+function cwRender(){
+  const cs = cwCellSize(), b = $('cwBoard');
+  b.innerHTML=''; b.style.gridTemplateColumns=`repeat(${cw.W},${cs}px)`; b.style.gridAutoRows=cs+'px';
+  cw.els = [];
+  for (let y=0;y<cw.H;y++){
+    const row=[];
+    for (let x=0;x<cw.W;x++){
+      const d = document.createElement('div');
+      if (!cw.ch[y][x]) d.className='cw blk';
+      else {
+        d.className='cw';
+        if (cw.num[y][x]){const s=document.createElement('span');s.className='n';s.textContent=cw.num[y][x];d.appendChild(s)}
+        const l=document.createElement('span'); l.className='l'; l.style.fontSize=Math.round(cs*.52)+'px'; d.appendChild(l);
+        d.addEventListener('click',()=>cwSelect(x,y));
+      }
+      b.appendChild(d); row.push(d);
+    }
+    cw.els.push(row);
+  }
+  const mk = (list,ul)=>{ul.innerHTML='';list.forEach(w=>{
+    const li=document.createElement('li'); const no=document.createElement('span'); no.className='no'; no.textContent=w.num; const tx=document.createElement('span'); tx.className='tx'; tx.textContent=`${w.clue} (${w.word.length})`; li.append(no,tx);
+    li.onclick=()=>{cwGoWord(w)}; w.li=li; ul.appendChild(li)})};
+  mk(cw.across,$('cwAcross')); mk(cw.down,$('cwDown'));
+  cwPaint();
+}
+function cwActive(){
+  if (!sel) return null;
+  return (sel.dir===0?cw.cA:cw.cD)[sel.y][sel.x];
+}
+function cwWordDone(w){return w.cells.every(([x,y])=>cw.user[y][x]===cw.ch[y][x])}
+function cwPaint(){
+  const aw = cwActive(); let filled = 0, total = 0;
+  for (let y=0;y<cw.H;y++) for (let x=0;x<cw.W;x++){
+    if (!cw.ch[y][x]) continue;
+    total++; if (cw.user[y][x]) filled++;
+    const d = cw.els[y][x];
+    let c = 'cw';
+    if (aw && aw.cells.some(([a,b])=>a===x&&b===y)) c+=' w';
+    if (sel && sel.x===x && sel.y===y) c+=' s';
+    if (cw.given[y][x]) c+=' g';
+    if (cw.bad[y][x]) c+=' bad';
+    d.className = c;
+    d.querySelector('.l').textContent = cw.user[y][x];
+  }
+  $('cwFilled').textContent = filled+'/'+total;
+  [...cw.across,...cw.down].forEach(w=>{
+    w.li.classList.toggle('act', w===aw);
+    w.li.classList.toggle('ok', cwWordDone(w));
+  });
+  cwSave();
+  const t = $('cwClueTxt');
+  if (aw) t.innerHTML = `<b>${aw.num} ${aw.dir===0?'➡':'⬇'}</b> ${aw.clue} <span style="color:var(--muted)">(${aw.word.length} letras)</span>`;
+  else t.textContent = 'Toque em uma casa para começar';
+}
+function cwSelect(x,y){
+  if (!cw.ch[y][x] || cwDone) return;
+  tCW.start();
+  if (sel && sel.x===x && sel.y===y){
+    const other = (sel.dir===0?cw.cD:cw.cA)[y][x]; if (other) sel.dir = 1-sel.dir;
+  } else {
+    let dir = sel?sel.dir:0;
+    if (!(dir===0?cw.cA:cw.cD)[y][x]) dir = 1-dir;
+    sel = {x,y,dir};
+  }
+  $('cwMsg').textContent=''; cwPaint();
+}
+function cwGoWord(w){
+  const cell = w.cells.find(([x,y])=>!cw.user[y][x]) || w.cells[0];
+  sel = {x:cell[0],y:cell[1],dir:w.dir}; tCW.start(); cwPaint();
+  cw.els[cell[1]][cell[0]].scrollIntoView({block:'nearest',inline:'nearest'});
+}
+function cwStep(d){
+  const all = [...cw.across,...cw.down]; if (!all.length) return;
+  const aw = cwActive(); let i = aw?all.indexOf(aw):-1;
+  cwGoWord(all[(i+d+all.length)%all.length]);
+}
+function cwMove(step){
+  const w = cwActive(); if (!w) return;
+  const i = w.cells.findIndex(([x,y])=>x===sel.x&&y===sel.y), j = i+step;
+  if (j>=0 && j<w.cells.length){sel.x=w.cells[j][0];sel.y=w.cells[j][1]}
+}
+function cwType(letter){
+  if (!sel || cwDone) return;
+  tCW.start();
+  if (!cw.given[sel.y][sel.x]){cw.user[sel.y][sel.x]=letter; cw.bad[sel.y][sel.x]=false}
+  cwMove(1); $('cwMsg').textContent=''; cwPaint(); cwCheckWin();
+}
+function cwBack(){
+  if (!sel || cwDone) return;
+  const {x,y} = sel;
+  if (cw.user[y][x] && !cw.given[y][x]){cw.user[y][x]='';cw.bad[y][x]=false}
+  else {cwMove(-1); const a=sel.x,b=sel.y; if(!cw.given[b][a]){cw.user[b][a]='';cw.bad[b][a]=false}}
+  cwPaint();
+}
+function cwCheckWin(){
+  for (let y=0;y<cw.H;y++) for (let x=0;x<cw.W;x++) if (cw.ch[y][x] && cw.user[y][x]!==cw.ch[y][x]) return;
+  cwDone = true; tCW.pause(); cwSave(); const el = tCW.sec();
+  const prev = +store(cwBest()) || 0; let rec = false;
+  if (!prev || el<prev){store(cwBest(),String(el));rec=true}
+  cwShowBest();
+  showWin(`Tempo: <b>${fmt(el)}</b> · Revelações: <b>${cwReveals}</b>`, rec, prev);
+}
+$('cwCheck').onclick = ()=>{
+  if (cwDone) return;
+  let wrong = 0;
+  for (let y=0;y<cw.H;y++) for (let x=0;x<cw.W;x++){
+    const b = !!(cw.user[y][x] && cw.user[y][x]!==cw.ch[y][x]); cw.bad[y][x]=b; if (b) wrong++;
+  }
+  $('cwMsg').textContent = wrong ? `${wrong} letra${wrong>1?'s':''} errada${wrong>1?'s':''} (em vermelho)` : 'Nenhuma letra errada até agora 👍';
+  cwPaint();
+};
+$('cwReveal').onclick = ()=>{
+  if (!sel || cwDone) return;
+  const {x,y} = sel; if (cw.user[y][x]===cw.ch[y][x]) return;
+  cw.user[y][x]=cw.ch[y][x]; cw.given[y][x]=true; cw.bad[y][x]=false; cwReveals++; tCW.start();
+  cwPaint(); cwCheckWin();
+};
+$('cwPrev').onclick = ()=>cwStep(-1);
+$('cwNext').onclick = ()=>cwStep(1);
+function newCW(){
+  tCW.reset(); cwDone=false; cwReveals=0; sel=null; $('cwMsg').textContent='';
+  cw = generateCW();
+  if (!cw){ $('cwClueTxt').textContent='Não consegui gerar. Toque em Novo jogo.'; $('cwBoard').innerHTML=''; return }
+  cwShowBest(); cwRender();
+  // seleciona a primeira palavra
+  const f = cw.across[0] || cw.down[0]; if (f){sel={x:f.cells[0][0],y:f.cells[0][1],dir:f.dir}; cwPaint()}
+  cwSave();
+}
+
+/* teclado na tela e físico */
+(function(){
+  const kb = $('kb');
+  const rows = ['QWERTYUIOP','ASDFGHJKL','ZXCVBNM'];
+  rows.forEach((r,ri)=>{
+    const d = document.createElement('div'); d.className='krow';
+    r.split('').forEach(l=>{const b=document.createElement('button');b.className='key';b.textContent=l;
+      b.addEventListener('pointerdown',e=>e.preventDefault());
+      b.onclick=()=>cwType(l);d.appendChild(b)});
+    if (ri===2){const b=document.createElement('button');b.className='key wide';b.textContent='⌫';b.setAttribute('aria-label','Apagar');
+      b.addEventListener('pointerdown',e=>e.preventDefault());
+      b.onclick=cwBack;d.appendChild(b)}
+    kb.appendChild(d);
+  });
+})();
+document.addEventListener('keydown',e=>{
+  if (gameKey!=='cw' || !cw || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.key==='Backspace'){e.preventDefault();cwBack();return}
+  if (e.key==='Tab'){e.preventDefault();cwStep(e.shiftKey?-1:1);return}
+  const arrows = {ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};
+  if (arrows[e.key] && sel){
+    e.preventDefault(); const [dx,dy]=arrows[e.key]; const nx=sel.x+dx, ny=sel.y+dy;
+    if (nx>=0&&ny>=0&&nx<cw.W&&ny<cw.H&&cw.ch[ny][nx]){
+      const dir = dx?0:1; sel = {x:nx,y:ny,dir:(dir===0?cw.cA:cw.cD)[ny][nx]?dir:1-dir}; cwPaint();
+    }
+    return;
+  }
+  const ch = e.key.length===1 ? e.key.normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase() : '';
+  if (/^[A-Z]$/.test(ch)){e.preventDefault();cwType(ch)}
+});
+
+/* =====================================================================
+   Salvamento da partida em andamento (localStorage)
+   ===================================================================== */
+function drop(k){try{localStorage.removeItem(k)}catch(e){}}
+const elapsedMs = t => t.acc + (t.run ? Date.now()-t.t0 : 0);
+function wsSave(){
+  if (!ws || !ws.grid || wsDone){drop('jp_ws_save');return}
+  store('jp_ws_save', JSON.stringify({diff:wsDiff,theme:wsTheme,grid:ws.grid,placed:ws.placed,n:ws.n,
+    found:[...wsFound],hints:wsHints,acc:elapsedMs(tWS)}));
+}
+function wsLoad(){
+  try{
+    const raw = store('jp_ws_save'); if (!raw) return false;
+    const d = JSON.parse(raw);
+    if (!(d.diff in DIFFS) || !(d.theme in THEMES) || !Array.isArray(d.grid) || d.grid.length!==d.n ||
+        !Array.isArray(d.placed) || !d.placed.length || !Array.isArray(d.found) || d.found.length>=d.placed.length) return false;
+    wsDiff=d.diff; wsTheme=d.theme; tWS.reset();
+    ws = {grid:d.grid, placed:d.placed, n:d.n}; wsFound = new Set(d.found); wsHints = d.hints|0; wsDone = false;
+    tWS.acc = d.acc|0; tWS.draw(); wsShowBest(); wsRender(); return true;
+  }catch(e){return false}
+}
+function cwSave(){
+  if (!cw || !cw.placed || cwDone){drop('jp_cw_save');return}
+  store('jp_cw_save', JSON.stringify({diff:cwDiff,theme:cwTheme,W:cw.W,H:cw.H,
+    placed:cw.placed.map(p=>({word:p.word,clue:p.clue,x:p.x,y:p.y,dir:p.dir})),
+    user:cw.user,given:cw.given,bad:cw.bad,reveals:cwReveals,sel,acc:elapsedMs(tCW)}));
+}
+function cwLoad(){
+  try{
+    const raw = store('jp_cw_save'); if (!raw) return false;
+    const d = JSON.parse(raw);
+    if (!(d.diff in DIFFS) || !(d.theme in THEMES) || !Array.isArray(d.placed) || !d.placed.length ||
+        !Array.isArray(d.user) || d.user.length!==d.H || !Array.isArray(d.given) || !Array.isArray(d.bad)) return false;
+    cwDiff=d.diff; cwTheme=d.theme; tCW.reset();
+    const m = cwModel({placed:d.placed.map(p=>({...p})),x0:0,y0:0,W:d.W,H:d.H});
+    m.user=d.user; m.given=d.given; m.bad=d.bad;
+    cw = m; cwDone = false; cwReveals = d.reveals|0;
+    tCW.acc = d.acc|0; tCW.draw();
+    const f = cw.across[0] || cw.down[0];
+    sel = (d.sel && d.sel.x<cw.W && d.sel.y<cw.H && cw.ch[d.sel.y][d.sel.x]) ? d.sel : (f?{x:f.cells[0][0],y:f.cells[0][1],dir:f.dir}:null);
+    $('cwMsg').textContent=''; cwShowBest(); cwRender(); return true;
+  }catch(e){return false}
+}
+setInterval(()=>{wsSave();cwSave()},5000);
+window.addEventListener('pagehide',()=>{wsSave();cwSave()});
+
+/* =====================================================================
+   Interface comum
+   ===================================================================== */
+function showWin(line1, rec, prev){
+  $('res1').innerHTML = line1;
+  $('res2').innerHTML = rec ? '<b>🏆 Novo recorde!</b>' : `Seu recorde: <b>${fmt(prev)}</b>`;
+  setTimeout(()=>$('overlay').classList.add('show'), 350);
+}
+function hideWin(){$('overlay').classList.remove('show')}
+function buildControls(g){
+  const isWS = g==='ws', tabs = $(g+'Tabs'), sel = $(g+'Theme');
+  const getD = () => isWS?wsDiff:cwDiff, getT = () => isWS?wsTheme:cwTheme;
+  tabs.innerHTML='';
+  for (const k in DIFFS){
+    const b = document.createElement('button');
+    b.className = 'tab'+(k===getD()?' on':''); b.textContent = DIFFS[k].nome;
+    b.onclick = () => {
+      if (isWS) wsDiff = k; else cwDiff = k;
+      store('jp_'+g+'_diff',k); buildControls(g); hideWin(); isWS?newWS():newCW();
+    };
+    tabs.appendChild(b);
+  }
+  if (!sel.options.length){
+    for (const k in THEMES){const o=document.createElement('option');o.value=k;o.textContent='Tema: '+THEMES[k].nome;sel.appendChild(o)}
+    sel.onchange = () => {
+      if (isWS) wsTheme = sel.value; else cwTheme = sel.value;
+      store('jp_'+g+'_theme',sel.value); hideWin(); isWS?newWS():newCW();
+    };
+  }
+  sel.value = getT();
+}
+function setGame(g){
+  (gameKey==='ws'?tWS:tCW).pause();
+  gameKey = g; store('jp_game',g);
+  $('wsPanel').classList.toggle('on', g==='ws');
+  $('cwPanel').classList.toggle('on', g==='cw');
+  document.body.classList.toggle("mode-cw", g==="cw");
+  document.querySelectorAll('#gtabs .tab').forEach(b=>b.classList.toggle('on', b.dataset.g===g));
+  const t = g==='ws'?tWS:tCW, done = g==='ws'?wsDone:cwDone;
+  if (t.began && !done) t.start();
+}
+document.querySelectorAll('#gtabs .tab').forEach(b=>b.onclick=()=>setGame(b.dataset.g));
+$('wsNew').onclick = ()=>{hideWin(); newWS()};
+$('cwNew').onclick = ()=>{hideWin(); newCW()};
+$('again').onclick = ()=>{hideWin(); gameKey==='ws'?newWS():newCW()};
+document.addEventListener('visibilitychange',()=>{
+  const t = gameKey==='ws'?tWS:tCW, done = gameKey==='ws'?wsDone:cwDone;
+  if (document.hidden){wsSave();cwSave()}
+  if (document.hidden) t.pause(); else if (t.began && !done) t.start();
+});
+let rz; window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{if(ws&&ws.grid)wsRender();if(cw&&cw.els)cwRender()},150)});
+
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(()=>{});
+wsLoad() || newWS(); cwLoad() || newCW(); buildControls("ws"); buildControls("cw"); setGame(gameKey);
+</script>
+</body>
+</html>

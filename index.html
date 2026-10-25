@@ -23,8 +23,10 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:var(--bg);color:var(--text);font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
 body{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:12px 12px 0;user-select:none;-webkit-user-select:none}
-body.mode-cw{padding-bottom:178px}
-h1{font-size:20px;margin:4px 0 10px;letter-spacing:.2px;font-weight:800}
+body.mode-cw{padding-bottom:0}
+h1{font-size:0;line-height:0;margin:0 0 6px}
+.titleSvg{display:block;margin:0 auto;aspect-ratio:760/240;height:clamp(60px,11vh,92px);width:auto}
+.homeArt{height:auto;width:clamp(250px,80vw,350px)}
 .wrap{width:100%;max-width:560px;display:flex;flex-direction:column;gap:10px}
 .row{display:flex;gap:8px;align-items:center}
 .tabs{display:flex;gap:8px}
@@ -77,8 +79,6 @@ section.on{display:flex}
 #cwClue .txt b{color:var(--amber)}
 #cwClue button{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(var(--card1),var(--card2));color:var(--text);font-size:18px;font-weight:800;cursor:pointer;touch-action:manipulation;box-shadow:var(--shadow)}
 #cwMsg{min-height:18px;text-align:center;font-size:13px;color:var(--muted)}
-.clues{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:420px){.clues{grid-template-columns:1fr}}
 .clues h3{margin:0 0 8px;font-size:14px;color:var(--text)}
 .clues ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
 .clues li{display:flex;align-items:center;gap:10px;font-size:13px;line-height:1.25;padding:8px 10px;border-radius:14px;background:linear-gradient(var(--card1),var(--card2));cursor:pointer}
@@ -92,8 +92,8 @@ body.mode-cw #kb{display:flex}
 .krow{display:flex;gap:5px;width:100%;max-width:560px;justify-content:center}
 .key{flex:1;max-width:44px;height:46px;border:1px solid var(--line);border-radius:10px;background:linear-gradient(#fff,#eef0f4);color:var(--text);font-size:17px;font-weight:700;cursor:pointer;touch-action:manipulation;box-shadow:var(--shadow)}
 .key.wide{flex:1.5;max-width:66px;background:linear-gradient(#e9ebf0,#d6d9e1)}
-#overlay{position:fixed;inset:0;background:rgba(20,24,40,.5);display:none;align-items:center;justify-content:center;padding:20px;z-index:9}
-#overlay.show{display:flex}
+#overlay,#confirm{position:fixed;inset:0;background:rgba(20,24,40,.5);display:none;align-items:center;justify-content:center;padding:20px;z-index:9}
+#overlay.show,#confirm.show{display:flex}
 .modal{background:linear-gradient(#fff,#f1f2f6);border:1px solid var(--line);border-radius:18px;padding:22px;max-width:320px;width:100%;text-align:center;box-shadow:0 10px 30px rgba(20,24,40,.25)}
 .modal h2{margin:0 0 8px;font-size:22px}
 .modal p{margin:6px 0;color:var(--muted);font-size:15px}
@@ -104,33 +104,40 @@ body.home #home{display:grid}
 body.home h1,body.home .wrap{display:none}
 body.home footer{position:fixed;left:0;right:0;bottom:0;padding:10px 0}
 .homeHead{grid-row:1;align-self:end;display:flex;flex-direction:column;align-items:center;gap:14px;margin-bottom:30px}
-.logo{width:clamp(84px,24vw,112px);height:auto;filter:drop-shadow(0 4px 8px rgba(29,63,154,.28))}
-.homeTitle{text-align:center;font-size:clamp(38px,12vw,56px);font-weight:800;letter-spacing:.2px;line-height:1.05}
+.logo{width:clamp(110px,30vw,130px);height:auto;filter:drop-shadow(0 4px 8px rgba(29,63,154,.28))}
+.homeTitle{text-align:center;line-height:0}
 .homeBtns{grid-row:2;display:flex;flex-direction:column;gap:12px;width:100%;max-width:240px}
 .homeBtn{height:50px;border-radius:14px;border:1px solid var(--line);background:linear-gradient(var(--card1),var(--card2));box-shadow:inset 5px 0 0 var(--blue),var(--shadow);font-size:16px;font-weight:800;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;touch-action:manipulation;font-family:inherit}
 .homeBtn span{font-size:19px}
 .homeBtn:active{transform:scale(.98)}
 footer{margin-top:auto;padding:16px 0 12px;font-size:12px;color:var(--muted);text-align:center}
-#cwClue{position:sticky;top:0;z-index:4}
+body.mode-ws footer,body.mode-cw footer{display:none}   /* jogos: sem rodapé (versão aparece só na tela inicial) */
+#cwClue{flex:1;min-width:0}
+#cwReveal{flex:none;width:72px;padding:0;font-size:16px}
+.clues{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.clueBox summary{list-style:none;cursor:pointer;padding:11px 14px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(var(--card1),var(--card2));box-shadow:var(--shadow);font-size:15px;font-weight:700}
+.clueBox summary::-webkit-details-marker{display:none}
+.clueBox summary::after{content:none}
+.clueBox ul{display:none}   /* listas ficam ocultas: o botão só move o cursor (lista aberta gerava rolagem) */
 @media(min-width:700px){
   .wrap{max-width:760px}
   .krow{max-width:760px}
   .key{max-width:56px;height:52px}
-  .logo{width:128px}
+  .logo{width:150px}
   .homeBtns{max-width:300px}
   .homeBtn{height:58px;font-size:18px}
-  body.mode-cw{padding-bottom:196px}
+  body.mode-cw{padding-bottom:0}
 }
 @media(max-width:699px) and (max-height:700px){
   .key{height:40px}
   #kb{gap:5px;padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
-  body.mode-cw{padding-bottom:152px}
+  body.mode-cw{padding-bottom:0}
 }
 @media(max-height:520px) and (orientation:landscape){
   #home{grid-template-columns:1fr 1fr;grid-template-rows:1fr;align-items:center;column-gap:20px}
   .homeHead{grid-row:1;grid-column:1;align-self:center;justify-self:end;margin-bottom:0;flex-direction:row;gap:14px}
-  .logo{width:76px}
-  .homeTitle{font-size:32px;text-align:left}
+  .logo{width:90px}
+  .homeArt{width:230px}
   .homeBtns{grid-row:1;grid-column:2;justify-self:start;align-self:center}
   body.home footer{padding:4px 0}
   h1{display:none}
@@ -144,34 +151,29 @@ footer{margin-top:auto;padding:16px 0 12px;font-size:12px;color:var(--muted);tex
   .stats{font-size:13px}
   .key{height:34px}
   #kb{gap:4px;padding:4px 6px calc(4px + env(safe-area-inset-bottom))}
-  body.mode-cw{padding-bottom:132px}
+  body.mode-cw{padding-bottom:0}
 }
 </style>
 </head>
 <body class="home">
-<h1>Jogos de Palavras</h1>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="titleArt" viewBox="0 0 760 240"><rect x="26" y="30" width="708" height="196" rx="18" fill="#ffffff" stroke="#d5d8e0" stroke-width="3"/><g stroke="#abc1ee" stroke-width="2"><line x1="40" y1="76" x2="720" y2="76"/><line x1="40" y1="108" x2="720" y2="108"/><line x1="40" y1="140" x2="720" y2="140"/><line x1="40" y1="172" x2="720" y2="172"/><line x1="40" y1="204" x2="720" y2="204"/></g><line x1="58" y1="40" x2="58" y2="218" stroke="#e5484d" stroke-opacity="0.55" stroke-width="2.5"/><g fill="#6a6e7a"><rect x="90" y="12" width="14" height="36" rx="7"/><rect x="170" y="12" width="14" height="36" rx="7"/><rect x="250" y="12" width="14" height="36" rx="7"/><rect x="330" y="12" width="14" height="36" rx="7"/><rect x="410" y="12" width="14" height="36" rx="7"/><rect x="490" y="12" width="14" height="36" rx="7"/><rect x="570" y="12" width="14" height="36" rx="7"/><rect x="650" y="12" width="14" height="36" rx="7"/></g><g transform="rotate(-2 380 140)"><path d="M84.3 174.4Q82.2 175.5 79.8 175.4Q77.4 175.4 75.1 174.4Q72.9 173.4 71.5 171.8Q70.9 171.1 71 169.2Q71.1 167.3 71.5 166.1Q71.9 164.5 72.7 164.5Q73.7 164.5 74.9 166.2Q77.4 168.4 79.9 167.4Q82.4 166.4 85.2 162.1Q85.7 160.8 86.9 158.3Q88.1 155.7 89.4 152.8Q90.7 150 91.8 147.5Q92.8 145 93.2 143.9Q93.2 143.9 93.2 143.6Q93.3 143.3 93.6 142.9Q93.7 142.6 94.1 141.5Q94.5 140.4 94.8 139Q95.2 138 95.9 136Q96.5 134 97.3 131.9Q98.1 129.7 98.6 128.3Q99 126.4 99.7 124.2Q100.4 122 100.8 120.8Q101.2 120.1 101.9 117.9Q102.6 115.7 103.5 113.1Q104.6 109.5 105.5 106.9Q106.3 104.3 106.7 102.7Q107.2 101.2 107 100.9Q107 100.9 105.4 101.2Q103.8 101.4 101.9 101.8Q100.4 102.4 98.8 102.6Q97.2 102.8 97.5 101.6Q97.5 101.3 97.5 100.9Q97.5 100.6 97.5 100.6Q97.2 100.8 96.8 100.3Q96.3 99.7 96 98.9Q95.6 98 95.6 97.6Q95.6 96.9 97.7 95.9Q99.9 95 102.6 94.6Q104.4 94.3 107 94.1Q109.6 93.9 110.8 93.7Q111.1 93.4 112.4 93.9Q113.6 94.3 115 95Q116.3 95.6 116.8 96.1Q117.3 96.9 117.5 97.7Q117.6 98.5 117.2 99.9Q116.9 101.4 115.9 104Q115 106.7 113.3 111.3Q111.3 116.8 109.8 121.4Q108.2 125.9 107 128.9Q106.7 129.9 106 131.8Q105.3 133.7 104.7 135.6Q104.1 137.5 103.7 138.8Q103 140.5 102.4 142.5Q101.7 144.5 101.4 145.6Q101.4 146.4 101 147.3Q100.7 148.2 100.2 148.6Q100.2 148.6 99.6 150.2Q99 151.8 98.1 153.9Q97.3 155.7 96.5 157.9Q95.6 160.1 94.9 161.3Q94.5 162.4 93.8 163.3Q93.2 164.3 93.2 164.6Q93.2 164.6 93.2 164.9Q93.1 165.2 92.7 165.2Q92.7 165.2 92.5 165.4Q92.2 165.6 92.2 166.1Q92 166.6 91 167.8Q90 169 88.8 170.4Q87.5 171.8 86.3 172.8Q85 173.9 84.3 174.4ZM119.5 155.4Q118.3 155.4 117.6 154.9Q117 154.5 116 153.7Q114.3 151.9 113.2 149.8Q112.2 147.7 112.5 146.2Q112.7 145.5 112.7 144.8Q112.6 144.1 112.6 144.1Q112.2 143.7 112.4 143.5Q112.6 143.4 112.7 143Q113.3 143 113.1 142Q112.9 141.3 113.7 138.9Q114.4 136.6 115.8 134.4Q116.3 133.5 117.4 132Q118.5 130.5 119.8 129Q121.1 127.6 122.2 126.7Q124.4 124.8 126.4 123.6Q128.3 122.4 130.3 122Q132.3 121.5 134.4 121.5Q136.5 121.5 137.9 123Q139.9 123.9 140.8 125.4Q141.6 126.9 141.9 129.4Q142.2 132.1 141.4 136Q140.6 139.9 137 145Q134.7 148.3 132.5 150.1Q130.4 151.9 127.8 153.4Q125.9 154.6 123.7 154.9Q121.6 155.2 119.5 155.4ZM128.7 144.4Q130.6 142.7 131.5 140.6Q132.4 138.5 133.3 135.7Q133.7 135.2 133.8 133.9Q134 132.7 133.9 131.5Q133.8 130.3 133.3 130.1Q132.4 129.4 131.6 129.8Q130.8 130.1 129.6 131Q126.9 133.2 124.6 136.1Q122.3 139.1 121.4 143.3Q121.1 145.6 121.9 146.7Q122.6 147.8 124.4 147.3Q126.1 146.8 128.7 144.4ZM156.2 174Q153.7 175 150.9 173.7Q148.2 172.4 146.2 169.6Q145.9 169.1 145.1 167.7Q144.4 166.3 143.7 164.6Q143.1 163 142.8 161.9Q142.4 160.7 142.7 160.5Q143.1 159.5 144.3 159.3Q145.6 159.2 146.9 159.5Q148.1 159.8 148.3 160.3Q148.6 161 148.8 161.6Q149.1 162.3 149.5 162.9Q149.9 163.5 150.3 163.9Q151.3 165.5 152.4 166Q153.6 166.6 154.2 166.2Q155.8 165 156.5 163.4Q157.3 161.9 158.6 157.9Q159.5 154.6 160.3 152.1Q161 149.7 161.8 147.6Q162.1 146.5 162.5 145.8Q162.9 145 163.2 144.7H163.8Q161.8 145.9 160.4 147.2Q159.1 148.4 156.8 149.4Q156.2 150.1 154.1 150.2Q152 150.3 150 149.7Q148.7 149 148 148.2Q147.2 147.4 146.7 146.5Q146.2 145.5 145.7 144.1Q145.1 142.8 145.5 139.7Q146 136.6 147.1 133.6Q148.2 131.3 150.3 128.7Q152.3 126.1 154.7 124Q157 121.9 158.9 121.3Q159.6 121 161.4 120.5Q163.2 120 164.9 120.4Q166.4 120.6 167.2 121.1Q168 121.6 169.8 123.1Q171 124.3 172.7 126.2Q174.4 128 174.9 129.3Q175.5 130.6 175.1 132.2Q174.8 133.8 173.9 134.9Q173.1 136.1 172.2 137.3Q171.3 138.4 170.8 140.5Q170.4 143.2 169.1 146.6Q167.8 150 167.1 152.8L165.7 158.4Q163.4 166.1 160.7 169.5Q158 173 156.2 174ZM154.3 143Q156.1 142.9 157.4 142.6Q158.7 142.3 159.9 141.2Q161.1 140.1 162.6 137.7Q164.1 135.6 164.8 133.8Q165.4 132 165.2 129.7Q165.1 128.3 164.4 127.8Q163.7 127.4 162.5 127.6Q160.8 127.8 159.5 128.9Q158.1 130.1 156.3 132.4Q155 134.2 154.1 136.7Q153.2 139.4 153.3 141.1Q153.4 142.7 154.3 143ZM184.8 155.4Q183.7 155.4 183 154.9Q182.3 154.5 181.3 153.7Q179.6 151.9 178.6 149.8Q177.6 147.7 177.8 146.2Q178.1 145.5 178 144.8Q178 144.1 178 144.1Q177.6 143.7 177.7 143.5Q177.9 143.4 178.1 143Q178.6 143 178.5 142Q178.3 141.3 179 138.9Q179.8 136.6 181.2 134.4Q181.7 133.5 182.8 132Q183.9 130.5 185.2 129Q186.5 127.6 187.5 126.7Q189.8 124.8 191.7 123.6Q193.7 122.4 195.6 122Q197.6 121.5 199.7 121.5Q201.9 121.5 203.2 123Q205.3 123.9 206.1 125.4Q207 126.9 207.3 129.4Q207.5 132.1 206.7 136Q205.9 139.9 202.3 145Q200.1 148.3 197.9 150.1Q195.7 151.9 193.1 153.4Q191.2 154.6 189.1 154.9Q186.9 155.2 184.8 155.4ZM194 144.4Q196 142.7 196.9 140.6Q197.7 138.5 198.7 135.7Q199.1 135.2 199.2 133.9Q199.3 132.7 199.3 131.5Q199.2 130.3 198.6 130.1Q197.8 129.4 197 129.8Q196.2 130.1 194.9 131Q192.2 133.2 189.9 136.1Q187.6 139.1 186.7 143.3Q186.5 145.6 187.2 146.7Q188 147.8 189.8 147.3Q191.5 146.8 194 144.4ZM216.1 156.5Q213 155.3 211.6 153.9Q210.2 152.5 210.5 151.4Q210.7 150.9 211.1 150.4Q211.6 150 213.2 150Q214.7 150.1 218.1 150.9Q219.1 150.9 220 150.8Q221 150.7 221.9 150.5Q222.7 150.3 223.3 150.1Q223.7 149.9 223.6 149.6Q223.4 149.2 222.9 148.9Q222.6 148.4 222.1 148.3Q221.7 148.2 221.3 148.2Q221.1 147.7 220.5 147.3Q220 146.8 219.1 146.3Q217.2 144.7 215.5 143.4Q213.9 142.1 214.3 141.5Q214.3 141.1 214.3 141.1Q214.3 141.1 214.3 141.1Q213.7 141.1 213.1 139.3Q212.6 137.5 212.6 136.1Q212.6 134.3 213.3 132.5Q214.1 130.7 215.3 129.1Q216.5 127.5 217.8 126.2Q219.5 124.6 221.4 123Q223.4 121.4 225.7 120.2Q228 118.9 230.8 118.2Q232 117.9 233.6 117.9Q235.3 117.9 236 118.4Q236.7 117.9 237.8 118.6Q238.9 119.3 239.9 120.4Q241 121.6 241.6 122.8Q241.6 123.9 241.5 125.4Q241.5 127 241.3 128.2Q241.1 129.4 240.5 129.4Q240.5 129.4 240.3 129.4Q240 129.4 240 129.9Q240 130.8 238.7 132Q237 133.1 235.4 133.9Q233.9 134.6 233.1 133.9Q232.6 133.6 232.1 133.2Q231.7 132.9 231.3 132.3Q231.3 132.3 231.1 131.9Q230.9 131.5 230.9 131.2Q230.9 130.8 231.1 130.5Q231.4 130.2 231.4 130.2Q232.7 129 233.3 128Q234 127 234.3 126.2Q234.5 125.5 234.5 125Q234.5 124.5 234.3 124.4Q234.1 124.2 233.4 124.2Q232.9 124.2 231.4 124.9Q230 125.7 228.3 126.7Q226.7 127.7 225.8 128.5Q225.4 129.2 225.3 129.4Q225.2 129.5 224.8 129.5Q224.8 129.2 224.4 129.6Q223.9 130.1 223.3 130.9Q222.7 131.7 222 132.6Q221.4 133.5 221 134Q220.9 134.8 220.6 135.5Q220.3 136.2 220.4 136.9Q220.5 137.8 221.3 138.6Q222.1 139.4 223.6 140.7Q226.8 143 228.4 144.4Q230 145.7 230.6 146.5Q231.2 147.4 231.4 148.2Q232.9 151 231.8 153Q230.6 155 228.2 156.1Q227.3 156.5 225 156.9Q222.7 157.4 220.3 157.3Q217.8 157.3 216.1 156.5ZM289.3 157.7Q288.1 158 287 157.1Q285.9 156.3 285.4 155.3Q284.9 153.8 284.7 152.5Q284.6 151.2 284.5 149.5L284.4 146.5L280.7 149.8Q277.7 152.7 275 153.9Q272.4 155.1 270.2 155.1Q269.2 154.9 267.8 153.8Q266.4 152.7 265.3 151.3Q264.2 149.9 263.7 149Q263.2 147.7 263.4 145.5Q263.6 143.2 264.5 140.5Q265.3 137.8 266.6 135.2Q267.9 132.6 269.7 130.7Q272.6 126.2 277 125.1Q281.4 123.9 284.9 125.8Q286.5 126.7 287.2 126.5Q287.9 126.3 288.1 125.3Q288.5 123.9 288.9 122.6Q289.4 121.3 290.2 118.8Q292.4 112 294.1 108.1Q295.8 104.2 297.1 101.4Q298.1 99.3 299.1 98.5Q300.1 97.7 300.8 97.8Q301.8 97.8 303.3 98.5Q304.8 99.2 305.2 100.5Q305.6 101.3 305.5 102.2Q305.5 103.1 304.9 104.1Q303.8 106.2 302.2 109.8Q300.6 113.3 299 117.6Q297.5 121.8 296.1 125.9Q294.8 130.1 293.9 133.2Q293.3 135.2 293 138.3Q292.7 141.3 292.6 144.5Q292.4 147.7 292.5 150.2Q292.6 152.7 292.8 153.4Q293.3 155.2 292.8 156.1Q292.3 157 291.3 157.3Q290.3 157.6 289.3 157.7ZM274.4 146.8Q275.7 146.4 276.7 145.7Q277.7 145.1 279 144.1Q281.7 142 282.9 140.5Q284.1 139 284.9 136.7Q285.3 135.4 284.9 134.4Q284.5 133.4 283.5 132.5Q282.5 131.7 281 131.8Q279.5 132 277.5 133.8Q275.3 135.7 273.8 138.4Q272.3 141 271.3 145.8Q271.1 146.7 271.9 147.1Q272.7 147.4 274.4 146.8ZM318.2 154.2Q315.5 155.7 312.5 156Q309.4 156.2 306.8 155.1Q304.2 154.1 302.6 152Q301.7 150.9 300.9 148.3Q300.1 145.7 300.6 141.3Q301.2 137.2 303.2 133Q305.2 128.7 308.2 125.5Q311.2 122.2 314.7 121.1Q315.9 120.6 317.2 120.4Q318.5 120.2 320.7 120.3Q322.8 120.6 324.4 121.4Q326 122.1 326.7 123Q328.2 124.5 328.6 125.8Q329.1 127.2 329 128.5Q328.5 131.3 326.4 134.7Q324.3 138 320.5 139.6Q319 140.2 316.9 140.4Q314.8 140.6 311.2 139.9Q309.1 139.4 308.4 140.3Q307.7 141.2 307.8 143.8Q308 145.5 308.6 146.7Q309.2 147.9 310.8 148.3Q312.9 148.7 313.8 148.4Q314.7 148.1 316 147.4Q316.7 147 317.4 146.5Q318.1 145.9 318.8 145.4Q319.4 144.8 319.9 144.6Q320.3 144.2 320.8 144.1Q321.2 144 321.7 144Q322.7 144.1 323.6 145.1Q324.5 146.1 324.8 147Q324.8 147.7 323.9 149Q323 150.3 321.5 151.7Q320 153.1 318.2 154.2ZM317 134.1Q317.6 133.9 318.9 132.9Q320.1 131.9 321.1 130.7Q322.1 129.6 322.1 129Q322.1 128 320.7 127.3Q319.4 126.6 317.4 127Q316.7 127.2 315.7 128Q314.7 128.8 313.7 129.8Q312.7 130.9 312 131.8Q311.2 132.8 311 133.3Q311.3 133.8 312.4 134Q313.5 134.3 314.8 134.3Q316.1 134.3 317 134.1ZM354 161.1Q352.9 161.1 352.2 160Q351.7 159.4 351 158.3Q350.4 157.1 350.6 154.4Q350.9 151.8 352.6 146.6Q353.5 143.2 354 141.6Q354.6 140.1 354.6 139.3Q354.6 138.4 354.8 137.7Q355 137 355 136.4Q355.5 136.4 356.1 135.4Q356.6 134.4 357 132.7Q357.3 131.2 357.7 130.2Q358 129.3 358 128.9Q358.4 128.2 358.9 126.7Q359.4 125.1 360.5 123Q361.2 120.3 362.1 117.3Q363 114.4 364 111.8Q364.9 109.3 365.5 107.8Q366.5 105 367.1 103.9Q367.6 102.8 367.1 102.4Q366.4 102 366.5 100.1Q366.5 98.3 368.1 96.9Q369.1 95.8 370.7 95.3Q372.2 94.8 374.2 94.8Q376.2 94.8 378.3 95Q379.9 95 381.8 95Q383.6 95 384.1 95Q384.9 95.4 386.1 95.9Q387.2 96.3 388.2 96.7Q389.1 97.1 389.1 97.4Q389.1 97.9 389.5 98.1Q389.9 98.2 390.4 98.3Q391 98.3 392.5 99.4Q393.9 100.5 395.4 102.1Q396.9 103.7 397.5 105.2Q398.2 106.8 398.7 108.1Q399.2 109.5 398.8 112Q398.7 113.3 398.4 114.7Q398 116 397.7 116.5Q397.1 116.8 396.7 117.4Q396.2 117.9 396.2 118.4Q396.2 118.7 395.5 120.1Q394.8 121.5 393.7 123.3Q392.6 125 391.4 126.7Q390.1 128.5 389 129.4Q387.9 130.9 386.3 132.1Q384.7 133.4 383.5 134.2Q381.1 135.3 378.1 136.3Q375.1 137.3 372.3 137.9Q369.5 138.4 367.8 138.4Q365.2 138.7 364.4 139Q363.6 139.3 363.2 140.6Q362.7 141.8 362.3 143Q361.9 144.3 361.9 144.8Q361.8 145.2 361.2 146.8Q360.6 148.4 359.8 150.6Q359.1 152.8 358.4 154.9Q357.8 157.1 357.4 158.6Q357.1 159.9 355.9 160.5Q354.8 161.1 354 161.1ZM366.8 131.1Q367.2 131.4 369.1 131.2Q371.1 130.9 373.9 129.8Q375.7 129.2 377.6 128.3Q379.4 127.4 381.1 126.3Q382 125.7 383 124.7Q384 123.8 385.8 121.5Q386.1 121.1 386.7 119.8Q387.4 118.5 388 117.3Q388.8 116 389.6 113.6Q390.4 111.1 389.9 109.5Q389.5 107.1 388.1 105.5Q386.8 104 384.7 103.2Q382.7 102.9 381.4 102.8Q380.1 102.7 378.6 103Q377.2 103.4 376.6 104.2Q376 105 374.9 107.7Q374.3 108.9 373.1 111.1Q371.9 113.3 371.1 115.6Q369.5 121.5 368.3 124.7Q367.1 127.8 366.7 128.8Q366.8 129.8 366.6 130.2Q366.4 130.6 366.8 131.1ZM397 154.1Q396.6 153.4 395.4 152.7Q394.2 151.9 394.2 151.6Q394.2 151.2 393.8 150.5Q393.4 149.7 393 149.3Q392.5 148.8 393.3 146.7Q394 144.6 395.4 141.5Q396.9 138.4 398.6 135.3Q399.3 134.6 400 133.4Q400.7 132.2 401.1 131.9Q401.1 131.5 401.4 131.2Q401.6 130.9 402 130.9L402.7 129.4Q402.9 129.1 403.8 128Q404.8 126.9 406.1 125.6Q407.5 124.3 408.9 123.1Q410.3 122 411.2 121.4Q413.1 120.2 415.1 120.3Q417.1 120.3 418.6 121.5Q418.8 121.8 419.8 122.6Q420.7 123.4 421.9 124.4Q423.2 125.4 424.1 126.2L427.4 129.2L425.9 133.7Q424.7 137.3 425.3 140Q425.9 142.7 426.9 144.7Q427.4 145.6 428.2 146.2Q428.9 146.7 430.2 146.9Q430.9 147 431.5 147.4Q432.2 147.9 432.2 148.9Q432.2 151 431.4 152Q430.6 152.9 429.7 153.1Q426.8 153.5 424.1 152.5Q421.4 151.5 419.2 147.4Q418.8 146.8 418.2 145.3Q417.7 143.8 417.6 143.4Q417.2 143.8 416.6 144.5Q416 145.2 415.5 145.7Q409.1 152.2 404.6 154.2Q400 156.1 397 154.1ZM401.9 146.6Q402.5 146.7 403.9 146Q405.2 145.2 407.5 143.4Q410.6 140.8 412.5 139.1Q414.5 137.4 416.4 134.7L418.4 131.4Q417.5 129.4 416.8 128.7Q416 128.1 415.3 128.1Q414.2 128.1 412.5 129.6Q410.9 131.1 408.9 133.9Q406.9 136.7 404.3 141Q403.2 142.9 402.5 144.8Q401.9 146.6 401.9 146.6ZM438.7 157Q437 157.4 435.7 156Q434.3 154.6 433.8 151.9Q433.2 149.2 434 145.9Q434.4 144.8 434.7 143.8Q434.9 142.8 434.9 142.1Q435.1 141.2 435.7 139.5Q436.2 137.7 436.8 135.8Q437.5 133.9 438.1 132.5Q438.6 131 438.8 130.6Q439.2 130.6 439.5 130Q439.7 129.4 439.7 128.7Q439.7 128 440 127.1Q440.4 126.2 440.7 125.8Q440.7 125.4 440.9 124.8Q441.2 124.2 441.2 123.9Q441.2 123.5 441.4 123.1Q441.6 122.8 441.6 122.4Q442.2 121.2 443.3 118.7Q444.3 116.1 445.5 113Q446.7 109.8 447.8 106.8Q448.9 103.7 449.6 101.6Q450.3 99.5 450.3 99Q450.3 98.3 450.8 97.7Q451.3 97 452.1 97Q452.3 96.8 453.3 96.6Q454.3 96.5 454.7 96.5Q454.7 96.5 455 96.9Q455.4 97.2 456.1 97.9Q456.8 98.6 457.5 99.4Q458.2 100.2 458.2 101.3Q458.2 102.4 457.9 103.5Q457.5 104.6 456.7 106.4Q455.9 108.3 454.2 111.9Q453.5 113.7 452.7 115.3Q451.9 116.8 451.9 117.2Q451.9 117.6 451.6 118.3Q451.2 119 450.9 120.1Q450.5 120.8 449.9 122.2Q449.3 123.6 448.6 125.2Q447.9 126.7 447.5 127.9Q447 129 447 129.2Q447 129.5 447 129.9Q446.9 130.3 446.6 130.6Q446.2 130.6 446.2 131.1Q446.1 131.6 446.1 131.6Q446.1 132.5 444.7 136.4Q443.2 141.3 442 145.5Q440.8 149.6 440.8 152.1Q440.8 154.3 440.1 155.5Q439.5 156.6 438.7 157ZM453.1 154.1Q452.8 153.4 451.6 152.7Q450.3 151.9 450.3 151.6Q450.3 151.2 449.9 150.5Q449.5 149.7 449.2 149.3Q448.7 148.8 449.4 146.7Q450.2 144.6 451.6 141.5Q453 138.4 454.8 135.3Q455.5 134.6 456.2 133.4Q456.9 132.2 457.3 131.9Q457.3 131.5 457.5 131.2Q457.8 130.9 458.2 130.9L458.9 129.4Q459.1 129.1 460 128Q461 126.9 462.3 125.6Q463.7 124.3 465.1 123.1Q466.5 122 467.4 121.4Q469.3 120.2 471.3 120.3Q473.3 120.3 474.7 121.5Q475 121.8 476 122.6Q476.9 123.4 478.1 124.4Q479.3 125.4 480.2 126.2L483.6 129.2L482 133.7Q480.9 137.3 481.5 140Q482 142.7 483.1 144.7Q483.6 145.6 484.3 146.2Q485.1 146.7 486.4 146.9Q487.1 147 487.7 147.4Q488.3 147.9 488.3 148.9Q488.3 151 487.6 152Q486.8 152.9 485.9 153.1Q482.9 153.5 480.2 152.5Q477.5 151.5 475.4 147.4Q475 146.8 474.4 145.3Q473.8 143.8 473.8 143.4Q473.4 143.8 472.8 144.5Q472.2 145.2 471.7 145.7Q465.3 152.2 460.7 154.2Q456.2 156.1 453.1 154.1ZM458.1 146.6Q458.7 146.7 460.1 146Q461.4 145.2 463.7 143.4Q466.7 140.8 468.7 139.1Q470.7 137.4 472.6 134.7L474.6 131.4Q473.7 129.4 472.9 128.7Q472.2 128.1 471.5 128.1Q470.3 128.1 468.7 129.6Q467.1 131.1 465.1 133.9Q463 136.7 460.5 141Q459.3 142.9 458.7 144.8Q458.1 146.6 458.1 146.6ZM498.2 151.2Q497.6 150.7 496.6 148Q495.5 145.3 494.6 141.7Q493.6 138.1 493.1 135Q492.7 133.2 492.3 132Q491.9 130.7 491.7 129.9Q491.2 128.3 492 126.5Q492.7 124.7 493.8 124Q494.3 123.8 495.5 123.6Q496.7 123.5 497.1 123.6Q498.2 123.9 499.1 126.9Q500 129.8 500.7 134.6Q501 137.4 501.3 138.7Q501.5 140 501.5 140.3Q501.8 141.1 502 142.1Q502.1 143.1 502.8 142.4Q503.2 142 504 141.1Q504.7 140.2 505.8 138.8Q507.7 136.3 508.8 134.6Q509.9 133 511.4 131.2Q512 130.3 513.1 129.2Q514.2 128.1 515.3 127.1Q516.3 126.2 517.1 126Q519.2 125.7 519.7 127.6Q520.2 129.5 518.4 132.1Q517.7 133.1 517.3 134.1Q516.9 135 516.5 135.4Q515.8 136.8 514.3 139Q512.7 141.2 511.3 143.1Q509.9 144.9 509.3 145.5Q509 145.8 507.7 146.8Q506.5 147.8 505.4 149.3Q503.3 151.4 501.3 151.9Q499.3 152.3 498.2 151.2ZM522.6 153.6Q521.8 152.9 520.9 151.9Q519.9 151 520.2 149.2Q520.5 146.6 520.9 144.7Q521.4 142.8 522 140.2Q522.2 139.2 523 136.6Q523.7 133.9 524.8 130.9Q525.9 127.8 527.1 125.1Q528.2 122.3 529.1 121Q530.1 120.1 532 120.1Q534 120.1 534.7 120.8Q535.7 121.6 535.3 123.6Q535 125.7 532.8 129.9Q532.4 131 531.7 132.2Q531 133.4 530.7 134.2Q530.5 134.9 530.9 134.8Q531.5 133.9 532.9 132.5Q534.3 131.2 536 130Q537.6 128.7 539 127.7Q540.5 126.7 541 126.5Q541.7 126 542.7 125.7Q543.6 125.4 544 125.2Q546 124.2 548.5 124.4Q551 124.7 551.5 126Q551.6 126.7 552.1 127.1Q552.6 127.5 552.6 127.5Q553 127.5 553 127.7Q553.1 128 553.1 128Q553.1 128.6 551.9 129.8Q550.6 131 549.2 131.1Q548 131.2 547.1 131.5Q546.2 131.9 545 132.4Q541.5 134.4 538.8 135.9Q536.1 137.5 533.2 140.6Q532.5 141.3 531.8 142Q531.1 142.6 530.4 143.8Q529.9 144.2 529.5 145.7Q529 147.3 528.7 148.7Q528.4 150.1 528.4 150.3Q528.4 150.3 528.1 151.2Q527.9 152 527.2 152.8Q526.2 154.3 525.1 154.6Q524.1 155 522.6 153.6ZM555.5 154.1Q555.1 153.4 553.9 152.7Q552.7 151.9 552.7 151.6Q552.7 151.2 552.3 150.5Q551.9 149.7 551.5 149.3Q551.1 148.8 551.8 146.7Q552.5 144.6 554 141.5Q555.4 138.4 557.1 135.3Q557.8 134.6 558.6 133.4Q559.3 132.2 559.6 131.9Q559.6 131.5 559.9 131.2Q560.2 130.9 560.5 130.9L561.3 129.4Q561.4 129.1 562.4 128Q563.3 126.9 564.7 125.6Q566 124.3 567.4 123.1Q568.8 122 569.7 121.4Q571.6 120.2 573.6 120.3Q575.7 120.3 577.1 121.5Q577.4 121.8 578.3 122.6Q579.3 123.4 580.5 124.4Q581.7 125.4 582.6 126.2L585.9 129.2L584.4 133.7Q583.2 137.3 583.8 140Q584.4 142.7 585.5 144.7Q585.9 145.6 586.7 146.2Q587.5 146.7 588.7 146.9Q589.4 147 590.1 147.4Q590.7 147.9 590.7 148.9Q590.7 151 589.9 152Q589.2 152.9 588.3 153.1Q585.3 153.5 582.6 152.5Q579.9 151.5 577.7 147.4Q577.4 146.8 576.8 145.3Q576.2 143.8 576.1 143.4Q575.8 143.8 575.2 144.5Q574.6 145.2 574 145.7Q567.7 152.2 563.1 154.2Q558.6 156.1 555.5 154.1ZM560.5 146.6Q561.1 146.7 562.4 146Q563.8 145.2 566 143.4Q569.1 140.8 571.1 139.1Q573.1 137.4 574.9 134.7L576.9 131.4Q576 129.4 575.3 128.7Q574.6 128.1 573.9 128.1Q572.7 128.1 571.1 129.6Q569.5 131.1 567.4 133.9Q565.4 136.7 562.9 141Q561.7 142.9 561.1 144.8Q560.5 146.6 560.5 146.6ZM598.3 156.5Q595.2 155.3 593.8 153.9Q592.4 152.5 592.7 151.4Q592.9 150.9 593.3 150.4Q593.8 150 595.3 150Q596.9 150.1 600.2 150.9Q601.2 150.9 602.2 150.8Q603.2 150.7 604.1 150.5Q604.9 150.3 605.5 150.1Q605.9 149.9 605.7 149.6Q605.6 149.2 605.1 148.9Q604.7 148.4 604.3 148.3Q603.8 148.2 603.5 148.2Q603.3 147.7 602.7 147.3Q602.1 146.8 601.3 146.3Q599.3 144.7 597.7 143.4Q596.1 142.1 596.5 141.5Q596.5 141.1 596.5 141.1Q596.5 141.1 596.5 141.1Q595.8 141.1 595.3 139.3Q594.8 137.5 594.8 136.1Q594.8 134.3 595.5 132.5Q596.3 130.7 597.5 129.1Q598.7 127.5 600 126.2Q601.7 124.6 603.6 123Q605.6 121.4 607.9 120.2Q610.1 118.9 612.9 118.2Q614.2 117.9 615.8 117.9Q617.4 117.9 618.2 118.4Q618.9 117.9 620 118.6Q621 119.3 622.1 120.4Q623.2 121.6 623.7 122.8Q623.7 123.9 623.7 125.4Q623.7 127 623.5 128.2Q623.3 129.4 622.7 129.4Q622.7 129.4 622.4 129.4Q622.2 129.4 622.2 129.9Q622.2 130.8 620.9 132Q619.2 133.1 617.6 133.9Q616.1 134.6 615.3 133.9Q614.7 133.6 614.3 133.2Q613.8 132.9 613.5 132.3Q613.5 132.3 613.3 131.9Q613 131.5 613 131.2Q613 130.8 613.3 130.5Q613.6 130.2 613.6 130.2Q614.8 129 615.5 128Q616.2 127 616.5 126.2Q616.7 125.5 616.7 125Q616.7 124.5 616.5 124.4Q616.3 124.2 615.5 124.2Q615.1 124.2 613.6 124.9Q612.1 125.7 610.5 126.7Q608.9 127.7 608 128.5Q607.6 129.2 607.5 129.4Q607.4 129.5 607 129.5Q607 129.2 606.5 129.6Q606.1 130.1 605.5 130.9Q604.8 131.7 604.2 132.6Q603.6 133.5 603.2 134Q603.1 134.8 602.8 135.5Q602.5 136.2 602.6 136.9Q602.7 137.8 603.5 138.6Q604.3 139.4 605.8 140.7Q609 143 610.6 144.4Q612.1 145.7 612.8 146.5Q613.4 147.4 613.6 148.2Q615.1 151 613.9 153Q612.8 155 610.3 156.1Q609.4 156.5 607.2 156.9Q604.9 157.4 602.5 157.3Q600 157.3 598.3 156.5Z" fill="#1d3f9a"/><ellipse cx="479.8" cy="134" rx="158.2" ry="46" fill="none" stroke="#e5484d" stroke-width="5" stroke-opacity="0.9" transform="rotate(-2 479.8 134)"/></g><g stroke="#4a4f5c" stroke-width="3" fill="none"><rect x="646" y="84" width="30" height="30"/><rect x="680" y="84" width="30" height="30" fill="#4a4f5c"/><rect x="646" y="118" width="30" height="30" fill="#4a4f5c"/><rect x="680" y="118" width="30" height="30"/></g><g transform="translate(112 200) rotate(-16)"><rect x="-14" y="-8" width="14" height="16" rx="4" fill="#e5484d"/><rect x="0" y="-8" width="60" height="16" fill="#e7c874"/><polygon points="60,-8 84,0 60,8" fill="#fbeab9"/><polygon points="77,-3 84,0 77,3" fill="#1c1d21"/></g></symbol></svg>
 <div id="home">
-  <div class="homeHead"><svg class="logo" viewBox="0 0 120 120" role="img" aria-label="Logotipo Jogos de Palavras"><rect width="120" height="120" rx="27" fill="#1d3f9a"/><rect x="10" y="23" width="22" height="22" rx="5" fill="#ffffff"/><text x="21" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">P</text><rect x="36" y="23" width="22" height="22" rx="5" fill="#ffffff"/><text x="47" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">A</text><rect x="62" y="23" width="22" height="22" rx="5" fill="#ffffff"/><text x="73" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">L</text><rect x="88" y="23" width="22" height="22" rx="5" fill="#ffffff"/><text x="99" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">A</text><rect x="10" y="49" width="22" height="22" rx="5" fill="#fbeab9"/><text x="21" y="65" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">J</text><rect x="36" y="49" width="22" height="22" rx="5" fill="#fbeab9"/><text x="47" y="65" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">O</text><rect x="62" y="49" width="22" height="22" rx="5" fill="#fbeab9"/><text x="73" y="65" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">G</text><rect x="88" y="49" width="22" height="22" rx="5" fill="#fbeab9"/><text x="99" y="65" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">O</text><rect x="10" y="75" width="22" height="22" rx="5" fill="#ffffff"/><text x="21" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">V</text><rect x="36" y="75" width="22" height="22" rx="5" fill="#ffffff"/><text x="47" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">R</text><rect x="62" y="75" width="22" height="22" rx="5" fill="#ffffff"/><text x="73" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">A</text><rect x="88" y="75" width="22" height="22" rx="5" fill="#ffffff"/><text x="99" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">S</text><rect x="8" y="49" width="104" height="26" rx="8" fill="none" stroke="#d9962b" stroke-width="3"/></svg><div class="homeTitle">Jogos de<br>Palavras</div></div>
+  <div class="homeHead"><svg class="logo" viewBox="0 0 120 120" role="img" aria-label="Logotipo Jogos de Palavras"><rect width="120" height="120" rx="27" fill="#1d3f9a"/><rect x="10" y="23" width="22" height="22" rx="5" fill="#ffffff"/><text x="21" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">P</text><rect x="36" y="23" width="22" height="22" rx="5" fill="#ffffff"/><text x="47" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">A</text><rect x="62" y="23" width="22" height="22" rx="5" fill="#ffffff"/><text x="73" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">L</text><rect x="88" y="23" width="22" height="22" rx="5" fill="#ffffff"/><text x="99" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">A</text><rect x="10" y="49" width="22" height="22" rx="5" fill="#fbeab9"/><text x="21" y="65" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">J</text><rect x="36" y="49" width="22" height="22" rx="5" fill="#fbeab9"/><text x="47" y="65" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">O</text><rect x="62" y="49" width="22" height="22" rx="5" fill="#fbeab9"/><text x="73" y="65" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">G</text><rect x="88" y="49" width="22" height="22" rx="5" fill="#fbeab9"/><text x="99" y="65" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">O</text><rect x="10" y="75" width="22" height="22" rx="5" fill="#ffffff"/><text x="21" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">V</text><rect x="36" y="75" width="22" height="22" rx="5" fill="#ffffff"/><text x="47" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">R</text><rect x="62" y="75" width="22" height="22" rx="5" fill="#ffffff"/><text x="73" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">A</text><rect x="88" y="75" width="22" height="22" rx="5" fill="#ffffff"/><text x="99" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">S</text><rect x="8" y="49" width="104" height="26" rx="8" fill="none" stroke="#d9962b" stroke-width="3"/></svg></div>
   <div class="homeBtns">
     <button class="homeBtn" data-g="ws"><span>🔎</span>Caça-Palavras</button>
     <button class="homeBtn" data-g="cw"><span>✏️</span>Palavras Cruzadas</button>
   </div>
 </div>
 <div class="wrap">
-  <div class="row"><button class="btn" id="homeBtn">🏠 Início</button></div>
-  <div class="tabs gtabs" id="gtabs">
-    <button class="tab" data-g="ws">🔎 Caça-Palavras</button>
-    <button class="tab" data-g="cw">✏️ Palavras Cruzadas</button>
-  </div>
+  <div class="row"><button class="btn" id="homeBtn">🏠 Início</button><button class="btn primary" id="topNew">🔄 Novo jogo</button></div>
 
   <!-- Caça-palavras -->
   <section id="wsPanel">
-    <div class="tabs" id="wsTabs"></div>
     <div class="row">
       <select id="wsTheme" aria-label="Tema do caça-palavras"></select>
-      <button class="btn primary" id="wsNew" style="flex:none">Novo jogo</button>
+      <select id="wsDiff" aria-label="Dificuldade do caça-palavras"></select>
     </div>
-    <div class="row"><button class="btn" id="hintBtn">💡 Dica</button></div>
+    <div class="row"><button class="btn" id="hintBtn">💡 Dica (3)</button></div>
     <div class="stats">
       <span>Achadas: <b id="found">0/0</b></span>
       <span>Tempo: <b id="time">00:00</b></span>
@@ -183,25 +185,24 @@ footer{margin-top:auto;padding:16px 0 12px;font-size:12px;color:var(--muted);tex
 
   <!-- Palavras cruzadas -->
   <section id="cwPanel">
-    <div class="tabs" id="cwTabs"></div>
     <div class="row">
       <select id="cwTheme" aria-label="Tema das palavras cruzadas"></select>
-      <button class="btn primary" id="cwNew" style="flex:none">Novo jogo</button>
+      <select id="cwDiff" aria-label="Dificuldade das palavras cruzadas"></select>
     </div>
     <div class="stats">
       <span>Letras: <b id="cwFilled">0/0</b></span>
       <span>Tempo: <b id="cwTime">00:00</b></span>
       <span>Recorde: <b id="cwBest">--</b></span>
     </div>
-    <div id="cwClue"><button id="cwPrev" aria-label="Dica anterior">‹</button><div class="txt" id="cwClueTxt">Toque em uma casa para começar</div><button id="cwNext" aria-label="Próxima dica">›</button></div>
     <div class="boardWrap"><div id="cwBoard"></div></div>
-    <div class="row">
-      <button class="btn" id="cwReveal">💡 Revelar letra (3)</button>
+    <div class="row cwBottom">
+      <div id="cwClue"><button id="cwPrev" aria-label="Dica anterior">‹</button><div class="txt" id="cwClueTxt">Toque em uma casa para começar</div><button id="cwNext" aria-label="Próxima dica">›</button></div>
+      <button class="btn" id="cwReveal" aria-label="Revelar letra">💡 3</button>
     </div>
     <div id="cwMsg"></div>
     <div class="clues">
-      <div><h3>➡ Horizontais</h3><ul id="cwAcross"></ul></div>
-      <div><h3>⬇ Verticais</h3><ul id="cwDown"></ul></div>
+      <details class="clueBox"><summary>➡ Horizontais</summary><ul id="cwAcross"></ul></details>
+      <details class="clueBox"><summary>⬇ Verticais</summary><ul id="cwDown"></ul></details>
     </div>
   </section>
 </div>
@@ -212,7 +213,13 @@ footer{margin-top:auto;padding:16px 0 12px;font-size:12px;color:var(--muted);tex
   <p id="res1"></p><p id="res2"></p>
   <button class="btn primary" id="again">Jogar de novo</button>
 </div></div>
-<footer>Versão: 24102026.13</footer>
+<div id="confirm"><div class="modal">
+  <h2>Novo jogo?</h2>
+  <p id="cfMsg"></p>
+  <button class="btn primary" id="cfYes">Iniciar novo jogo</button>
+  <button class="btn" id="cfNo">Cancelar</button>
+</div></div>
+<footer>Versão: 25102026.2</footer>
 
 <script>
 'use strict';
@@ -1717,7 +1724,307 @@ BRISE|Proteção solar na fachada|3
 CALCADAO|Rua larga destinada a pedestres|3
 CICLOVIA|Via exclusiva para bicicletas|3
 RODOVIA|Estrada para tráfego intenso|3
-FERROVIA|Via de trilhos|3`]
+FERROVIA|Via de trilhos|3`],
+animes:['Animes',`GOKU|Saiyajin criado na Terra, protagonista da série|1
+VEGETA|Príncipe dos saiyajins e rival de Goku|1
+GOHAN|Filho mais velho de Goku|1
+BULMA|Inventora que criou a Cápsula Corp|1
+PICOLO|Namekuseijin que treinou Gohan|1
+KRILIN|Careca amigo inseparável de Goku|1
+FREEZA|Tirano que destruiu o planeta Vegeta|1
+CHICHI|Esposa de Goku e mãe de Gohan|1
+SHENLONG|Dragão que realiza desejos|1
+KAMEHAMEHA|Ataque de energia lançado com as mãos|1
+SAIYAJIN|Raça guerreira de Goku e Vegeta|1
+TORNEIO|Disputa de lutadores de todo o planeta|1
+SUPERSAIYAN|Forma dourada de poder dos saiyajins|1
+CAPSULA|Objeto que guarda coisas em tamanho reduzido|2
+ESFERAS|Sete itens que, reunidos, invocam o dragão|2
+NAMEK|Planeta verde de origem de Piccolo e Dende|2
+TRUNKS|Guerreiro do futuro, filho de Vegeta e Bulma|2
+GOTEN|Filho caçula de Goku e Chichi|2
+GOTENKS|Fusão de dois guerreiros jovens|3
+BUU|Vilão rosa que destrói o planeta|2
+MAJINBUU|Forma mais poderosa do vilão rosa|3
+CELL|Androide perfeito que quer superar Goku|2
+GERO|Cientista que criou os androides|3
+YAMCHA|Lutador do deserto que usava um lobo|2
+TIEN|Lutador de três olhos e amigo de Goku|2
+CHAOTZU|Careca que treinou com Krilin e Tien|3
+BEERUS|Deus da Destruição do universo|2
+WHIS|Anjo que acompanha o Deus da Destruição|3
+BROLY|Saiyajin lendário da Lua Cheia|2
+RADITZ|Irmão mais velho de Goku|3
+NAPPA|Saiyajin que acompanha Vegeta|3
+ZARBON|Subordinado de Freeza de cabelo lilás|3
+DODORIA|Lacaio de Freeza de grande porte|3
+KAIO|Deus do Norte que treinou Goku|2
+KAIOKEN|Técnica que multiplica o poder de Goku|3
+GALICK|Ataque roxo de Vegeta|3
+GENKIDAMA|Esfera de energia reunida de muitas fontes|2
+KAMI|Deus que vive no Templo Sagrado|2
+PILAF|Vilão baixinho que procura as esferas|2
+TAOPAIPAI|Mestre malicioso que lutou contra Goku|3
+OOLONG|Porquinho que se transforma em animais|2
+PUAR|Gato transformista que acompanha Yamcha|3
+DENDE|Deus dos namekuseijins|3
+ROSHI|Título de respeito do velho mestre da tartaruga|3
+SAIBAMAN|Criaturas verdes que explodem|2
+ZENO|Soberano que governa o universo|3
+KAIOSHIN|Deus supremo que governa cada planeta|2
+VEGETTO|Fusão de Goku e Vegeta|2
+GOGETA|Fusão de Goku e Vegeta com nome próprio|2
+BOJACK|Pirata espacial que enfrentou Goku|3
+PIKACHU|Pokémon elétrico amarelo, mascote da série|1
+ASH|Treinador protagonista de Pallet|1
+MISTY|Líder de ginásio de água, em Cerulean|2
+BROCK|Líder de ginásio de pedra|2
+JESSIE|Integrante do Time Rocket|2
+JAMES|Integrante do Time Rocket|2
+MEOWTH|Pokémon gato que fala|1
+CHARIZARD|Evolução de fogo e voo do Charmander|1
+BULBASAUR|Pokémon inicial de planta|1
+SQUIRTLE|Pokémon inicial de água, uma tartaruga|1
+CHARMANDER|Pokémon inicial de fogo|1
+EEVEE|Pokémon que tem várias evoluções|1
+GENGAR|Pokémon fantasma que sorri|1
+SNORLAX|Pokémon gigante que dorme no caminho|1
+MEWTWO|Pokémon criado em laboratório|1
+MEW|Pokémon raro, ancestral de todos|1
+GYARADOS|Pokémon serpente evoluído de Magikarp|2
+MAGIKARP|Peixe fraco que vira um monstro|1
+PSYDUCK|Pato de poderes psíquicos|2
+JIGGLYPUFF|Pokémon rosa que canta para dormir|2
+TOGEPI|Pokémon bebê que nasce de um ovo|2
+LUCARIO|Pokémon lutador que sente auras|3
+GARDEVOIR|Pokémon que protege o treinador com psiquismo|3
+GRENINJA|Pokémon ninja de água|3
+SCYTHER|Inseto de lâminas nos braços|3
+PIDGEY|Pokémon passarinho comum|2
+RATTATA|Pokémon roedor muito comum|2
+ONIX|Pokémon de rocha em forma de serpente|2
+GEODUDE|Pokémon de pedra que rola|3
+DITTO|Pokémon que se transforma em tudo|2
+PORYGON|Pokémon digital criado por computador|2
+ABRA|Pokémon que se teletransporta ao dormir|2
+KADABRA|Evolução psíquica de Abra com colher|3
+ALAKAZAM|Evolução psíquica mais forte de Abra|3
+MACHAMP|Pokémon lutador de quatro braços|3
+LAPRAS|Pokémon que transporta pessoas no mar|3
+VAPOREON|Evolução do Eevee que vive na água|3
+JOLTEON|Evolução elétrica do Eevee|3
+FLAREON|Evolução de fogo do Eevee|3
+UMBREON|Evolução noturna do Eevee|3
+SYLVEON|Evolução de fada do Eevee|3
+POKEBOLA|Bola usada para capturar Pokémon|1
+POKEDEX|Enciclopédia eletrônica dos Pokémon|1
+OAK|Professor pesquisador de Pallet|2
+GIOVANNI|Líder do Time Rocket e de Viridian|2
+ERIKA|Líder de ginásio de planta em Celadon|2
+SABRINA|Líder psíquica de Saffron|2
+PALLET|Cidade natal do Ash|2
+KANTO|Região do primeiro anime|2
+JOHTO|Região de Ethan e Kris|2
+NARUTO|Ninja protagonista que abriga a Kurama|1
+KURAMA|Raposa de nove caudas selada em Naruto|1
+SASUKE|Rival e amigo de Naruto, da família Uchiha|1
+SAKURA|Kunoichi do Time 7|1
+KAKASHI|Mestre do Time 7 com o Sharingan|1
+ITACHI|Irmão de Sasuke e membro da Akatsuki|1
+MINATO|Quarto Hokage e pai de Naruto|2
+JIRAIYA|Sannin, mestre de Naruto|2
+TSUNADE|Quinta Hokage e Sannin|2
+OROCHIMARU|Sannin vilão que parece uma serpente|2
+PAIN|Líder da Akatsuki|2
+MADARA|Ancestral lendário da família Uchiha|2
+OBITO|Uchiha que usava máscara laranja|3
+KONOHA|Vila oculta da folha|1
+SUNAGAKURE|Vila oculta da areia|3
+IRUKA|Professor que formou Naruto|2
+HINATA|Herdeira do clã Hyuuga, apaixonada por Naruto|1
+NEJI|Primo de Hinata, do clã Hyuuga|2
+SHIKAMARU|Ninja preguiçoso e estrategista|2
+CHOJI|Amigo de Shikamaru que adora comer|2
+INO|Kunoichi do Time 10|2
+GAARA|Jinchuuriki do Shukaku e Kazekage|2
+RASENGAN|Técnica da esfera girante|1
+CHIDORI|Técnica do raio de Kakashi e Sasuke|2
+SHARINGAN|Olhos que copiam técnicas|1
+BYAKUGAN|Olhos de visão ampla dos Hyuuga|2
+RINNEGAN|Olhos de Pain que controlam as forças|3
+AKATSUKI|Organização de ninjas de capas com nuvens|1
+HOKAGE|Líder de Konoha|1
+GENIN|Ninja iniciante|1
+CHUNIN|Ninja de patente intermediária|2
+JONIN|Ninja de elite da vila|2
+ANBU|Esquadrão secreto de elite|2
+KUNOICHI|Ninja feminina|2
+JUTSU|Técnica ninja|1
+SHUKAKU|Bijuu de uma cauda da vila da areia|3
+MANGEKYOU|Sharingan avançado|3
+KAGEBUNSHIN|Clone das sombras de Naruto|1
+KIBA|Ninja que anda com um cão|2
+AKAMARU|Cão ninja de Kiba|3
+HIRUZEN|Terceiro Hokage|3
+KABUTO|Ninja médico de Orochimaru|3
+DEIDARA|Membro da Akatsuki que faz explosões|3
+KISAME|Membro da Akatsuki de espada gigante|3
+KONAN|Membra da Akatsuki que usa papel|3
+HIDAN|Membro imortal da Akatsuki|3
+BORUTO|Filho de Naruto|2
+HASHIRAMA|Primeiro Hokage, fundador de Konoha|2
+ICHIRAKU|Restaurante de ramen favorito de Naruto|2
+RAMEN|Macarrão favorito de Naruto|1
+SEIYA|Cavaleiro de Pégaso|1
+SHUN|Cavaleiro de Andrômeda|1
+HYOGA|Cavaleiro de Cisne|1
+SHIRYU|Cavaleiro de Dragão|1
+ATENA|Deusa protetora da Terra|1
+ALDEBARAN|Cavaleiro de Touro|2
+SAGA|Cavaleiro de Gêmeos|2
+MILO|Cavaleiro de Escorpião|1
+AIOLIA|Cavaleiro de Leão|2
+SHAKA|Cavaleiro de Virgem|2
+DOHKO|Cavaleiro de Libra|2
+SHURA|Cavaleiro de Capricórnio|2
+CAMUS|Cavaleiro de Aquário|2
+AFRODITE|Cavaleiro de Peixes|2
+ASMITA|Mestre da Virgem|3
+SAORI|Reencarnação de Atena|2
+MARIN|Cavaleira de Águia|2
+KANON|Gêmeo irmão de Saga|3
+RADAMANTHYS|Juiz de Wyvern no Hades|3
+MINOS|Juiz de Garuda no Hades|3
+AIACOS|Juiz de Grifo no Hades|3
+HADES|Deus do submundo|1
+POSEIDON|Deus dos mares|1
+ORFEU|Cavaleiro de Lira|3
+PEGASO|Constelação de Seiya|2
+ANDROMEDA|Constelação de Shun|2
+DRAGAO|Constelação de Shiryu|2
+CISNE|Constelação de Hyoga|2
+ZODIACO|Conjunto de doze constelações|1
+SANTUARIO|Local de treinamento dos cavaleiros de Atena|2
+CAPRICORNIO|Constelação do Cavaleiro Shura|3
+GEMEOS|Constelação de Saga|2
+ESCORPIAO|Constelação de Milo|2
+AQUARIO|Constelação de Camus|2
+COSMO|Energia que move os cavaleiros|1
+METEORO|Golpe de Pégaso|1
+GALAXIAN|Ataque de galáxias de Seiya|3
+DIAMANTE|Pó de gelo, golpe de Cisne|2
+ARIES|Signo do cavaleiro de cabelos azuis|2
+TOURO|Signo de Aldebaran|2
+LEAO|Signo do Cavaleiro Aiolia|2
+VIRGEM|Signo de Shaka|2
+LIBRA|Signo de Dohko|2
+SAGITARIO|Signo do Cavaleiro Aiolos|3
+PEIXES|Signo de Afrodite|2
+AIOLOS|Cavaleiro de Sagitário|3
+BRONZE|Classe inicial dos cavaleiros|2
+PRATA|Classe intermediária dos cavaleiros|2
+OURO|Classe mais alta dos cavaleiros|2
+ARMADURA|Proteção dos cavaleiros|1
+YUJI|Protagonista que abriga Sukuna|1
+GOJO|Feiticeiro mais forte, de olhos vendados|1
+SUKUNA|Rei das maldições|1
+MEGUMI|Feiticeiro que usa shikigami|1
+NOBARA|Feiticeira do Colégio Tokyo|1
+ITADORI|Sobrenome de Yuji|2
+FUSHIGURO|Sobrenome de Megumi|2
+KUGISAKI|Sobrenome de Nobara|2
+INUMAKI|Feiticeiro que fala com palavras limitadas|2
+PANDA|Feiticeiro com corpo de urso|1
+NANAMI|Feiticeira que trabalha com cálculos|1
+KENTO|Nome de Nanami|2
+TODO|Amigo e rival de Yuji|2
+ZENIN|Clã poderoso de feiticeiros|2
+MAKI|Feiticeira treinada do clã Zenin|2
+GETO|Ex-amigo de Gojo|1
+SUGURU|Nome de Geto|2
+MAHITO|Feiticeiro que molda almas|3
+KENJAKU|Vilão que comanda maldições|3
+MAHORAGA|Shikigami divino de Megumi|3
+HAKARI|Feiticeiro que gosta de jogos de azar|3
+RYOMEN|Nome completo de Sukuna|3
+MALDICAO|Energia negativa criada por emoções humanas|1
+FEITICEIRO|Usuário de energia amaldiçoada|1
+FEITICO|Energia usada em técnicas|1
+DOMINIO|Espaço criado por uma técnica de feitiço|2
+AZUL|Técnica de Gojo que atrai objetos|2
+VERMELHO|Técnica de Gojo que repele objetos|2
+PURPURA|Técnica que une Azul e Vermelho|3
+VAZIO|Técnica que apaga algo do mundo|2
+SHIKIGAMI|Espíritos invocados por Megumi|3
+SATORU|Nome de Gojo|3
+SHIBUYA|Local do grande incidente do arco|2
+HIGURUMA|Feiticeiro de Kyoto|3
+YUTA|Feiticeiro que tem uma maldição da amiga|2
+RIKA|Espírito amigo de Yuta|3
+DAGON|Maldição marinha de Shibuya|3
+HANAMI|Maldição da natureza|3
+SHINJUKU|Arco de batalha com Sukuna|2
+INCIDENTE|Evento de Shibuya que muda o rumo da história|2
+TOJI|Guerreiro sem energia amaldiçoada do clã Zenin|3
+PREGO|Objetos pontudos que Nobara lança em combate|2
+MARTELO|Arma usada por Nobara em combate|2
+PALAVRA|Técnica de Inumaki com termos amaldiçoados|2
+ESPIRITO|Entidade formada por emoções negativas|1
+TECNICA|Habilidade amaldiçoada usada em combate|1
+COLEGIO|Escola de feiticeiros de Tóquio|1
+ESCOLA|Local onde estudam os jovens feiticeiros|1
+CAMPO|Local onde ocorrem batalhas de feiticeiros|2
+AMIZADE|Laço forte entre Yuji e Megumi|1
+TANJIRO|Protagonista caçador de demônios|1
+NEZUKO|Irmã de Tanjiro transformada em demônio|1
+ZENITSU|Caçador medroso que usa o trovão|1
+INOSUKE|Caçador que usa máscara de javali|1
+RENGOKU|Pilar da Chama|1
+TENGEN|Pilar do Som|2
+GIYU|Pilar da Água|2
+SHINOBU|Pilar do Inseto|2
+MITSURI|Pilar do Amor|2
+OBANAI|Pilar da Serpente|2
+SANEMI|Pilar do Vento|2
+MUICHIRO|Pilar da Névoa|2
+AKAZA|Demônio da Lua Superior|2
+DOUMA|Demônio da Lua Superior do gelo|2
+KOKUSHIBO|Demônio mais forte da Lua Superior|2
+MUZAN|Rei dos demônios|1
+KIBUTSUJI|Nome humano de Muzan|3
+KAMADO|Sobrenome de Tanjiro e Nezuko|1
+HASHIBIRA|Sobrenome do caçador com máscara de javali|3
+TOMIOKA|Sobrenome de Giyu|3
+UZUI|Pilar do Som de Tengen|3
+AGATSUMA|Sobrenome de Zenitsu|3
+IGURO|Sobrenome de Obanai|3
+KOCHO|Sobrenome de Shinobu|3
+KANROJI|Sobrenome de Mitsuri|3
+HASHIRA|Líder dos caçadores de demônios|1
+NICHIRIN|Lâmina especial dos caçadores de demônios|1
+KASUGAI|Corvo mensageiro dos caçadores|3
+TANJURO|Pai de Tanjiro, carvoeiro que morreu no ataque|2
+KAGURA|Dança sagrada da família Kamado|2
+HINOKAMI|Dança do Deus do Fogo|1
+HAGANEZUKA|Ferreiro que forja as lâminas|3
+KANAO|Caçadora de demônios amiga de Tanjiro|3
+TSUYURI|Sobrenome de Kanao|3
+KANZAKI|Sobrenome de Aoi|3
+GYOMEI|Pilar da Pedra, de grande força|3
+HIMEJIMA|Sobrenome de Gyomei|3
+YORIICHI|Primeiro caçador de demônios|3
+RUI|Demônio aranha de Muzan|3
+SABITO|Amigo de Tanjiro na infância|3
+MAKOTO|Amigo de Sabito|3
+TAMAYO|Médica que estuda demônios|3
+YUSHIRO|Demônio ajudante de Tamayo|3
+UBUYASHIKI|Líder da Corporação dos caçadores|3
+KANATA|Filha de Kagaya|3
+RESPIRACAO|Técnica que os caçadores usam para ganhar força|1
+KATANA|Lâmina que os caçadores usam|1
+SOL|Inimigo mortal dos demônios|1
+LUA|Astro que fortalece os demônios|1
+NOITE|Momento em que os demônios saem|1`]
 };
 const THEMES = {};
 for (const k in RAW){
@@ -1824,6 +2131,7 @@ function wsCellSize(n){
 function wsBest(){return 'cp_best_'+wsDiff+'_'+wsTheme}
 function wsShowBest(){const b=store(wsBest());$('best').textContent = b? fmt(+b):'--'}
 function wsRender(){
+  wsHintLabel();
   const {grid,n,placed} = ws, cs = wsCellSize(n);
   const b = $('board'); b.innerHTML='';
   b.style.gridTemplateColumns = `repeat(${n},${cs}px)`;
@@ -1905,12 +2213,17 @@ boardEl.addEventListener('pointerup', ()=>{
   }
 });
 boardEl.addEventListener('pointercancel', ()=>{wsSel=null;wsPaintSel()});
+const WS_MAX_HINTS = 3;
+function wsHintLabel(){
+  const left = Math.max(0, WS_MAX_HINTS-wsHints), b = $('hintBtn');
+  b.textContent = `💡 Dica (${left})`; b.style.opacity = left<=0 ? .5 : 1;
+}
 $('hintBtn').onclick = () => {
-  if (wsDone || !ws) return;
+  if (wsDone || !ws || wsHints>=WS_MAX_HINTS) return;
   const rest = ws.placed.map((p,i)=>i).filter(i=>!wsFound.has(i));
   if (!rest.length) return;
   const p = ws.placed[rest[rnd(rest.length)]];
-  wsHints++; wsSave();
+  wsHints++; wsSave(); wsHintLabel();
   const c = wsEls[p.y][p.x]; c.classList.remove('hint'); void c.offsetWidth; c.classList.add('hint');
   setTimeout(()=>c.classList.remove('hint'),1600);
 };
@@ -2035,7 +2348,16 @@ function cwBest(){return 'cw_best_'+cwDiff+'_'+cwTheme}
 function cwShowBest(){const b=store(cwBest());$('cwBest').textContent = b? fmt(+b):'--'}
 function cwCellSize(){
   const avail = Math.min(window.innerWidth-24, window.innerWidth>=700?760:560) - 16 - (cw.W-1)*2;
-  return Math.max(20, Math.min(56, Math.floor(avail/cw.W)));
+  const byW = Math.floor(avail/cw.W);
+  // altura: o quadro cabe no espaço que sobra entre o topo, o teclado e o conteúdo de baixo (sem rolar a página)
+  const wrap = document.querySelector('#cwPanel .boardWrap'), panel = $('cwPanel'), foot = document.querySelector('footer');
+  const kbH = $('kb') ? $('kb').offsetHeight : 0;
+  const topH = wrap.getBoundingClientRect().top;
+  const belowH = panel.getBoundingClientRect().bottom - wrap.getBoundingClientRect().bottom;
+  const footH = foot && foot.offsetParent ? foot.offsetHeight + 16 : 0;
+  const room = window.innerHeight - kbH - topH - belowH - footH - 8;
+  const byH = Math.floor((room - (cw.H-1)*2 - 16) / cw.H);
+  return Math.max(20, Math.min(56, byW, byH));
 }
 function cwRender(){
   const cs = cwCellSize(), b = $('cwBoard');
@@ -2094,25 +2416,40 @@ function cwPaint(){
 }
 function cwSelect(x,y){
   if (!cw.ch[y][x] || cwDone) return;
+  // só palavras ainda não concluídas podem ser selecionadas
+  const open = d => { const w=(d===0?cw.cA:cw.cD)[y][x]; return w && !cwWordDone(w) };
+  if (!open(0) && !open(1)) return;
   tCW.start();
   if (sel && sel.x===x && sel.y===y){
-    const other = (sel.dir===0?cw.cD:cw.cA)[y][x]; if (other) sel.dir = 1-sel.dir;
+    if (open(1-sel.dir)) sel.dir = 1-sel.dir;
   } else {
     let dir = sel?sel.dir:0;
-    if (!(dir===0?cw.cA:cw.cD)[y][x]) dir = 1-dir;
+    if (!open(dir)) dir = 1-dir;
     sel = {x,y,dir};
   }
   $('cwMsg').textContent=''; cwPaint();
 }
 function cwGoWord(w){
+  if (cwWordDone(w)) return;
   const cell = w.cells.find(([x,y])=>!cw.user[y][x]) || w.cells[0];
   sel = {x:cell[0],y:cell[1],dir:w.dir}; tCW.start(); cwPaint();
   cw.els[cell[1]][cell[0]].scrollIntoView({block:'nearest',inline:'nearest'});
 }
+function cwCycle(d){   // botão Horizontais (0) / Verticais (1): percorre só as palavras dessa direção ainda abertas
+  if (cwDone) return;
+  const list = (d===0?cw.across:cw.down).filter(w=>!cwWordDone(w));
+  if (!list.length){ cwSay('Todas as palavras '+(d===0?'horizontais':'verticais')+' já foram preenchidas','ok'); return }
+  const cur = cwActive(); const i = cur && cur.dir===d ? list.indexOf(cur) : -1;
+  cwGoWord(list[(i+1)%list.length]);
+}
+document.querySelectorAll('#cwPanel .clueBox').forEach((box,i)=>box.querySelector('summary').addEventListener('click',e=>{e.preventDefault();cwCycle(i)}));  // não expande a lista (evita rolagem)
 function cwStep(d){
   const all = [...cw.across,...cw.down]; if (!all.length) return;
   const aw = cwActive(); let i = aw?all.indexOf(aw):-1;
-  cwGoWord(all[(i+d+all.length)%all.length]);
+  for (let k=1;k<=all.length;k++){            // pula as palavras já concluídas
+    const w = all[((i+d*k)%all.length+all.length)%all.length];
+    if (!cwWordDone(w)){cwGoWord(w);return}
+  }
 }
 function cwMove(step){
   const w = cwActive(); if (!w) return;
@@ -2123,7 +2460,7 @@ const CW_MAX_HINTS = 3;
 function cwEnsureVisible(){   // mantém a casa selecionada visível acima do teclado e abaixo da dica
   if (onHome || gameKey!=='cw' || !sel || !cw.els || !cw.els[sel.y]) return;
   const r = cw.els[sel.y][sel.x].getBoundingClientRect(), kb = $('kb').getBoundingClientRect();
-  const bottomLimit = kb.top - 10, topLimit = $('cwClue').getBoundingClientRect().bottom + 8;
+  const bottomLimit = kb.top - 10, topLimit = document.querySelector('#cwPanel .stats').getBoundingClientRect().bottom + 8;
   if (r.bottom > bottomLimit) window.scrollBy(0, r.bottom - bottomLimit + 40);
   else if (r.top < topLimit) window.scrollBy(0, r.top - topLimit - 40);
 }
@@ -2137,7 +2474,7 @@ function cwAdvance(){   // vai para a próxima casa ainda livre da palavra
 }
 function cwHintLabel(){
   const left = CW_MAX_HINTS-cwReveals, b = $('cwReveal');
-  b.textContent = `💡 Revelar letra (${Math.max(0,left)})`; b.style.opacity = left<=0 ? .5 : 1;
+  b.textContent = `💡 ${Math.max(0,left)}`; b.style.opacity = left<=0 ? .5 : 1;
 }
 function cwType(letter){
   if (!sel || cwDone) return;
@@ -2231,35 +2568,49 @@ document.addEventListener('keydown',e=>{
    ===================================================================== */
 function drop(k){try{localStorage.removeItem(k)}catch(e){}}
 const elapsedMs = t => t.acc + (t.run ? Date.now()-t.t0 : 0);
-function wsSave(){
-  if (!ws || !ws.grid || wsDone){drop('jp_ws_save');return}
-  store('jp_ws_save', JSON.stringify({diff:wsDiff,theme:wsTheme,grid:ws.grid,placed:ws.placed,n:ws.n,
-    found:[...wsFound],hints:wsHints,acc:elapsedMs(tWS)}));
+/* Um salvamento independente por jogo e por dificuldade */
+const slotKey = (g,d) => 'jp_'+g+'_save_'+d;
+function wsPct(){return ws && ws.placed && ws.placed.length ? Math.round(100*wsFound.size/ws.placed.length) : 0}
+function wsActive(){return !!(ws && ws.grid && !wsDone && (wsFound.size>0 || wsHints>0))}
+function cwStat(){
+  if (!cw || !cw.ch) return {pct:0,active:false};
+  let letters=0, given=0, ok=0, bad=0;
+  for (let y=0;y<cw.H;y++) for (let x=0;x<cw.W;x++){
+    if (!cw.ch[y][x]) continue; letters++;
+    if (cw.given[y][x]) given++; else if (cw.ok[y][x]) ok++; else if (cw.bad[y][x]) bad++;
+  }
+  const init = given - cwReveals, den = Math.max(1, letters - init), num = ok + cwReveals;
+  return {pct:Math.min(100,Math.round(100*num/den)), active: !cwDone && (num>0 || bad>0)};
 }
-function wsLoad(){
+function wsSave(){
+  if (!ws || !ws.grid || wsDone){drop(slotKey('ws',wsDiff));return}
+  store(slotKey('ws',wsDiff), JSON.stringify({diff:wsDiff,theme:wsTheme,grid:ws.grid,placed:ws.placed,n:ws.n,
+    found:[...wsFound],hints:wsHints,acc:elapsedMs(tWS),pct:wsPct()}));
+}
+function wsLoad(diff){
   try{
-    const raw = store('jp_ws_save'); if (!raw) return false;
+    const raw = store(slotKey('ws',diff||wsDiff)); if (!raw) return false;
     const d = JSON.parse(raw);
     if (!(d.diff in DIFFS) || !(d.theme in THEMES) || !Array.isArray(d.grid) || d.grid.length!==d.n ||
         !Array.isArray(d.placed) || !d.placed.length || !Array.isArray(d.found) || d.found.length>=d.placed.length) return false;
-    wsDiff=d.diff; wsTheme=d.theme; tWS.reset();
+    wsDiff=d.diff; wsTheme=d.theme; store('jp_ws_theme',wsTheme); tWS.reset();
     ws = {grid:d.grid, placed:d.placed, n:d.n}; wsFound = new Set(d.found); wsHints = d.hints|0; wsDone = false;
     tWS.acc = d.acc|0; tWS.draw(); wsShowBest(); wsRender(); return true;
   }catch(e){return false}
 }
 function cwSave(){
-  if (!cw || !cw.placed || cwDone){drop('jp_cw_save');return}
-  store('jp_cw_save', JSON.stringify({diff:cwDiff,theme:cwTheme,W:cw.W,H:cw.H,
+  if (!cw || !cw.placed || cwDone){drop(slotKey('cw',cwDiff));return}
+  store(slotKey('cw',cwDiff), JSON.stringify({diff:cwDiff,theme:cwTheme,W:cw.W,H:cw.H,
     placed:cw.placed.map(p=>({word:p.word,clue:p.clue,x:p.x,y:p.y,dir:p.dir})),
-    user:cw.user,given:cw.given,bad:cw.bad,ok:cw.ok,reveals:cwReveals,sel,acc:elapsedMs(tCW)}));
+    user:cw.user,given:cw.given,bad:cw.bad,ok:cw.ok,reveals:cwReveals,sel,acc:elapsedMs(tCW),pct:cwStat().pct}));
 }
-function cwLoad(){
+function cwLoad(diff){
   try{
-    const raw = store('jp_cw_save'); if (!raw) return false;
+    const raw = store(slotKey('cw',diff||cwDiff)); if (!raw) return false;
     const d = JSON.parse(raw);
     if (!(d.diff in DIFFS) || !(d.theme in THEMES) || !Array.isArray(d.placed) || !d.placed.length ||
         !Array.isArray(d.user) || d.user.length!==d.H || !Array.isArray(d.given) || !Array.isArray(d.bad)) return false;
-    cwDiff=d.diff; cwTheme=d.theme; tCW.reset();
+    cwDiff=d.diff; cwTheme=d.theme; store('jp_cw_theme',cwTheme); tCW.reset();
     const m = cwModel({placed:d.placed.map(p=>({...p})),x0:0,y0:0,W:d.W,H:d.H});
     m.user=d.user; m.given=d.given; m.bad=d.bad;
     m.ok = Array.isArray(d.ok) ? d.ok : m.ch.map((r,y)=>r.map((c,x)=>!!(c && d.user[y][x]===c && !d.given[y][x])));
@@ -2282,24 +2633,38 @@ function showWin(line1, rec, prev){
   setTimeout(()=>$('overlay').classList.add('show'), 350);
 }
 function hideWin(){$('overlay').classList.remove('show')}
+/* pop-up de confirmação */
+let cfAction = null;
+function askNew(msg, action){
+  $('cfMsg').textContent = msg; cfAction = action; $('confirm').classList.add('show');
+}
+$('cfYes').onclick = ()=>{ $('confirm').classList.remove('show'); const a=cfAction; cfAction=null; a&&a() };
+$('cfNo').onclick = ()=>{ $('confirm').classList.remove('show'); cfAction=null; buildControls('ws'); buildControls('cw') };
+const isActive = g => g==='ws' ? wsActive() : cwStat().active;
+function startNew(g){ hideWin(); g==='ws' ? newWS() : newCW() }
 function buildControls(g){
-  const isWS = g==='ws', tabs = $(g+'Tabs'), sel = $(g+'Theme');
+  const isWS = g==='ws', dsel = $(g+'Diff'), sel = $(g+'Theme');
   const getD = () => isWS?wsDiff:cwDiff, getT = () => isWS?wsTheme:cwTheme;
-  tabs.innerHTML='';
-  for (const k in DIFFS){
-    const b = document.createElement('button');
-    b.className = 'tab'+(k===getD()?' on':''); b.textContent = DIFFS[k].nome;
-    b.onclick = () => {
+  if (!dsel.options.length){
+    for (const k in DIFFS){const o=document.createElement('option');o.value=k;o.textContent='Dificuldade: '+DIFFS[k].nome;dsel.appendChild(o)}
+    dsel.onchange = () => {
+      const k = dsel.value;
+      if (k===getD()) { dsel.value = getD(); return }
+      isWS ? wsSave() : cwSave();            // guarda o jogo da dificuldade atual
       if (isWS) wsDiff = k; else cwDiff = k;
-      store('jp_'+g+'_diff',k); buildControls(g); hideWin(); isWS?newWS():newCW();
+      store('jp_'+g+'_diff',k); hideWin();
+      if (!(isWS ? wsLoad(k) : cwLoad(k))) startNew(g);   // retoma o salvo ou cria um novo
+      buildControls(g);
     };
-    tabs.appendChild(b);
   }
+  dsel.value = getD();
   if (!sel.options.length){
     for (const k in THEMES){const o=document.createElement('option');o.value=k;o.textContent='Tema: '+THEMES[k].nome;sel.appendChild(o)}
     sel.onchange = () => {
-      if (isWS) wsTheme = sel.value; else cwTheme = sel.value;
-      store('jp_'+g+'_theme',sel.value); hideWin(); isWS?newWS():newCW();
+      const v = sel.value;
+      const go = () => { if (isWS) wsTheme = v; else cwTheme = v; store('jp_'+g+'_theme',v); startNew(g) };
+      if (isActive(g)) askNew('Mudar o tema inicia um novo jogo nesta dificuldade e o progresso atual será perdido. Continuar?', go);
+      else go();
     };
   }
   sel.value = getT();
@@ -2310,8 +2675,7 @@ function setGame(g){
   $('wsPanel').classList.toggle('on', g==='ws');
   $('cwPanel').classList.toggle('on', g==='cw');
   document.body.classList.toggle("mode-cw", g==="cw");
-  document.querySelectorAll('#gtabs .tab').forEach(b=>b.classList.toggle('on', b.dataset.g===g));
-  const t = g==='ws'?tWS:tCW, done = g==='ws'?wsDone:cwDone;
+    const t = g==='ws'?tWS:tCW, done = g==='ws'?wsDone:cwDone;
   if (t.began && !done) t.start();
 }
 let onHome = true;
@@ -2327,9 +2691,8 @@ function openGame(g){
 document.querySelectorAll('.homeBtn').forEach(b=>b.onclick=()=>openGame(b.dataset.g));
 $('homeBtn').onclick = ()=>{ if (history.state && history.state.g) history.back(); else goHome(); };
 window.addEventListener('popstate',()=>{ if (!onHome) goHome(); });
-document.querySelectorAll('#gtabs .tab').forEach(b=>b.onclick=()=>setGame(b.dataset.g));
-$('wsNew').onclick = ()=>{hideWin(); newWS()};
-$('cwNew').onclick = ()=>{hideWin(); newCW()};
+$('topNew').onclick = ()=>{ const g = gameKey;
+  if (isActive(g)) askNew('Iniciar um novo jogo nesta dificuldade? O progresso atual será perdido.', ()=>startNew(g)); else startNew(g) };
 $('again').onclick = ()=>{hideWin(); gameKey==='ws'?newWS():newCW()};
 document.addEventListener('visibilitychange',()=>{
   const t = gameKey==='ws'?tWS:tCW, done = gameKey==='ws'?wsDone:cwDone;
@@ -2339,6 +2702,12 @@ document.addEventListener('visibilitychange',()=>{
 let rz; window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{if(ws&&ws.grid)wsRender();if(cw&&cw.els)cwRender()},150)});
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(()=>{});
+/* migra salvamentos do formato antigo (um único slot) */
+['ws','cw'].forEach(g=>{ try{
+  const raw = store('jp_'+g+'_save'); if (!raw) return;
+  const d = JSON.parse(raw); if (d && d.diff in DIFFS && !store(slotKey(g,d.diff))) store(slotKey(g,d.diff), raw);
+  drop('jp_'+g+'_save');
+}catch(e){} });
 wsLoad() || newWS(); cwLoad() || newCW(); buildControls("ws"); buildControls("cw"); setGame(gameKey); goHome();
 </script>
 </body>

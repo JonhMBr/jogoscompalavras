@@ -212,272 +212,1532 @@ footer{margin-top:auto;padding:16px 0 12px;font-size:12px;color:var(--muted);tex
   <p id="res1"></p><p id="res2"></p>
   <button class="btn primary" id="again">Jogar de novo</button>
 </div></div>
-<footer>Versão: 24102026.12</footer>
+<footer>Versão: 24102026.13</footer>
 
 <script>
 'use strict';
 /* ---------- Banco de palavras e dicas (sem acentos nas respostas) ---------- */
 const RAW = {
-geral:['Geral',`CASA|Onde moramos
-MESA|Móvel onde se come ou se trabalha
-LIVRO|Tem páginas e capítulos
-CADEIRA|Móvel para sentar
-JANELA|Abertura na parede com vidro
-PORTA|Fecha a entrada de um cômodo
-CAMINHO|Trajeto a seguir
-AMIGO|Companheiro de confiança
-FAMILIA|Pais, filhos e irmãos
-TRABALHO|Ocupação profissional
-ESCOLA|Lugar de estudar
-CIDADE|Maior que uma vila
-ESTRADA|Via para carros entre cidades
-JARDIM|Espaço com flores e plantas
-FLORESTA|Grande área de árvores
-MONTANHA|Grande elevação de terreno
-RIO|Curso de água doce
-PRAIA|Areia à beira-mar
-VENTO|Ar em movimento
-CHUVA|Água que cai das nuvens
-SOL|Estrela que ilumina o dia
-LUA|Satélite natural da Terra
-ESTRELA|Ponto brilhante no céu à noite
-NUVEM|Massa branca ou cinza no céu
-FOGO|Queima e dá calor
-TERRA|Nosso planeta
-MUSICA|Arte dos sons
-FESTA|Comemoração com convidados
-VIAGEM|Deslocamento a outro lugar
-SONHO|Imagem que vemos ao dormir
-FUTEBOL|Esporte com gol e bola
-CAFE|Bebida escura e quente
-PAO|Alimento do café da manhã, feito de farinha
-CARRO|Veículo de quatro rodas
-AVIAO|Voa levando passageiros
-BARCO|Navega na água
-TREM|Corre sobre trilhos
-RELOGIO|Marca as horas
-TELEFONE|Serve para ligar para alguém
-CAMA|Onde dormimos
-ESPELHO|Reflete nossa imagem
-TAPETE|Cobre o chão da sala
-LUZ|Faz o ambiente ficar claro
-VIDRO|Material transparente e frágil
-PAPEL|Onde se escreve e se desenha
-CANETA|Escreve com tinta
-MOCHILA|Bolsa levada nas costas
-BICICLETA|Veículo de duas rodas com pedais`],
-animais:['Animais',`CACHORRO|Melhor amigo do homem
-GATO|Felino doméstico que mia
-CAVALO|Animal montado em cavalgadas
-VACA|Dá leite
-PORCO|Animal da fazenda que grunhe
-GALINHA|Põe ovos
-PATO|Ave que faz "quá"
-COELHO|Orelhas longas, adora cenoura
-TARTARUGA|Tem casco e anda devagar
-JACARE|Réptil de boca grande que vive em rios
-ONCA|Grande felino pintado do Brasil
-MACACO|Primata que pula de galho em galho
-ELEFANTE|Maior animal terrestre
-GIRAFA|Animal de pescoço bem longo
-LEAO|Rei da selva
-TIGRE|Felino listrado
-ZEBRA|Cavalo listrado africano
-URSO|Grande mamífero que hiberna
-LOBO|Canídeo que uiva
-RAPOSA|Animal astuto de cauda peluda
-COBRA|Réptil sem patas
-SAPO|Anfíbio que coaxa
-BORBOLETA|Inseto de asas coloridas
-ABELHA|Produz mel
-FORMIGA|Inseto que vive em colônias e trabalha muito
-ARANHA|Tece teias
-GOLFINHO|Mamífero marinho muito inteligente
-BALEIA|Maior mamífero do mar
-TUBARAO|Peixe predador de nadadeira dorsal
-POLVO|Molusco de oito tentáculos
-CARANGUEJO|Crustáceo que anda de lado
-PAPAGAIO|Ave que imita a fala
-TUCANO|Ave de bico grande e colorido
-CORUJA|Ave noturna de olhos grandes
-AGUIA|Ave de rapina de visão aguçada
-PINGUIM|Ave que não voa e vive no gelo
-CAPIVARA|Maior roedor do mundo
-TAMANDUA|Come formigas com língua comprida
-PREGUICA|Mamífero muito lento
-CAMELO|Tem corcovas e vive no deserto
-HIPOPOTAMO|Grande animal dos rios africanos
-RINOCERONTE|Tem chifre no focinho
-GAVIAO|Ave de rapina de garras fortes
-BEIJAFLOR|Ave minúscula que paira no ar`],
-comidas:['Comidas',`ARROZ|Grão branco que acompanha o feijão
-FEIJAO|Caldo escuro do prato brasileiro
-FAROFA|Farinha de mandioca temperada
-MACARRAO|Massa cozida com molho
-LASANHA|Massa em camadas com queijo e molho
-PIZZA|Massa redonda italiana com cobertura
-CHURRASCO|Carne assada na brasa
-FRANGO|Carne de galinha
-PEIXE|Alimento tirado do mar ou do rio
-CARNE|Alimento de origem animal
-SALADA|Prato de folhas e legumes
-TOMATE|Fruto vermelho usado em molhos
-CEBOLA|Faz chorar ao ser cortada
-BATATA|Tubérculo frito, cozido ou assado
-MANDIOCA|Raiz também chamada aipim
-BANANA|Fruta amarela e curva
-LARANJA|Fruta cítrica do suco
-MELANCIA|Fruta grande, verde por fora e vermelha por dentro
-MORANGO|Fruta vermelha pequena
-ABACAXI|Fruta tropical com coroa de folhas
-MANGA|Fruta doce de caroço grande
-UVA|Fruta do vinho
-LIMAO|Fruta azeda da limonada
-MAMAO|Fruta alaranjada de sementes pretas
-GOIABA|Fruta de polpa rosada e muitas sementes
-BOLO|Sobremesa de aniversário
-BRIGADEIRO|Docinho de chocolate de festa
-SORVETE|Sobremesa gelada
-CHOCOLATE|Doce feito de cacau
-TAPIOCA|Beiju de goma de mandioca
-PAMONHA|Iguaria de milho verde
-COXINHA|Salgado em forma de gota, recheado com frango
-PASTEL|Salgado frito de feira
-MILHO|Grão amarelo da pipoca
-QUEIJO|Derivado do leite
-IOGURTE|Leite fermentado
-BISCOITO|Bolacha
-PIPOCA|Milho estourado no cinema
-ACAI|Fruta roxa da Amazônia
-CAJU|Fruta com a castanha do lado de fora
-FEIJOADA|Prato de feijão preto com carnes
-MOQUECA|Ensopado de peixe com dendê`],
-petroleo:['Petróleo e poços',`POCO|Furo perfurado para chegar ao reservatório
-SONDA|Equipamento que perfura o poço
-PLATAFORMA|Estrutura que produz petróleo no mar
-BROCA|Ferramenta que corta a rocha
-REVESTIMENTO|Tubo de aço que reveste as paredes do poço
-CIMENTO|Fixa o revestimento na rocha
-VALVULA|Dispositivo que abre e fecha o fluxo
-PRESSAO|Força por unidade de área
-RESERVATORIO|Rocha que armazena óleo e gás
-PETROLEO|Óleo bruto fóssil
-GAS|Fluido que ocupa todo o volume disponível
-FLUIDO|Líquido ou gás que escoa
-LAMA|Fluido de perfuração
-COLUNA|Conjunto de tubos descidos no poço
-PACKER|Isola o espaço anular no poço
-TUBING|Coluna de produção, em inglês
-ANULAR|Espaço entre dois tubos concêntricos
-CABECA|Parte do corpo onde fica o cérebro
-COMPLETACAO|Etapa que prepara o poço para produzir
-PERFURACAO|Ato de abrir o poço
-INTEGRIDADE|Capacidade do poço de manter suas barreiras
-ABANDONO|Encerramento definitivo de um poço
-BARREIRA|Elemento que impede fluxo indesejado
-TAMPAO|Plug de cimento ou mecânico
-SONDAGEM|Investigação do subsolo
-RISER|Tubo que liga o poço à plataforma
-BOP|Preventor de erupção (sigla)
-MANOMETRO|Mede pressão
-VAZAO|Volume que escoa por unidade de tempo
-DENSIDADE|Massa por unidade de volume
-PROFUNDIDADE|Distância da superfície ao fundo
-CANHONEIO|Furos feitos no revestimento
-FRATURA|Rachadura aberta na rocha
-SEPARADOR|Divide óleo, gás e água
-DUTO|Tubulação para transporte
-OLEODUTO|Duto que transporta petróleo
-REFINARIA|Transforma óleo bruto em derivados
-TUBULACAO|Conjunto de tubos
-FLANGE|Conexão aparafusada entre tubos
-CHOKE|Restritor que regula a vazão
-SUBSEA|Relativo ao fundo do mar, em inglês
-ARVORE|Planta de tronco, galhos e folhas`],
-civil:['Engenharia civil',`CONCRETO|Mistura de cimento, areia, brita e água
-CIMENTO|Aglomerante em pó usado no concreto
-AREIA|Agregado miúdo da construção
-BRITA|Pedra britada usada no concreto
-ACO|Material das barras que armam o concreto
-VIGA|Elemento horizontal que recebe a carga das lajes
-PILAR|Elemento vertical que sustenta a estrutura
-LAJE|Piso ou cobertura de concreto
-FUNDACAO|Parte da obra que transmite o peso ao solo
-SAPATA|Fundação rasa que apoia o pilar
-ESTACA|Fundação profunda cravada no solo
-RADIER|Laje que serve de fundação para toda a obra
-ALICERCE|Base de uma construção
-ALVENARIA|Parede feita de tijolos ou blocos
-TIJOLO|Bloco de barro cozido
-BLOCO|Peça usada para levantar paredes
-ARGAMASSA|Mistura de cimento, areia e água para assentar tijolos
-REBOCO|Camada que regulariza a parede
-TELHADO|Cobertura da casa
-TELHA|Peça que forma o telhado
-ESTRUTURA|Esqueleto que sustenta a construção
-FORMA|Molde que dá o formato ao concreto
-ARMADURA|Conjunto de barras de aço dentro do concreto
-TRACO|Proporção dos materiais do concreto
-SLUMP|Teste de abatimento do concreto fresco
-CURA|Período em que o concreto ganha resistência
-TOPOGRAFIA|Estudo da forma e das medidas do terreno
-ATERRO|Terra levada para elevar o nível do terreno
-ESCAVACAO|Retirada de terra do terreno
-SONDAGEM|Investigação do solo para projetar a fundação
-DRENAGEM|Condução da água para longe da obra
-ESGOTO|Rede que leva os dejetos da casa
-PONTE|Obra que atravessa um rio ou vale
-VIADUTO|Ponte construída sobre vias ou vales urbanos
-TUNEL|Passagem escavada sob um morro ou rio
-BARRAGEM|Obra que represa a água de um rio
-ASFALTO|Revestimento preto das ruas
-PAVIMENTO|Camada que reveste a pista de rolamento
-CALCADA|Passeio destinado aos pedestres
-MEIOFIO|Peça que separa a calçada da rua
-PROJETO|Conjunto de desenhos e cálculos de uma obra
-PLANTA|Desenho da obra vista de cima
-ESCALA|Relação entre o desenho e o tamanho real
-ORCAMENTO|Estimativa dos custos da obra
-CRONOGRAMA|Calendário das etapas da obra
-EMPREITEIRO|Quem executa a obra por contrato
-MESTRE|Chefe do canteiro, o "de obras"
-PEDREIRO|Profissional que assenta tijolos
-SERVENTE|Ajudante geral na obra
-ENGENHEIRO|Profissional que projeta e dirige a obra
-ARQUITETO|Profissional que desenha o projeto da edificação
-CANTEIRO|Local onde a obra é executada
-ANDAIME|Estrutura provisória para trabalhar em altura
-GUINDASTE|Máquina que levanta cargas pesadas
-BETONEIRA|Máquina que mistura o concreto
-ESCAVADEIRA|Máquina que cava a terra
-CAPACETE|Equipamento de proteção para a cabeça
-NIVEL|Instrumento que confere a horizontal
-PRUMO|Instrumento que indica a vertical
-TRENA|Fita métrica usada na obra
-TRELICA|Estrutura de barras que formam triângulos
-FLEXAO|Esforço que curva uma viga
-COMPRESSAO|Esforço que comprime e encurta o pilar
-TRACAO|Esforço que estica uma peça
-CARGA|Peso que a estrutura precisa suportar
-RECALQUE|Afundamento do solo sob a fundação
-FISSURA|Pequena rachadura na parede
-TRINCA|Rachadura mais aberta na parede
-PISO|Revestimento do chão
-AZULEJO|Cerâmica que reveste paredes molhadas
-GESSO|Material usado em forros e acabamentos
-RODAPE|Faixa que protege a base da parede`]
+geral:['Geral',`CASA|Onde moramos|1
+MESA|Móvel onde se come ou se trabalha|1
+LIVRO|Tem páginas e capítulos|1
+CADEIRA|Móvel para sentar|1
+JANELA|Abertura na parede com vidro|1
+PORTA|Fecha a entrada de um cômodo|1
+CAMINHO|Trajeto a seguir|1
+AMIGO|Companheiro de confiança|1
+FAMILIA|Pais, filhos e irmãos|1
+TRABALHO|Ocupação profissional|1
+ESCOLA|Lugar de estudar|1
+CIDADE|Maior que uma vila|1
+ESTRADA|Via para carros entre cidades|2
+JARDIM|Espaço com flores e plantas|2
+FLORESTA|Grande área de árvores|2
+MONTANHA|Grande elevação de terreno|2
+RIO|Curso de água doce|1
+PRAIA|Areia à beira-mar|1
+VENTO|Ar em movimento|1
+CHUVA|Água que cai das nuvens|1
+SOL|Estrela que ilumina o dia|1
+LUA|Satélite natural da Terra|1
+ESTRELA|Ponto brilhante no céu à noite|1
+NUVEM|Massa branca ou cinza no céu|1
+FOGO|Queima e dá calor|1
+TERRA|Nosso planeta|1
+MUSICA|Arte dos sons|1
+FESTA|Comemoração com convidados|1
+VIAGEM|Deslocamento a outro lugar|2
+SONHO|Imagem que vemos ao dormir|2
+FUTEBOL|Esporte com gol e bola|2
+CAFE|Bebida escura e quente|1
+PAO|Alimento do café da manhã, feito de farinha|1
+CARRO|Veículo de quatro rodas|1
+AVIAO|Voa levando passageiros|1
+BARCO|Navega na água|1
+TREM|Corre sobre trilhos|1
+RELOGIO|Marca as horas|2
+TELEFONE|Serve para ligar para alguém|2
+CAMA|Onde dormimos|1
+ESPELHO|Reflete nossa imagem|2
+TAPETE|Cobre o chão da sala|2
+LUZ|Faz o ambiente ficar claro|1
+VIDRO|Material transparente e frágil|1
+PAPEL|Onde se escreve e se desenha|1
+CANETA|Escreve com tinta|1
+MOCHILA|Bolsa levada nas costas|2
+BICICLETA|Veículo de duas rodas com pedais|2
+SOFA|Móvel estofado para duas ou três pessoas|1
+ARMARIO|Móvel com portas para guardar roupas|3
+GELADEIRA|Eletrodoméstico que conserva alimentos frios|2
+FOGAO|Eletrodoméstico com bocas para cozinhar|1
+PANELA|Recipiente de metal usado para cozinhar|1
+COLHER|Talher para tomar sopa|1
+GARFO|Talher com dentes|1
+FACA|Talher que corta|1
+PRATO|Louça onde se serve a comida|1
+COPO|Recipiente para beber água|1
+XICARA|Recipiente pequeno com asa para café|2
+JARRA|Vaso com alça para servir líquidos|2
+BANHEIRO|Cômodo com chuveiro e vaso sanitário|2
+COZINHA|Cômodo onde se preparam as refeições|1
+SALA|Cômodo para receber visitas|1
+QUARTO|Cômodo onde se dorme|1
+VARANDA|Área aberta junto à casa|2
+TELHADO|Cobertura de uma casa|2
+PAREDE|Divisória vertical de um cômodo|2
+CHAVE|Abre a fechadura|2
+FECHADURA|Mecanismo de trava da porta|3
+CORTINA|Tecido pendurado na janela|2
+TRAVESSEIRO|Almofada macia para apoiar a cabeça|3
+LENCOL|Tecido que cobre o colchão|3
+COBERTOR|Aquece quem dorme no frio|2
+TOALHA|Seca o corpo depois do banho|2
+SABONETE|Higiene usada no banho|2
+ESCOVA|Limpa os dentes ou o cabelo|2
+PENTE|Alisa e separa os fios do cabelo|2
+CHUVEIRO|Esguicha água para o banho|2
+VASSOURA|Varre o chão|2
+BALDE|Recipiente com alça para carregar água|2
+LIXO|Resto descartado|2
+SABAO|Produto de limpeza que faz espuma|2
+LAMPADA|Ilumina o cômodo|2
+TOMADA|Ponto da parede para ligar aparelhos|2
+VENTILADOR|Aparelho com hélices que refresca|3
+TELEVISAO|Aparelho de imagens e programas|2
+RADIO|Aparelho que toca música e notícias|2
+COMPUTADOR|Máquina de processar dados e navegar na internet|2
+CELULAR|Telefone que cabe no bolso|2
+TECLADO|Conjunto de teclas para digitar|2
+MOUSE|Dispositivo que move o cursor|2
+TELA|Superfície onde aparecem imagens|2
+INTERNET|Rede mundial de computadores|2
+SENHA|Código secreto de acesso|3
+ANEL|Joia usada no dedo|2
+COLAR|Enfeite usado no pescoço|2
+BRINCO|Enfeite usado na orelha|2
+PULSEIRA|Enfeite usado no pulso|3
+CAMISA|Roupa com mangas e botões|1
+CALCA|Veste as pernas|1
+SAIA|Roupa feminina sem pernas separadas|2
+VESTIDO|Peça feminina de corpo inteiro|2
+BLUSA|Roupa para o tronco|2
+CASACO|Roupa pesada para o frio|2
+MEIA|Cobre o pé dentro do sapato|1
+SAPATO|Calçado fechado|1
+SANDALIA|Calçado aberto|2
+CHINELO|Calçado de dedo para o dia a dia|2
+BOTA|Calçado que cobre o tornozelo|1
+CHAPEU|Cobre a cabeça|2
+BONE|Chapéu com aba na frente|1
+CINTO|Prende a calça na cintura|2
+BOLSA|Acessório para carregar objetos|2
+CARTEIRA|Guarda dinheiro e documentos|2
+OCULOS|Ajudam a enxergar melhor|2
+GUARDACHUVA|Protege da chuva|3
+LUVA|Protege as mãos|2
+LENCO|Tecido para secar o nariz ou enfeitar|2
+DINHEIRO|Meio de pagamento|2
+MOEDA|Dinheiro de metal|2
+BANCO|Instituição que guarda o dinheiro|2
+LOJA|Estabelecimento que vende produtos|1
+MERCADO|Lugar de comprar alimentos|2
+FEIRA|Mercado ao ar livre|1
+PADARIA|Onde se compra pão|2
+FARMACIA|Onde se compram remédios|2
+HOSPITAL|Lugar de tratar doentes|2
+MEDICO|Profissional que cuida da saúde|2
+ENFERMEIRO|Auxilia os doentes no hospital|3
+PROFESSOR|Quem ensina na escola|2
+ALUNO|Quem estuda|2
+PEDREIRO|Quem levanta paredes|2
+COZINHEIRO|Quem prepara refeições profissionalmente|2
+MOTORISTA|Quem dirige veículos|2
+PILOTO|Quem conduz um avião|2
+POLICIAL|Agente que cuida da segurança pública|2
+BOMBEIRO|Apaga incêndios e salva pessoas|2
+JUIZ|Quem julga nos tribunais|2
+ADVOGADO|Defende pessoas na justiça|3
+PINTOR|Quem pinta paredes ou quadros|2
+ARTISTA|Quem cria obras de arte|2
+CANTOR|Quem canta|2
+ATOR|Quem interpreta personagens|2
+ESCRITOR|Autor de livros|3
+POETA|Quem escreve versos|3
+PADRE|Líder religioso católico|2
+VIZINHO|Quem mora ao lado|2
+PREFEITO|Chefe de uma cidade|3
+PRESIDENTE|Chefe de um país|2
+CIDADAO|Habitante de um país|3
+POVO|Conjunto de habitantes|2
+PAIS|Território com governo próprio|2
+ESTADO|Divisão política de um país|3
+BAIRRO|Parte de uma cidade|3
+RUA|Via de uma cidade|1
+AVENIDA|Rua larga e importante|2
+PRACA|Espaço público com bancos e árvores|2
+PONTE|Liga as duas margens de um rio|1
+CALCADA|Passeio para pedestres|2
+SEMAFORO|Controla o trânsito com três cores|3
+ONIBUS|Transporte coletivo urbano|2
+METRO|Trem urbano que anda sob a terra|2
+TAXI|Carro de aluguel com taxímetro|1
+MOTO|Veículo de duas rodas com motor|1
+CAMINHAO|Veículo grande para transportar carga|2
+PNEU|Borracha que envolve a roda|2
+VOLANTE|Peça usada para dirigir o carro|3
+FREIO|Peça que faz o veículo parar|2
+GASOLINA|Combustível dos carros|2
+AEROPORTO|Onde os aviões pousam e decolam|3
+PORTO|Onde os navios atracam|2
+ESTACAO|Onde os trens param|3
+PASSAGEM|Bilhete de viagem|3
+MALA|Bagagem de viagem|1
+MAPA|Representação de um território|1
+BUSSOLA|Aponta o norte|3
+TURISTA|Pessoa que viaja a passeio|2
+HOTEL|Onde se hospeda em viagem|2
+FERIAS|Período de descanso do trabalho|2
+PASSEIO|Pequena volta para se distrair|2
+ANO|Doze meses|1
+MES|Trinta dias, mais ou menos|1
+SEMANA|Sete dias|2
+DIA|Período de vinte e quatro horas|1
+NOITE|Período escuro do dia|1
+MANHA|Início do dia|1
+TARDE|Período entre o meio-dia e a noite|1
+HORA|Sessenta minutos|1
+MINUTO|Sessenta segundos|3
+SEGUNDO|Menor divisão da hora|3
+AGENDA|Caderno de compromissos|3
+CALENDARIO|Mostra os dias do ano|3
+VERAO|Estação mais quente|2
+INVERNO|Estação mais fria|2
+OUTONO|Estação depois do verão|3
+PRIMAVERA|Estação das flores|3
+NEVE|Água congelada que cai em flocos|2
+GELO|Água em estado sólido|2
+TROVAO|Barulho forte da tempestade|3
+RAIO|Descarga elétrica no céu|2
+ARCOIRIS|Faixa colorida depois da chuva|3
+NEBLINA|Névoa baixa que atrapalha a visão|3
+TEMPESTADE|Chuva forte com ventos e raios|3
+CLIMA|Condições do tempo em uma região|3
+CEU|Espaço sobre nossas cabeças|2
+MAR|Grande extensão de água salgada|1
+OCEANO|Maior extensão de água do planeta|3
+ILHA|Terra cercada de água|1
+LAGO|Grande massa de água cercada de terra|1
+CACHOEIRA|Queda d água em rio|3
+VALE|Terreno baixo entre montanhas|2
+DESERTO|Região seca com muita areia|2
+CAMPO|Área rural aberta|2
+PLANICIE|Terreno plano e extenso|3
+VULCAO|Montanha que expele lava|3
+PEDRA|Fragmento duro de rocha|1
+AREIA|Grãos finos das praias|1
+BARRO|Terra molhada e mole|2
+FLOR|Parte colorida e perfumada da planta|1
+ARVORE|Planta de tronco e copa|2
+FOLHA|Parte verde da árvore|1
+RAIZ|Parte da planta debaixo da terra|1
+SEMENTE|Origem de uma nova planta|2
+FRUTO|Parte da planta que guarda sementes|2
+GRAMA|Vegetação rasteira do gramado|2
+MATO|Vegetação silvestre|2
+ROSA|Flor com espinhos|1
+CORPO|Conjunto físico de uma pessoa|2
+CABECA|Parte do corpo onde fica o cérebro|2
+CEREBRO|Órgão do pensamento|3
+CORACAO|Órgão que bombeia sangue|2
+PULMAO|Órgão da respiração|3
+OLHO|Órgão da visão|1
+OUVIDO|Órgão da audição|2
+NARIZ|Órgão do olfato|1
+BOCA|Por onde falamos e comemos|1
+DENTE|Mastiga o alimento|1
+LINGUA|Órgão do paladar|2
+BRACO|Membro que liga o ombro à mão|1
+MAO|Parte do corpo com cinco dedos|1
+DEDO|Cada extremidade da mão|1
+PERNA|Membro usado para andar|1
+JOELHO|Articulação no meio da perna|3
+PELE|Reveste o corpo|1
+OSSO|Peça rígida do esqueleto|1
+SANGUE|Líquido vermelho que corre nas veias|2
+CABELO|Fios que cobrem a cabeça|2
+BARBA|Pelos do rosto masculino|2
+SORRISO|Expressão de alegria|3
+LAGRIMA|Gota que escorre do olho|3
+ALEGRIA|Sentimento de contentamento|2
+TRISTEZA|Sentimento oposto à alegria|2
+MEDO|Sentimento diante do perigo|1
+AMOR|Sentimento de afeto profundo|1
+RAIVA|Sentimento de fúria|2
+SAUDADE|Falta de quem está distante|3
+ESPERANCA|Confiança em dias melhores|3
+CORAGEM|Qualidade de quem enfrenta o medo|3
+PACIENCIA|Capacidade de esperar com calma|3
+HONESTIDADE|Qualidade de quem não mente|3
+AMIZADE|Relação entre amigos|2
+RESPEITO|Consideração pelo outro|3
+SEGREDO|Algo que não se conta|3
+VERDADE|Oposto da mentira|2
+MENTIRA|Afirmação falsa|2
+HISTORIA|Narrativa de fatos|2
+CONTO|Narrativa curta|2
+POESIA|Arte feita de versos|3
+CANCAO|Música com letra|3
+DANCA|Movimento do corpo ao ritmo da música|2
+TEATRO|Arte de encenar peças|2
+CINEMA|Sala de projeção de filmes|2
+FILME|Obra exibida no cinema|2
+PINTURA|Arte de aplicar tintas|2
+DESENHO|Imagem feita com lápis|2
+FOTOGRAFIA|Imagem registrada por câmera|3
+VIOLAO|Instrumento de cordas tocado no colo|3
+PIANO|Instrumento de teclas brancas e pretas|3
+TAMBOR|Instrumento de percussão|3
+FLAUTA|Instrumento de sopro fino|3
+JOGO|Atividade com regras para se divertir|1
+BRINQUEDO|Objeto para crianças brincarem|2
+BOLA|Objeto redondo dos esportes|1
+XADREZ|Jogo de tabuleiro com rei e rainha|3
+BARALHO|Conjunto de cartas|3
+DADO|Cubo com pontos de um a seis|1
+PIPA|Brinquedo de papel que voa com vento|1
+BONECA|Brinquedo em forma de pessoa|2
+LIVRARIA|Loja de livros|3
+BIBLIOTECA|Lugar com muitos livros para ler|3
+DICIONARIO|Livro com o significado das palavras|3
+CADERNO|Folhas encadernadas para anotar|2
+LAPIS|Escreve e pode ser apagado|1
+BORRACHA|Apaga o que o lápis escreveu|3
+REGUA|Instrumento para traçar linhas retas|3
+TESOURA|Instrumento para cortar papel|3
+COLA|Substância pegajosa que une papéis|1
+QUADRO|Superfície onde o professor escreve|3
+PROVA|Teste de conhecimentos|3
+LICAO|Tarefa de aprendizado|3`],
+animais:['Animais',`CACHORRO|Melhor amigo do homem|1
+GATO|Felino doméstico que mia|1
+CAVALO|Animal montado em cavalgadas|1
+VACA|Dá leite|1
+PORCO|Animal da fazenda que grunhe|1
+GALINHA|Põe ovos|1
+PATO|Ave que faz "quá"|1
+COELHO|Orelhas longas, adora cenoura|1
+TARTARUGA|Tem casco e anda devagar|1
+JACARE|Réptil de boca grande que vive em rios|1
+ONCA|Grande felino pintado do Brasil|1
+MACACO|Primata que pula de galho em galho|1
+ELEFANTE|Maior animal terrestre|1
+GIRAFA|Animal de pescoço bem longo|1
+LEAO|Rei da selva|1
+TIGRE|Felino listrado|1
+ZEBRA|Cavalo listrado africano|1
+URSO|Grande mamífero que hiberna|1
+LOBO|Canídeo que uiva|1
+RAPOSA|Animal astuto de cauda peluda|1
+COBRA|Réptil sem patas|1
+SAPO|Anfíbio que coaxa|1
+BORBOLETA|Inseto de asas coloridas|1
+ABELHA|Produz mel|1
+FORMIGA|Inseto que vive em colônias e trabalha muito|1
+ARANHA|Tece teias|1
+GOLFINHO|Mamífero marinho muito inteligente|1
+BALEIA|Maior mamífero do mar|1
+TUBARAO|Peixe predador de nadadeira dorsal|1
+POLVO|Molusco de oito tentáculos|1
+CARANGUEJO|Crustáceo que anda de lado|1
+PAPAGAIO|Ave que imita a fala|1
+TUCANO|Ave de bico grande e colorido|1
+CORUJA|Ave noturna de olhos grandes|1
+AGUIA|Ave de rapina de visão aguçada|1
+PINGUIM|Ave que não voa e vive no gelo|1
+CAPIVARA|Maior roedor do mundo|1
+TAMANDUA|Come formigas com língua comprida|2
+PREGUICA|Mamífero muito lento|1
+CAMELO|Tem corcovas e vive no deserto|1
+HIPOPOTAMO|Grande animal dos rios africanos|1
+RINOCERONTE|Tem chifre no focinho|1
+GAVIAO|Ave de rapina de garras fortes|2
+BEIJAFLOR|Ave minúscula que paira no ar|2
+FILHOTE|Animal recém-nascido|1
+BEZERRO|Filhote da vaca|2
+POTRO|Filhote do cavalo|2
+CORDEIRO|Filhote da ovelha|2
+OVELHA|Fornece lã|1
+CABRA|Animal de chifres que dá leite e pula em montanhas|1
+BODE|Macho da cabra|2
+BOI|Macho adulto do gado, usado no trabalho ou para corte|1
+BUFALO|Grande bovino de chifres curvos|2
+JUMENTO|Burro de carga|2
+BURRO|Cruzamento de jumento com égua|1
+EGUA|Fêmea do cavalo|2
+GALO|Canta ao amanhecer|1
+PINTINHO|Filhote de galinha|2
+PERU|Ave grande de papo vermelho comum em ceias de fim de ano|1
+GANSO|Ave aquática de pescoço longo|1
+CISNE|Ave branca elegante de lago|1
+PAVAO|Ave de cauda colorida em leque|2
+POMBO|Ave comum nas praças|1
+PARDAL|Pequena ave urbana|2
+SABIA|Ave canora símbolo do Brasil|2
+CANARIO|Pequena ave amarela de canto|2
+ARARA|Grande ave colorida de cauda longa|2
+PERIQUITO|Pequeno papagaio verde|2
+CACATUA|Ave de crista erguida|2
+AVESTRUZ|Maior ave do mundo|2
+EMA|Ave corredora brasileira|2
+SERIEMA|Ave brasileira caçadora de cobras|3
+GARCA|Ave pernalta de pescoço em S|2
+FLAMINGO|Ave rosada de pernas longas|2
+CEGONHA|Ave que a lenda diz trazer bebês|2
+URUBU|Ave negra que come carniça|2
+CARCARA|Ave de rapina do Nordeste|3
+FALCAO|Ave de rapina veloz|2
+CONDOR|Grande ave de rapina dos Andes|2
+MORCEGO|Mamífero voador noturno|1
+ANDORINHA|Ave migratória de cauda bifurcada|2
+PICAPAU|Ave que bica troncos|2
+ROUXINOL|Ave de canto melodioso|2
+GAIVOTA|Ave marinha de praia|2
+PELICANO|Ave de bico com bolsa|2
+CORVO|Ave negra de grasnado rouco|2
+COLIBRI|Outro nome do beija-flor|2
+SALMAO|Peixe que sobe rios para desovar|2
+ATUM|Grande peixe de águas abertas|2
+SARDINHA|Pequeno peixe prateado|2
+BACALHAU|Peixe salgado típico da Páscoa|2
+TILAPIA|Peixe de água doce muito criado|2
+PIRARUCU|Gigante peixe da Amazônia|3
+PIRANHA|Peixe de dentes afiados em cardumes|3
+TAMBAQUI|Peixe amazônico de dentes fortes|3
+DOURADO|Peixe de escamas cor de ouro|2
+TRAIRA|Peixe de rio predador|3
+LAMBARI|Pequeno peixe de rio|3
+ENGUIA|Peixe longo que lembra uma cobra|2
+RAIA|Peixe achatado de cauda com ferrão|2
+MOREIA|Peixe de corpo longo escondido em tocas de recifes|3
+BAGRE|Peixe de bigodes|2
+LINGUADO|Peixe achatado com olhos de um lado|2
+BADEJO|Peixe de mar comum na pesca|3
+ROBALO|Peixe de mar apreciado na pesca esportiva|3
+AGULHAO|Peixe de bico longo e pontudo|3
+ORCA|Baleia preta e branca predadora|2
+FOCA|Mamífero marinho que bate palmas nos circos|1
+MORSA|Mamífero marinho de grandes presas|2
+MANATI|Peixe-boi|3
+LONTRA|Mamífero aquático de pelos espessos|3
+CASTOR|Roedor que constrói represas|3
+OURICO|Animal de espinhos|3
+CAMARAO|Crustáceo rosado|1
+LAGOSTA|Crustáceo de pinças grandes e carne nobre|2
+SIRI|Crustáceo de nadadeiras traseiras|2
+OSTRA|Molusco que pode ter pérola|2
+LULA|Molusco de dez braços|2
+MEXILHAO|Molusco de concha escura|3
+CARACOL|Molusco de concha em espiral|2
+LESMA|Molusco sem concha|3
+MEDUSA|Animal marinho gelatinoso|3
+ESPONJA|Animal marinho poroso|3
+ESCORPIAO|Aracnídeo com ferrão na cauda|3
+CARRAPATO|Parasita que se prende ao cão|3
+PULGA|Parasita saltador|1
+PIOLHO|Parasita do cabelo|3
+MOSCA|Inseto de duas asas que zumbe|1
+MOSQUITO|Pequeno inseto que pica|1
+PERNILONGO|Mosquito de zumbido|2
+BARATA|Inseto doméstico que foge da luz|1
+GRILO|Inseto que canta à noite|2
+GAFANHOTO|Inseto saltador que forma pragas|2
+CIGARRA|Inseto de canto estridente no verão|3
+VAGALUME|Inseto que brilha no escuro|2
+JOANINHA|Pequeno besouro vermelho de pintas|2
+BESOURO|Inseto de casco rígido|2
+LIBELULA|Inseto de asas longas que voa sobre a água|3
+VESPA|Inseto que ferroa e faz ninho de papel|2
+MARIMBONDO|Inseto que ferroa e faz favos de papel|3
+CUPIM|Inseto que devora madeira|3
+TRACA|Inseto que rói roupas e livros|3
+LAGARTA|Fase larval da borboleta|2
+CASULO|Abrigo da lagarta antes de virar borboleta|3
+MARIPOSA|Parente noturna da borboleta|2
+TATU|Mamífero com carapaça que se enrola|1
+TATUBOLA|Tatu que vira bola|2
+ANTA|Maior mamífero terrestre do Brasil|2
+QUATI|Mamífero de focinho comprido e cauda listrada|3
+GAMBA|Mamífero que solta mau cheiro|3
+LOBOGUARA|Grande canídeo brasileiro de pernas longas|3
+LINCE|Felino de orelhas com pincéis|3
+PUMA|Felino também chamado onça-parda|2
+JAGUATIRICA|Pequeno felino pintado brasileiro|3
+PANTERA|Felino negro|2
+LEOPARDO|Felino de manchas em rosetas|2
+GUEPARDO|Felino mais veloz do mundo|3
+HIENA|Animal africano que parece rir|3
+CHACAL|Canídeo selvagem africano|3
+CANGURU|Marsupial que pula e carrega o filhote na bolsa|1
+COALA|Marsupial que come eucalipto|2
+PANDA|Urso preto e branco que come bambu|1
+GORILA|Maior primata|1
+CHIMPANZE|Primata muito inteligente|2
+ORANGOTANGO|Primata ruivo da Ásia|2
+BABUINO|Macaco de focinho comprido|3
+LEMURE|Primata de Madagascar de cauda anelada|3
+SAGUI|Pequeno macaco brasileiro|3
+BUGIO|Macaco que ruge|3
+ESQUILO|Roedor de cauda peluda que guarda nozes|1
+RATO|Roedor pequeno de cauda fina|1
+HAMSTER|Pequeno roedor de estimação|2
+CAMUNDONGO|Pequeno roedor doméstico|2
+CUTIA|Roedor da mata que enterra sementes|3
+PACA|Roedor de pelos pintados|3
+CERVO|Animal de chifres ramificados|1
+VEADO|Mamífero ágil da floresta|2
+ALCE|Grande cervídeo de galhadas largas|2
+RENA|Cervo que puxa o trenó do Papai Noel|2
+ALPACA|Animal andino de lã macia|2
+BISAO|Grande bovino selvagem americano|2
+JAVALI|Porco selvagem de presas|2
+MARRECO|Ave aquática parecida com o pato|2
+IGUANA|Grande lagarto verde|2
+LAGARTO|Réptil de quatro patas e cauda longa|1
+CAMALEAO|Réptil que muda de cor|1
+LAGARTIXA|Pequeno lagarto de parede|2
+TEIU|Grande lagarto brasileiro|2
+JIBOIA|Cobra constritora brasileira|2
+SUCURI|Maior cobra do Brasil|2
+ANACONDA|Gigante cobra aquática|2
+CASCAVEL|Cobra de guizo na cauda|2
+JARARACA|Cobra venenosa de cabeça triangular|2
+PITON|Grande serpente constritora|2
+CROCODILO|Réptil de grande mandíbula do Nilo|2
+CAGADO|Pequena tartaruga de água doce|3
+PERERECA|Anfíbio que se prende a folhas|3
+SALAMANDRA|Anfíbio de corpo alongado e cauda|3
+GIRINO|Filhote do sapo|3
+ZEBU|Boi de cupim de origem indiana|3
+CARNEIRO|Macho da ovelha com chifres enrolados|2
+LEOA|Fêmea do leão|2
+GATINHO|Filhote de gato|2
+CADELA|Fêmea do cão|2
+CHOCA|Galinha que aquece os ovos para nascerem os pintinhos|2
+CODORNA|Pequena ave de ovos miúdos|2
+FAISAO|Ave de plumagem vistosa e caça nobre|2
+BEMTEVI|Ave que canta seu nome|3
+CARDEAL|Ave de crista vermelha|3
+CURIO|Ave canora de peito claro|3
+TICOTICO|Pequena ave marrom de topete|3
+JABUTI|Réptil de casco alto que vive em terra|2
+SURUCUCU|Maior víbora das Américas|3
+BOTO|Golfinho de rio da Amazônia|2
+PEIXEBOI|Mamífero aquático herbívoro|2
+ARRAIA|Peixe achatado com ferrão na cauda|3
+ALBATROZ|Ave marinha de grande envergadura|3
+TUCUNARE|Peixe amazônico de mancha circular|3
+SURUBIM|Peixe de couro de rio com manchas|3
+PACU|Peixe de rio de corpo achatado|2
+CASCUDO|Peixe de rio com couraça|3
+JUNDIA|Peixe de rio com bigodes|3
+ANTILOPE|Mamífero veloz de chifres que vive na savana|2
+GAZELA|Antílope elegante e veloz|2
+GNU|Antílope africano que migra em grandes manadas|3
+IMPALA|Antílope africano de saltos longos|3
+ORIX|Antílope de chifres retos e longos|3
+DROMEDARIO|Camelo de uma só corcova|2
+IAQUE|Boi tibetano de pelos longos|3
+TAPIR|Outro nome da anta|3
+FURAO|Pequeno mamífero alongado de estimação|2
+DONINHA|Pequeno carnívoro de corpo fino|3
+TEXUGO|Mamífero escavador de faixa branca no rosto|3
+ARMINHO|Pequeno carnívoro de pelagem branca no inverno|3
+CHINCHILA|Roedor de pelagem macia e cinza|3
+ORNITORRINCO|Mamífero australiano que bota ovos e tem bico de pato|3
+WOMBAT|Marsupial australiano escavador|3
+DINGO|Cão selvagem da Austrália|3
+CASUAR|Grande ave australiana que não voa|3
+JACU|Ave brasileira que come frutos|3
+MUTUM|Grande ave brasileira de crista|3
+PERDIZ|Ave de caça de corpo roliço|3
+POMBA|Ave símbolo da paz|2
+JURITI|Pomba de canto triste|3
+BIGUA|Ave aquática mergulhadora de pescoço longo|3
+GUARA|Ave de plumagem vermelha vivo|3
+TUIUIU|Grande ave símbolo do Pantanal|3
+UIRAPURU|Ave amazônica de canto lendário|3
+ARAPONGA|Ave que canta como martelo em metal|3
+HARPIA|Grande águia da floresta tropical|3
+QUEROQUERO|Ave dos campos que grita o próprio nome|3
+ANU|Ave preta de bico curvo|3
+SANHACO|Ave de plumagem azul-acinzentada|3
+MAITACA|Papagaio pequeno e barulhento|3
+LOUVADEUS|Inseto de patas dianteiras em posição de prece|3
+ESCARAVELHO|Besouro sagrado dos egípcios|3
+PERCEVEJO|Inseto de cheiro forte|3
+TATURANA|Lagarta que causa queimadura|3
+SAUVA|Formiga cortadeira de folhas|3
+ZANGAO|Abelha macho|3
+CORVINA|Peixe prateado comum na pesca de mar|3
+TAINHA|Peixe de cardume que migra para desovar|2
+CAVALA|Peixe de mar de carne escura|2
+BONITO|Peixe pequeno parente do atum|2
+GAROUPA|Peixe grande de boca larga que vive em tocas|3
+PESCADA|Peixe branco de carne macia|2
+ANCHOVA|Pequeno peixe prateado usado em conservas|3
+CARPA|Peixe de água doce de lagos|2
+TRUTA|Peixe de rios frios e águas limpas|2
+ESTURJAO|Peixe cujas ovas dão o caviar|3
+LAMPREIA|Peixe sem mandíbula de corpo de enguia|3
+BARRACUDA|Peixe de mar predador de dentes afiados|2
+CACHALOTE|Baleia de cabeça grande com dentes|3
+BELUGA|Pequena baleia branca do Ártico|3
+NARVAL|Baleia com longa presa em espiral|3
+CAIMAN|Jacaré da América do Sul|2
+GAVIAL|Crocodilo de focinho fino|3
+VARANO|Grande lagarto carnívoro|3
+BASILISCO|Lagarto que corre sobre a água|3
+GECO|Pequeno lagarto que anda em paredes|3
+CECILIA|Anfíbio sem pernas que parece minhoca|3
+AXOLOTE|Salamandra mexicana que vive na água|3
+CATETO|Porco do mato menor|3
+QUEIXADA|Porco do mato que anda em bandos grandes|3
+MURIQUI|Maior macaco das Américas|3
+URSOPOLAR|Grande urso branco do Ártico|2
+URSOPARDO|Urso comum da Europa e da Ásia|2
+MARACAJA|Pequeno felino pintado da mata|3
+COBAIA|Roedor de estimação e de laboratório|2
+CORUJAO|Grande ave noturna de tufos na cabeça|3
+CAMBOATA|Peixe de rio que carrega os ovos no ventre|3
+CURIMBATA|Peixe de rio que migra para desovar|3
+MATRINXA|Peixe de rio apreciado na pesca|3
+ACARA|Peixe de água doce que cuida dos filhotes na boca|3
+PEIXEESPADA|Peixe de mar de bico alongado|3
+PEIXELUA|Grande peixe redondo de mar|3
+PEIXEPALHACO|Peixe laranja com listras brancas|2
+PEIXEDOURADO|Peixe ornamental de aquário|2
+PERUA|Fêmea do peru|2
+GALINHOLA|Ave de bico longo que vive em brejos|2`],
+comidas:['Comidas',`ARROZ|Grão branco que acompanha o feijão|1
+FEIJAO|Caldo escuro do prato brasileiro|1
+FAROFA|Farinha de mandioca temperada|1
+MACARRAO|Massa cozida com molho|1
+LASANHA|Massa em camadas com queijo e molho|1
+PIZZA|Massa redonda italiana com cobertura|1
+CHURRASCO|Carne assada na brasa|1
+FRANGO|Carne de galinha|1
+PEIXE|Alimento tirado do mar ou do rio|1
+CARNE|Alimento de origem animal|1
+SALADA|Prato de folhas e legumes|1
+TOMATE|Fruto vermelho usado em molhos|1
+CEBOLA|Faz chorar ao ser cortada|1
+BATATA|Tubérculo frito, cozido ou assado|1
+MANDIOCA|Raiz também chamada aipim|2
+BANANA|Fruta amarela e curva|1
+LARANJA|Fruta cítrica do suco|1
+MELANCIA|Fruta grande, verde por fora e vermelha por dentro|1
+MORANGO|Fruta vermelha pequena|1
+ABACAXI|Fruta tropical com coroa de folhas|1
+MANGA|Fruta doce de caroço grande|1
+UVA|Fruta do vinho|1
+LIMAO|Fruta azeda da limonada|1
+MAMAO|Fruta alaranjada de sementes pretas|1
+GOIABA|Fruta de polpa rosada e muitas sementes|1
+BOLO|Sobremesa de aniversário|1
+BRIGADEIRO|Docinho de chocolate de festa|1
+SORVETE|Sobremesa gelada|1
+CHOCOLATE|Doce feito de cacau|1
+TAPIOCA|Beiju de goma de mandioca|1
+PAMONHA|Iguaria de milho verde|1
+COXINHA|Salgado em forma de gota, recheado com frango|1
+PASTEL|Salgado frito de feira|1
+MILHO|Grão amarelo da pipoca|1
+QUEIJO|Derivado do leite|1
+IOGURTE|Leite fermentado|1
+BISCOITO|Bolacha|1
+PIPOCA|Milho estourado no cinema|1
+ACAI|Fruta roxa da Amazônia|2
+CAJU|Fruta com a castanha do lado de fora|1
+FEIJOADA|Prato de feijão preto com carnes|2
+MOQUECA|Ensopado de peixe com dendê|2
+TORRADA|Pão tostado|2
+MANTEIGA|Gordura do leite passada no pão|1
+MARGARINA|Substituto da manteiga|2
+GELEIA|Doce de fruta para passar no pão|2
+REQUEIJAO|Queijo cremoso para passar|2
+PRESUNTO|Frios fatiado de carne suína|1
+MORTADELA|Frios rosado de sanduíche|2
+SALAME|Embutido curado em fatias|2
+LINGUICA|Embutido de carne temperada|2
+SALSICHA|Embutido do cachorro-quente|1
+BACON|Carne de porco defumada em fatias|2
+HAMBURGUER|Carne moída em formato redondo no pão|1
+SANDUICHE|Recheio entre duas fatias de pão|1
+OMELETE|Ovos batidos e fritos|2
+OVO|Alimento posto pela galinha|1
+ESTROGONOFE|Prato de carne com creme e champignon|3
+BIFE|Fatia de carne grelhada|1
+PICANHA|Corte nobre do churrasco brasileiro|2
+COSTELA|Corte de carne com ossos|2
+FRALDINHA|Corte de carne do churrasco|3
+ALCATRA|Corte bovino macio|3
+COXAO|Corte bovino para bifes|3
+LOMBO|Corte suíno magro|2
+FILE|Corte macio de carne|2
+CALDO|Líquido temperado de sopa|2
+SOPA|Prato líquido e quente|1
+CANJA|Sopa de galinha com arroz|2
+PURE|Batata amassada cremosa|2
+POLENTA|Farinha de milho cozida|3
+CUSCUZ|Massa de milho cozida no vapor|3
+ANGU|Massa cozida de farinha de milho ou mandioca|3
+PIRAO|Papa feita de caldo de peixe e farinha|3
+VATAPA|Creme baiano de pão e camarão|3
+ACARAJE|Bolinho baiano de feijão-fradinho frito no dendê|3
+CARURU|Prato baiano de quiabo|3
+BAIAO|Prato nordestino de arroz e feijão-de-corda|3
+PACOCA|Doce de amendoim moído|2
+CHARQUE|Carne bovina salgada|3
+SARAPATEL|Prato de miúdos de porco|3
+BUCHADA|Prato nordestino de vísceras de bode|3
+CANJICA|Doce de milho verde com leite|3
+CURAU|Creme de milho verde|3
+BEIJU|Massa fina de mandioca|3
+VINAGRETE|Molho picado de tomate e cebola|3
+MAIONESE|Molho cremoso de ovo e óleo|2
+KETCHUP|Molho vermelho de tomate|2
+MOSTARDA|Molho amarelo picante|3
+PIMENTA|Tempero picante|2
+SAL|Tempero básico|1
+ACUCAR|Adoçante branco extraído da cana|1
+MEL|Adoçante das abelhas|1
+AZEITE|Óleo extraído da azeitona|2
+OLEO|Gordura líquida para fritar|1
+VINAGRE|Líquido azedo para temperar|2
+ALHO|Tempero em dentes|1
+CEBOLINHA|Tempero verde fino|2
+SALSA|Erva aromática verde|2
+COENTRO|Erva de aroma marcante|3
+MANJERICAO|Erva aromática do molho italiano|3
+OREGANO|Erva da pizza|3
+LOURO|Folha aromática do feijão|3
+CANELA|Casca aromática de doces|2
+CRAVO|Botão floral aromático|3
+GENGIBRE|Raiz picante e aromática|3
+PAPRICA|Pó avermelhado de pimentão|3
+COLORAU|Tempero avermelhado de urucum|3
+CURRY|Mistura indiana de temperos|3
+ALFACE|Folha verde de salada|1
+RUCULA|Folha picante de salada|3
+AGRIAO|Folha verde de sabor ardido|3
+COUVE|Folha verde da feijoada|2
+ESPINAFRE|Folha verde rica em ferro|3
+REPOLHO|Verdura de folhas enroladas|2
+BROCOLIS|Hortaliça verde em pequenas árvores|2
+COUVEFLOR|Hortaliça branca em cabeça|2
+CENOURA|Raiz alaranjada|1
+BETERRABA|Raiz roxa|2
+PEPINO|Hortaliça verde e longa da salada|2
+ABOBORA|Hortaliça grande e alaranjada|2
+CHUCHU|Hortaliça verde sem muito sabor|2
+QUIABO|Hortaliça verde e babosa|2
+JILO|Hortaliça amarga e verde|3
+BERINJELA|Hortaliça roxa e brilhante|2
+PIMENTAO|Hortaliça colorida e oca|2
+ABOBRINHA|Hortaliça verde parecida com pepino|2
+MILHOVERDE|Espiga de grãos amarelos tenros|2
+ERVILHA|Grão verde e pequeno em vagens|2
+LENTILHA|Pequeno grão achatado|2
+GRAODEBICO|Leguminosa do homus|2
+SOJA|Grão de onde sai o óleo|2
+AMENDOIM|Semente que cresce sob a terra|2
+CASTANHA|Semente do caju ou do Pará|2
+NOZ|Fruto seco de casca dura|2
+AMENDOA|Semente de sabor delicado usada em doces|2
+PISTACHE|Semente verde de casca aberta|3
+UVAPASSA|Uva seca|2
+AMEIXA|Fruta roxa ou amarela de caroço|2
+PESSEGO|Fruta macia de casca aveludada|2
+MACA|Fruta vermelha ou verde de fazer torta|1
+PERA|Fruta doce de formato de sino|1
+KIWI|Fruta verde de casca peluda|2
+MARACUJA|Fruta de sementes e suco azedinho|2
+CAQUI|Fruta alaranjada e adocicada|3
+FIGO|Fruta de polpa rosada e doce|3
+ROMA|Fruta de muitas sementes vermelhas|3
+CEREJA|Pequena fruta vermelha de caroço|3
+AMORA|Pequena fruta roxa|3
+FRAMBOESA|Pequena fruta vermelha delicada|3
+MIRTILO|Pequena fruta azul|3
+COCO|Fruto de água doce e polpa branca|1
+JACA|Fruta gigante de gomos amarelos|2
+CUPUACU|Fruta amazônica de polpa ácida|3
+GRAVIOLA|Fruta de casca espinhosa e polpa branca|3
+PITANGA|Pequena fruta vermelha e ácida|2
+JABUTICABA|Fruta preta que nasce no tronco|2
+SERIGUELA|Fruta ácida e pequena do Nordeste|3
+UMBU|Fruta típica do sertão|3
+TANGERINA|Fruta cítrica de gomos soltos|2
+LIMA|Fruta cítrica de sabor suave|2
+ABACATE|Fruta verde de polpa cremosa|2
+AZEITONA|Fruto de salada ou pizza|2
+SUCO|Bebida feita de fruta|1
+VITAMINA|Bebida batida de frutas e leite|2
+REFRIGERANTE|Bebida gaseificada|1
+AGUA|Bebida essencial|1
+LEITE|Bebida branca de origem animal|1
+CHA|Bebida de ervas e água quente|1
+CHIMARRAO|Mate quente típico do sul|3
+GUARANA|Fruto amazônico e refrigerante brasileiro|3
+CAPUCCINO|Café com leite e espuma|3
+EXPRESSO|Café curto e forte|2
+CACAU|Semente do chocolate|2
+VINHO|Bebida fermentada de uvas|1
+CERVEJA|Bebida fermentada de cevada|1
+CACHACA|Destilado da cana|2
+CAIPIRINHA|Drinque brasileiro de limão|2
+CHOPP|Cerveja de barril|2
+LIMONADA|Suco de limão com açúcar|2
+GARAPA|Caldo de cana|3
+PUDIM|Sobremesa de leite condensado com calda|1
+MOUSSE|Sobremesa leve e cremosa|2
+BEIJINHO|Docinho de coco|2
+CAJUZINHO|Docinho de amendoim em forma de caju|3
+QUINDIM|Doce amarelo de gema e coco|3
+PAVE|Sobremesa de camadas com bolachas|3
+TORTA|Massa com recheio doce ou salgado|1
+PANQUECA|Massa fina enrolada|2
+WAFFLE|Massa quadriculada|2
+DONUT|Rosquinha açucarada|2
+CROISSANT|Pão folhado em meia-lua|2
+ROSCA|Pão doce em formato de anel|3
+SONHO|Doce de massa frita e creme|2
+CUCA|Bolo alemão com farofa|3
+STRUDEL|Doce alemão enrolado com maçã|3
+PICOLE|Sorvete de palito|2
+GELATINA|Sobremesa que treme|2
+BALA|Doce pequeno e duro|1
+CHICLETE|Doce que se mastiga sem engolir|2
+PIRULITO|Bala de palito|2
+PACOQUINHA|Doce de amendoim em tablete|2
+COCADA|Doce de coco|2
+GOIABADA|Doce de goiaba em tablete|2
+MARMELADA|Doce de marmelo|2
+BANANADA|Doce de banana em tablete|2
+BOLACHA|Biscoito|1
+ROSQUINHA|Biscoito em formato de anel|2
+CHEDDAR|Queijo alaranjado|2
+MUSSARELA|Queijo da pizza|2
+PARMESAO|Queijo ralado italiano|2
+GORGONZOLA|Queijo azul italiano|3
+RICOTA|Queijo macio e leve|2
+PROVOLONE|Queijo defumado|3
+COALHO|Queijo para grelhar do Nordeste|3
+MINAS|Queijo fresco mineiro|2
+CATUPIRY|Marca de requeijão da coxinha|3
+NATA|Camada de gordura do leite|2
+CREME|Gordura espessa do leite|2
+CHANTILLY|Creme batido e doce|3
+RISOTO|Arroz cremoso italiano|2
+NHOQUE|Massa de batata|3
+RAVIOLI|Massa recheada|3
+ESPAGUETE|Macarrão longo e fino|2
+FETTUCCINE|Macarrão em fitas|3
+PENNE|Macarrão em tubinhos|2
+CANELONE|Massa enrolada com recheio|2
+SUSHI|Bolinho de arroz com peixe cru|2
+SASHIMI|Fatias de peixe cru|3
+TEMAKI|Cone de alga recheado|3
+YAKISSOBA|Macarrão frito com legumes|3
+TACOS|Tortilha dobrada recheada|3
+BURRITO|Tortilha enrolada recheada|3
+NACHOS|Salgadinho de milho triangular|3
+GUACAMOLE|Pasta de abacate|3
+FALAFEL|Bolinho frito de grão-de-bico|3
+KIBE|Bolinho árabe de trigo e carne|3
+ESFIHA|Massa árabe recheada|3
+HOMUS|Pasta de grão-de-bico|3
+TABULE|Salada árabe de trigo e hortelã|3
+SHAWARMA|Carne em espeto giratório|3
+PAELLA|Arroz espanhol com frutos do mar|3
+ESCONDIDINHO|Carne moída coberta de purê e queijo gratinado|3
+FRITAS|Batata em palitos fritos|1
+CROQUETE|Bolinho frito de carne|3
+BOLINHO|Massa pequena frita|2
+RISOLE|Salgado frito de massa fina|3
+EMPADA|Massa de tortinha com recheio|2
+COZIDO|Prato de carne e legumes cozidos|2
+FRICASSE|Frango em molho cremoso|3
+BACALHOADA|Prato português de bacalhau|3
+CALDINHO|Entrada cremosa de feijão|2
+TUTU|Feijão engrossado com farinha|3
+REFOGADO|Cebola e alho fritos como base|3
+MARMITA|Refeição levada em recipiente fechado|2
+LANCHE|Refeição leve|1
+ALMOCO|Refeição do meio-dia|1
+JANTAR|Refeição da noite|1
+SOBREMESA|Doce depois da refeição|1
+PETISCO|Aperitivo servido no bar|2
+ENTRADA|Prato antes do principal|2
+PAODEFORMA|Pão de fatias para sanduíche|2
+BAGUETE|Pão francês longo e fino|3
+BRIOCHE|Pão doce e macio francês|3
+CIABATTA|Pão italiano de miolo aberto|3
+FOCACCIA|Pão italiano achatado com azeite|3
+BROA|Pão rústico de milho|3
+TORTILHA|Massa fina e redonda de milho ou trigo|2
+WRAP|Tortilha enrolada com recheio|3
+PITA|Pão árabe achatado|3
+BOLODEROLO|Bolo enrolado com goiabada|2
+PAODEMEL|Bolo escuro com especiarias|2
+BOLOFOFO|Bolo leve e macio|2
+BEIJOS|Docinho branco de coco|2
+OVOMOLE|Doce cremoso de gemas|3
+SUSPIRO|Doce de claras batidas e assadas|3
+MERENGUE|Claras batidas com açúcar|3
+PROFITEROLE|Bomba pequena recheada|3
+ECLAIR|Bomba alongada com creme|3
+TIRAMISU|Sobremesa italiana de café e queijo|3
+CHEESECAKE|Torta de queijo cremoso|2
+BROWNIE|Doce de chocolate denso|2
+COOKIE|Biscoito grande e macio|2
+CARAMELO|Açúcar derretido dourado|2
+CALDA|Líquido doce que cobre sobremesas|2
+CONFEITO|Pequena bola doce e colorida|2
+GRANOLA|Mistura de cereais e mel|2
+AVEIA|Cereal em flocos|3
+CENTEIO|Cereal escuro usado em pães|3
+TRIGO|Cereal da farinha de pão|3
+CEVADA|Cereal da cerveja|3
+QUINOA|Grão andino rico em proteínas|3
+FUBA|Farinha fina de milho|3
+POLVILHO|Fécula de mandioca|3
+FECULA|Amido extraído de raízes|3
+INHAME|Tubérculo de casca escura|3
+CARA|Tubérculo parente do inhame|3
+BATATADOCE|Tubérculo adocicado alaranjado|2
+MACAXEIRA|Nome nordestino da mandioca|3
+MAXIXE|Fruto verde espinhoso do Nordeste|3`],
+petroleo:['Petróleo e poços',`POCO|Furo perfurado para chegar ao reservatório|1
+SONDA|Equipamento que perfura o poço|1
+PLATAFORMA|Estrutura que produz petróleo no mar|1
+BROCA|Ferramenta que corta a rocha|1
+REVESTIMENTO|Tubo de aço que reveste as paredes do poço|1
+CIMENTO|Fixa o revestimento na rocha|1
+VALVULA|Dispositivo que abre e fecha o fluxo do poço|1
+PRESSAO|Grandeza medida no poço em psi ou kgf/cm²|1
+RESERVATORIO|Rocha que armazena óleo e gás|1
+PETROLEO|Óleo bruto fóssil|1
+GAS|Fluido leve produzido junto com o óleo|1
+FLUIDO|Óleo, gás ou água que escoa pelo poço|2
+LAMA|Fluido de perfuração|1
+COLUNA|Conjunto de tubos descidos no poço|1
+PACKER|Isola o espaço anular no poço|3
+TUBING|Coluna de produção, em inglês|3
+ANULAR|Espaço entre dois tubos concêntricos|3
+CABECA|Equipamento de superfície do poço: ___ de poço|2
+COMPLETACAO|Etapa que prepara o poço para produzir|3
+PERFURACAO|Ato de abrir o poço|1
+INTEGRIDADE|Capacidade do poço de manter suas barreiras|3
+ABANDONO|Encerramento definitivo de um poço|2
+BARREIRA|Elemento que impede fluxo indesejado|2
+TAMPAO|Plug de cimento ou mecânico|3
+SONDAGEM|Investigação do subsolo antes de perfurar|2
+RISER|Tubo que liga o poço à plataforma|3
+BOP|Preventor de erupção (sigla)|3
+MANOMETRO|Instrumento que mede a pressão no poço|1
+VAZAO|Volume de óleo ou gás produzido por unidade de tempo|2
+DENSIDADE|Propriedade do fluido que equilibra a pressão da formação|2
+PROFUNDIDADE|Distância da mesa rotativa ao fundo do poço|2
+CANHONEIO|Furos feitos no revestimento|3
+FRATURA|Rachadura aberta na rocha para aumentar a produção|2
+SEPARADOR|Divide óleo, gás e água|1
+DUTO|Tubulação para transportar óleo ou gás|1
+OLEODUTO|Duto que transporta petróleo|1
+REFINARIA|Transforma óleo bruto em derivados|1
+TUBULACAO|Conjunto de tubos que conduz óleo e gás na planta|1
+FLANGE|Conexão aparafusada entre tubos|2
+CHOKE|Restritor que regula a vazão|3
+SUBSEA|Equipamentos instalados no leito marinho, em inglês|3
+ARVORE|___ de natal: conjunto de válvulas sobre o poço produtor|3
+OLEO|Líquido combustível extraído do poço|1
+CRU|Petróleo antes de ser refinado|1
+BARRIL|Unidade de volume do petróleo|1
+GASOLINA|Derivado leve do petróleo usado em carros|1
+DIESEL|Derivado do petróleo usado em caminhões|1
+QUEROSENE|Derivado usado na aviação|1
+ASFALTO|Derivado pesado usado nas ruas|1
+NAFTA|Derivado usado na indústria petroquímica|2
+GLP|Gás de cozinha, em sigla|2
+GASNATURAL|Gás combustível extraído do subsolo|2
+METANO|Principal componente do gás natural|2
+ETANO|Hidrocarboneto de dois carbonos|2
+PROPANO|Hidrocarboneto de três carbonos|2
+BUTANO|Hidrocarboneto de quatro carbonos|2
+PARAFINA|Cera que se deposita nas paredes dos tubos|3
+ASFALTENO|Fração pesada do óleo que precipita|3
+HIDRATO|Sólido de gás e água que entope linhas|3
+SALMOURA|Água salgada produzida com o óleo|2
+EMULSAO|Mistura de óleo e água|3
+CONDENSADO|Líquido leve que se separa do gás|3
+API|Grau que mede a densidade do óleo|3
+VISCOSIDADE|Resistência do óleo ao escoamento|3
+POROSIDADE|Espaço vazio da rocha reservatório|3
+ARENITO|Rocha reservatório formada por grãos de areia|3
+CALCARIO|Rocha carbonática que pode ser reservatório|3
+FOLHELHO|Rocha de grão fino que pode ser geradora|3
+SAL|Espessa camada de rocha evaporítica acima dos reservatórios mais profundos|2
+PRESAL|Camada de reservatórios sob espessa camada de sal|2
+POSSAL|Camada acima do sal|2
+SELO|Rocha impermeável que retém o petróleo|2
+ARMADILHA|Estrutura geológica que retém o petróleo|2
+JAZIDA|Local com acumulação de petróleo|2
+CAMPO|Área com poços produtores|1
+BACIA|Região sedimentar onde há petróleo|1
+FORMACAO|Camada de rocha atravessada pelo poço|2
+MIGRACAO|Deslocamento do petróleo até o reservatório|3
+SISMICA|Método que mapeia o subsolo com ondas|1
+GEOLOGIA|Ciência que estuda as rochas|1
+GEOFISICA|Estuda o subsolo por medições físicas|2
+PERFIL|Registro das propriedades das rochas ao longo do poço|2
+TESTEMUNHO|Amostra cilíndrica de rocha retirada do poço|3
+CALHA|Canal de retorno da lama na sonda|3
+PESCARIA|Operação para retirar objetos do poço|3
+ARRASTE|Esforço extra ao puxar a coluna|3
+PRISAO|Quando a coluna fica presa no poço|3
+DESVIO|Mudança de direção do poço|2
+DIRECIONAL|Poço que não é vertical|3
+HORIZONTAL|Poço que segue paralelo à rocha reservatório|2
+EXPLORATORIO|Poço para descobrir petróleo|3
+PIONEIRO|Primeiro poço de uma área|3
+PRODUTOR|Poço que produz óleo ou gás|2
+INJETOR|Poço que injeta água ou gás no reservatório|3
+SECO|Poço sem petróleo comercial|2
+ONSHORE|Atividade em terra|1
+OFFSHORE|Atividade no mar|1
+FPSO|Navio que produz, armazena e transfere petróleo|3
+SEMISUB|Plataforma flutuante sobre colunas|3
+JACKUP|Plataforma de pernas que se apoiam no leito|3
+FIXA|Plataforma apoiada no fundo do mar|2
+NAVIOSONDA|Navio equipado para perfurar|1
+JAQUETA|Estrutura metálica de apoio da plataforma fixa|3
+CONVES|Piso da plataforma|2
+HELIPONTO|Local de pouso de helicópteros na plataforma|1
+GUINDASTE|Equipamento que movimenta cargas na plataforma|1
+FLARE|Queimador de gás na plataforma|1
+QUEIMADOR|Dispositivo que queima o gás excedente|2
+TOPSIDE|Instalações acima da água na plataforma|3
+UMBILICAL|Cabo que leva energia e fluido ao equipamento submarino|3
+MANIFOLD|Conjunto de válvulas que reúne linhas no fundo do mar|3
+ANM|Árvore de natal molhada, em sigla|3
+ANC|Árvore de natal convencional, em sigla|3
+ROV|Veículo submarino operado remotamente|3
+MERGULHADOR|Profissional que trabalha sob a água|2
+CABECAL|Conjunto de equipamentos de superfície do poço|1
+HANGER|Suspensor que sustenta a coluna|3
+ADAPTADOR|Peça que liga duas partes do cabeçal|3
+CARRETEL|Peça do cabeçal que suspende o revestimento|3
+BUCHA|Peça que veda e guia o fluido|2
+GAXETA|Elemento de vedação de válvulas|3
+ANEL|Peça de vedação metálica entre flanges|2
+VEDACAO|Impede passagem de fluido|2
+GAVETA|Válvula que fecha cortando o fluxo|2
+ESFERA|Válvula de passagem plena|2
+RETENCAO|Válvula que só deixa o fluido seguir um sentido|2
+GLOBO|Válvula que regula o fluxo|2
+BORBOLETA|Válvula de disco giratório|2
+ATUADOR|Dispositivo que abre ou fecha a válvula|2
+SSSV|Válvula de segurança de subsuperfície, em sigla|3
+DHSV|Válvula de segurança de fundo, em sigla|3
+SDV|Válvula de bloqueio por parada de emergência|3
+ESD|Parada de emergência, em sigla|3
+ALIVIO|Válvula que descarrega pressão excessiva|2
+PSV|Válvula de alívio de pressão, em sigla|3
+KICK|Entrada indesejada de fluido no poço|3
+BLOWOUT|Descontrole total do poço|3
+SURGENCIA|Fluxo espontâneo de fluido para o poço|3
+CONTROLE|Ação para dominar o poço|2
+BULLHEAD|Bombeio forçado de fluido para dentro da formação|3
+CIRCULACAO|Movimento do fluido pelo poço|3
+REVERSA|Circulação em sentido inverso|3
+BOMBA|Equipamento que movimenta fluido|1
+BOMBEIO|Elevação artificial por haste ou bomba|2
+CAVALETE|Unidade de bombeio mecânico em forma de cavalo|2
+HASTE|Barra que transmite movimento à bomba de fundo|2
+BCS|Bomba centrífuga submersa, em sigla|3
+GASLIFT|Elevação por injeção de gás|3
+ELEVACAO|Método para fazer o óleo chegar à superfície|2
+SURGENTE|Poço que produz sem bombeio|2
+PLUNGER|Êmbolo usado para elevar líquidos|3
+NIPLE|Peça tubular com sede para tampões|3
+MANDRIL|Peça tubular com alojamento lateral para válvulas|3
+TELESCOPICA|Junta que se alonga e encolhe|3
+JUNTA|Trecho de tubo|2
+CONEXAO|Ligação entre tubos|2
+ROSCA|Filete que une tubos|2
+CROSSOVER|Peça que une roscas diferentes|3
+SAPATA|Extremidade inferior do revestimento|2
+RASPADOR|Remove o reboco das paredes do poço|3
+REBOCO|Película que a lama deixa na parede do poço|3
+PASTA|Mistura de cimento com água para o poço|3
+CIMENTACAO|Operação que fixa o revestimento|3
+SQUEEZE|Injeção de cimento sob pressão para corrigir falhas|3
+ADITIVO|Produto adicionado ao cimento ou à lama|3
+RETARDADOR|Aditivo que atrasa a pega do cimento|3
+PEGA|Momento em que o cimento endurece|3
+CBL|Perfil que avalia a qualidade do cimento|3
+VDL|Perfil de densidade variável usado na cimentação|3
+CALIPER|Perfil que mede o diâmetro do poço|3
+GAMA|Perfil que mede a radioatividade natural das rochas|3
+SONICO|Perfil que usa ondas sonoras|3
+NEUTRONICO|Perfil que mede a porosidade com nêutrons|3
+PERFILAGEM|Registro de medidas ao longo do poço|2
+SLICKLINE|Operação com arame liso no poço|3
+WIRELINE|Operação com cabo no poço|3
+ARAME|Fio de aço usado em operações no poço|2
+FLEXITUBO|Tubo enrolado em carretel usado em intervenções|3
+ACIDIFICACAO|Injeção de ácido para aumentar a permeabilidade|3
+ACIDO|Fluido que dissolve minerais da rocha|2
+PROPANTE|Material que mantém a fratura aberta|3
+FRACKING|Fraturamento hidráulico, em inglês|3
+ESTIMULACAO|Tratamento para aumentar a produção|3
+SKIN|Fator que mede o dano ao redor do poço|3
+DECLINIO|Queda da produção ao longo do tempo|3
+RECUPERACAO|Fração do óleo que se extrai do reservatório|2
+RESERVAS|Quantidade de petróleo recuperável|2
+INJECAO|Colocação de fluidos no reservatório|2
+WAG|Injeção alternada de água e gás|3
+GASCAP|Capa de gás sobre o óleo|3
+CONTATO|Limite entre óleo e água no reservatório|3
+AQUIFERO|Reservatório de água ligado ao de óleo|3
+PRESSAOPORO|Pressão do fluido nos poros da rocha|3
+GRADIENTE|Variação da pressão com a profundidade|3
+LEAKOFF|Teste que mede a resistência da formação|3
+LOT|Teste de absorção da formação, em sigla|3
+PIT|Teste de integridade de pressão, em sigla|3
+TESTEPRESSAO|Verifica a estanqueidade de equipamentos|2
+VAZAMENTO|Escape indesejado de fluido|1
+CORROSAO|Desgaste do aço por ação química|3
+INCRUSTACAO|Depósito mineral nas paredes dos tubos|3
+INIBIDOR|Produto que impede formação de depósitos|3
+SULFETO|Gás tóxico associado ao petróleo|3
+DETECTOR|Aparelho que acusa gás no ambiente|2
+EPI|Equipamento de proteção individual|1
+CAPACETE|Protege a cabeça do trabalhador|1
+MACACAO|Roupa de trabalho da sonda|1
+BOTINA|Calçado de segurança|2
+PERMISSAO|Autorização para trabalho de risco|3
+ANALISE|Estudo de riscos de uma tarefa|3
+RISCO|Chance de ocorrer um acidente|1
+INCIDENTE|Evento inesperado na operação|2
+EMERGENCIA|Situação crítica que exige ação imediata|2
+EVACUACAO|Retirada de pessoal da plataforma|2
+BOTE|Embarcação de salvamento|2
+SIMULADO|Treinamento de emergência|2
+TORRE|Estrutura alta da sonda que sustenta a coluna|1
+MESA|Plataforma giratória da sonda que gira a coluna|1
+KELLY|Haste quadrada que transmite o giro à coluna|3
+TOPDRIVE|Motor suspenso que gira a coluna de perfuração|3
+CATARINA|Conjunto de roldanas no topo da torre|3
+TALHA|Conjunto de polias que sustenta a carga da sonda|2
+GUINCHO|Equipamento que enrola cabo para içar a coluna|1
+CABODEACO|Cabo resistente usado para içar cargas|2
+SWIVEL|Cabeça giratória que permite circular lama durante a rotação|3
+DRILLCOLLAR|Comando: tubo pesado que dá peso à broca|3
+COMANDO|Tubo pesado logo acima da broca|3
+HEAVYWEIGHT|Tubo de peso intermediário na coluna de perfuração|3
+DRILLPIPE|Tubo de perfuração|3
+BHA|Conjunto de fundo da coluna, em sigla|3
+MOTORDEFUNDO|Motor movido pela lama que gira a broca|3
+ALARGADOR|Ferramenta que aumenta o diâmetro do poço|3
+TRICONICA|Broca de três cones giratórios|3
+PDC|Broca de cortadores de diamante policristalino, em sigla|3
+DIAMANTE|Material duro usado em brocas|2
+JATO|Orifício da broca por onde sai a lama|3
+ROP|Taxa de penetração da broca, em sigla|3
+WOB|Peso sobre a broca, em sigla|3
+TORQUE|Força de giro aplicada à coluna|3
+MANOBRA|Subida ou descida da coluna no poço|2
+CONEXAOTUBO|Acréscimo de um novo tubo à coluna|2
+CUNHAS|Peças que seguram a coluna na mesa rotativa|2
+CHAVEFLEX|Ferramenta para apertar tubos|2
+TANQUE|Reservatório de lama|1
+PENEIRA|Equipamento que separa cascalho da lama|1
+SHALESHAKER|Peneira vibratória que separa cascalho da lama|3
+CENTRIFUGA|Equipamento que separa sólidos finos da lama|3
+HIDROCICLONE|Equipamento que limpa a lama por força centrífuga|3
+CASCALHO|Fragmentos de rocha trazidos pela lama|2
+PERFURADOR|Operador responsável pela perfuração|2
+SONDADOR|Profissional que conduz a operação da sonda|2
+SUPERVISOR|Responsável pelas operações no poço|2
+FISCAL|Representante da operadora na sonda|2
+OPERADORA|Empresa responsável pela exploração do campo|2
+PETROBRAS|Estatal brasileira de petróleo|1
+ANP|Agência nacional que regula o petróleo no Brasil|3
+ROYALTIES|Compensação paga pela exploração do petróleo|3
+LEILAO|Concorrência para obter áreas de exploração|3
+CONCESSAO|Direito de explorar uma área|3
+PARTILHA|Regime em que a produção é dividida com a União|3
+POTIGUAR|Bacia produtora do Rio Grande do Norte|3
+RECONCAVO|Bacia baiana onde o petróleo foi achado no Brasil|3
+ALCANO|Hidrocarboneto saturado|3
+AROMATICO|Hidrocarboneto de anel de benzeno|3
+BENZENO|Hidrocarboneto aromático tóxico|3
+ENXOFRE|Elemento presente no petróleo|2
+DESTILACAO|Separação do petróleo por temperatura de ebulição|3
+CRAQUEAMENTO|Quebra de moléculas grandes em menores|3
+REFINO|Processo de transformar o óleo bruto|2
+PETROQUIMICA|Indústria que usa derivados para fazer plásticos|2
+PLASTICO|Material derivado do petróleo|1
+LUBRIFICANTE|Derivado usado para reduzir atrito|2
+COQUE|Resíduo sólido do refino|3
+BRENT|Tipo de petróleo referência do mercado|3
+WTI|Petróleo referência do mercado americano|3
+COTACAO|Preço do barril no mercado|2
+OPEP|Organização dos países exportadores de petróleo|3
+TANQUEIRO|Navio que transporta petróleo|2
+PETROLEIRO|Navio de transporte de petróleo|1
+TERMINAL|Instalação de recebimento e embarque de petróleo|1
+OFFLOADING|Descarga do petróleo para o navio aliviador|3
+ALIVIADOR|Navio que recebe petróleo da plataforma|3
+BOIA|Estrutura flutuante de ancoragem|1
+ANCORA|Peça que prende o navio ao fundo|1
+AMARRA|Linha que prende a plataforma ao leito|3
+POITA|Peso que fixa linhas de ancoragem|3
+LAMINADAGUA|Distância da superfície ao leito marinho|3
+FASE|Etapa de perfuração com um diâmetro de poço|2
+CONDUTORPOCO|Primeiro e mais largo tubo cravado no leito|3
+LINER|Revestimento curto suspenso dentro de outro|3
+TIEBACK|Extensão do revestimento até a superfície|3
+HANGERLINER|Suspensor do liner no revestimento|3
+GRAVELPACK|Controle de areia com cascalho|3
+TELA|Filtro que impede a areia de entrar na coluna|3
+AREIA|Sólido que sobe com o fluido e danifica equipamentos|2
+BARITA|Mineral pesado que aumenta a densidade da lama|3
+BENTONITA|Argila que dá viscosidade à lama|3
+FILTRADO|Parte líquida da lama que invade a formação|3
+GEL|Resistência da lama quando fica parada|3
+REOLOGIA|Estudo do escoamento e da deformação dos fluidos|3`],
+civil:['Engenharia civil',`CONCRETO|Mistura de cimento, areia, brita e água|1
+CIMENTO|Aglomerante em pó usado no concreto|1
+AREIA|Agregado miúdo da construção|1
+BRITA|Pedra moída usada no concreto|1
+ACO|Material das barras que armam o concreto|1
+VIGA|Elemento horizontal que recebe a carga das lajes|1
+PILAR|Elemento vertical que sustenta a estrutura|1
+LAJE|Piso ou cobertura de concreto|1
+FUNDACAO|Parte da obra que transmite o peso ao solo|1
+SAPATA|Fundação rasa que apoia o pilar|3
+ESTACA|Fundação profunda cravada no solo|3
+RADIER|Laje que serve de fundação para toda a obra|3
+ALICERCE|Base de uma construção|2
+ALVENARIA|Parede feita de tijolos ou blocos|1
+TIJOLO|Bloco de barro cozido|1
+BLOCO|Peça usada para levantar paredes|1
+ARGAMASSA|Mistura de cimento, areia e água para assentar tijolos|1
+REBOCO|Camada que regulariza a parede|2
+TELHADO|Conjunto da cobertura da edificação, com telhas e madeiramento|1
+TELHA|Peça de cerâmica ou fibrocimento que cobre o telhado|1
+ESTRUTURA|Esqueleto que sustenta a construção|2
+FORMA|Molde de madeira ou metal que dá o formato ao concreto|2
+ARMADURA|Conjunto de barras de aço dentro do concreto|2
+TRACO|Proporção dos materiais do concreto|3
+SLUMP|Teste de abatimento do concreto fresco|3
+CURA|Período em que o concreto ganha resistência|2
+TOPOGRAFIA|Estudo da forma e das medidas do terreno|3
+ATERRO|Terra levada para elevar o nível do terreno|2
+ESCAVACAO|Retirada de terra do terreno|2
+SONDAGEM|Investigação do solo para projetar a fundação|2
+DRENAGEM|Condução da água para longe da obra|2
+ESGOTO|Rede que leva os dejetos da casa|1
+PONTE|Obra que atravessa um rio ou vale|1
+VIADUTO|Ponte construída sobre vias ou vales urbanos|2
+TUNEL|Passagem escavada sob um morro ou rio|1
+BARRAGEM|Obra que represa a água de um rio|2
+ASFALTO|Revestimento preto das ruas|1
+PAVIMENTO|Camada que reveste a pista de rolamento|2
+CALCADA|Passeio destinado aos pedestres|1
+MEIOFIO|Peça que separa a calçada da rua|2
+PROJETO|Conjunto de desenhos e cálculos de uma obra|1
+PLANTA|Desenho da obra vista de cima|1
+ESCALA|Relação entre o desenho e o tamanho real|2
+ORCAMENTO|Estimativa dos custos da obra|2
+CRONOGRAMA|Calendário das etapas da obra|2
+EMPREITEIRO|Quem executa a obra por contrato|2
+MESTRE|Chefe do canteiro, o "de obras"|2
+PEDREIRO|Profissional que assenta tijolos|1
+SERVENTE|Ajudante geral na obra|1
+ENGENHEIRO|Profissional que projeta e dirige a obra|1
+ARQUITETO|Profissional que desenha o projeto da edificação|1
+CANTEIRO|Local onde a obra é executada|1
+ANDAIME|Estrutura provisória para trabalhar em altura|1
+GUINDASTE|Máquina que levanta cargas pesadas|1
+BETONEIRA|Máquina que mistura o concreto|1
+ESCAVADEIRA|Máquina que cava a terra|1
+CAPACETE|Equipamento de proteção para a cabeça|1
+NIVEL|Instrumento que confere a horizontal|2
+PRUMO|Instrumento que indica a vertical|2
+TRENA|Fita métrica usada na obra|1
+TRELICA|Estrutura de barras que formam triângulos|3
+FLEXAO|Esforço que curva uma viga|2
+COMPRESSAO|Esforço que comprime e encurta o pilar|2
+TRACAO|Esforço que estica uma peça|2
+CARGA|Peso que a estrutura precisa suportar|2
+RECALQUE|Afundamento do solo sob a fundação|3
+FISSURA|Pequena rachadura na parede|2
+TRINCA|Rachadura mais aberta na parede|2
+PISO|Revestimento do chão|1
+AZULEJO|Cerâmica que reveste paredes molhadas|1
+GESSO|Material usado em forros e acabamentos|1
+RODAPE|Faixa que protege a base da parede|2
+OBRA|Construção em andamento|1
+CONSTRUCAO|Ato de edificar|2
+EDIFICIO|Construção de vários andares|1
+CASA|Edificação para moradia|1
+SOBRADO|Casa de dois pavimentos|1
+APARTAMENTO|Unidade de moradia em um prédio|1
+PREDIO|Edificação de vários andares|1
+GALPAO|Construção ampla e simples para indústria ou depósito|2
+ANDAR|Cada nível de um edifício|2
+COBERTURA|Último pavimento ou telhado|2
+TERRACO|Área aberta sobre a laje|1
+SACADA|Balcão externo de um apartamento|1
+MARQUISE|Cobertura em balanço sobre uma entrada|2
+ESCADA|Série de degraus que liga pavimentos|1
+DEGRAU|Cada elemento de uma escada|2
+CORRIMAO|Apoio para as mãos nas escadas|2
+RAMPA|Plano inclinado de acesso|1
+ELEVADOR|Equipamento que transporta pessoas entre andares|1
+PORTAO|Porta grande de entrada de um terreno|1
+MURO|Parede que cerca um terreno|1
+GRADIL|Cerca de barras metálicas|2
+CERCA|Divisa feita de arame, madeira ou grade|1
+PORTA|Elemento de passagem em vãos de parede|1
+JANELA|Vão de iluminação e ventilação|1
+BATENTE|Moldura fixa da porta|2
+VERGA|Peça sobre um vão que descarrega o peso|3
+CONTRAVERGA|Peça sob o vão da janela|3
+PEITORIL|Acabamento da base da janela|3
+SOLEIRA|Peça de piso na base da porta|3
+FORRO|Acabamento do teto|2
+TETO|Superfície superior de um cômodo|1
+LAJOTA|Peça cerâmica de revestimento|2
+CERAMICA|Material de argila queimada|2
+PORCELANATO|Revestimento resistente de piso|3
+GRANITO|Rocha usada em bancadas e pisos|2
+MARMORE|Rocha polida usada em acabamento|2
+PASTILHA|Pequena peça cerâmica ou de vidro de revestimento|3
+REJUNTE|Material que preenche espaços entre cerâmicas|3
+PINTURA|Camada de tinta nas superfícies|1
+TINTA|Produto líquido de revestimento|1
+MASSACORRIDA|Massa que alisa a parede antes da tinta|3
+SELADOR|Preparação que uniformiza a absorção da parede|3
+EMBOCO|Camada de argamassa sobre a alvenaria|3
+CHAPISCO|Camada áspera que ajuda a argamassa a aderir|3
+ESPATULA|Ferramenta para espalhar massa|2
+PRUMADA|Linha vertical de tubulação|3
+PICARETA|Ferramenta para quebrar solo duro|1
+MARRETA|Martelo pesado para quebrar|1
+MARTELO|Ferramenta de bater pregos|1
+SERROTE|Serra de mão|2
+SERRA|Ferramenta que corta madeira ou metal|1
+FURADEIRA|Faz furos em paredes|2
+PARAFUSO|Peça roscada de fixação|1
+PREGO|Peça metálica que se crava com martelo|1
+BUCHA|Peça plástica que fixa parafusos na parede|2
+CARRINHO|Veículo de uma roda para carregar material na obra|1
+PEDRISCO|Agregado de granulometria média|2
+AGREGADO|Material granular usado no concreto|3
+AGLOMERANTE|Material que une partículas, como cimento|3
+CAL|Material usado em argamassas e pinturas|2
+SOLO|Terreno natural onde se apoia a obra|2
+ARGILA|Solo fino e plástico|2
+SILTE|Solo de grãos intermediários|3
+CASCALHO|Fragmentos de rocha de pequeno tamanho|2
+SAIBRO|Material de aterro de fácil compactação|3
+COMPACTACAO|Aumento da densidade do solo|3
+ROLO|Máquina que compacta solo e asfalto|2
+TRATOR|Máquina que arrasta e empurra terra|1
+CACAMBA|Recipiente para entulho|2
+ENTULHO|Resto de demolição e obra|1
+DEMOLICAO|Derrubada de uma construção|1
+CORTE|Retirada de terra em terreno elevado|2
+TALUDE|Superfície inclinada de aterro ou corte|3
+ARRIMO|Muro que contém terra|3
+CONTENCAO|Estrutura que segura o solo|3
+GABIAO|Gaiola de arame cheia de pedras|3
+BERMA|Faixa lateral de rodovia ou degrau em talude|3
+VALA|Escavação longa e estreita|2
+ABERTURA|Vão deixado em parede|2
+LOCACAO|Marcação da obra no terreno|3
+GABARITO|Estrutura que marca eixos na obra|3
+ESQUADRO|Instrumento que garante ângulos retos|2
+TEODOLITO|Instrumento que mede ângulos|3
+ESTACAOTOTAL|Equipamento eletrônico de topografia|3
+BALIZA|Haste usada para marcar pontos na topografia|3
+CURVADENIVEL|Linha que une pontos de mesma altitude|3
+COTA|Valor de altura ou dimensão no desenho|3
+ALTIMETRIA|Medida das alturas do terreno|3
+PLANIMETRIA|Medida das dimensões horizontais do terreno|3
+LEVANTAMENTO|Medição do terreno|2
+AGRIMENSURA|Medição de terras|3
+GEOTECNIA|Estudo do comportamento do solo e das rochas|3
+SPT|Ensaio de sondagem de simples reconhecimento|3
+CAPACIDADE|Carga máxima suportada por solo ou peça|3
+TENSAO|Força por unidade de área|3
+DEFORMACAO|Mudança de forma de uma peça|3
+RESISTENCIA|Capacidade de suportar esforços|2
+FCK|Resistência característica do concreto, em sigla|3
+DOSAGEM|Proporção dos materiais da mistura|3
+CORPODEPROVA|Cilindro de concreto ensaiado|3
+ENSAIO|Teste de laboratório|2
+LABORATORIO|Local onde se ensaiam materiais|2
+LANCAMENTO|Colocação do concreto nas formas|3
+ADENSAMENTO|Remoção de vazios do concreto fresco|3
+VIBRADOR|Equipamento que adensa o concreto|3
+DESFORMA|Retirada das formas depois da cura|3
+ESCORAMENTO|Estrutura provisória que sustenta as formas|3
+ESCORA|Peça que sustenta laje ou viga durante a concretagem|2
+CIMBRAMENTO|Estrutura de suporte de formas em grande altura|3
+CONCRETAGEM|Operação de lançamento do concreto|3
+USINA|Local de produção de concreto|2
+ARMADO|Concreto com barras de aço|3
+PROTENDIDO|Concreto com aço tensionado previamente|3
+PREMOLDADO|Peça de concreto fabricada antes da obra|3
+PREFABRICADO|Elemento produzido em fábrica|2
+CHUMBADOR|Peça que fixa elementos na estrutura|3
+ESTRIBO|Barra de aço que envolve a armadura longitudinal|3
+BARRA|Elemento de aço do concreto armado|2
+VERGALHAO|Barra de aço nervurada|2
+TELA|Malha de aço soldada|2
+COBRIMENTO|Camada de concreto que protege o aço|3
+ESPACADOR|Peça que mantém a distância entre o aço e a forma|3
+BALDRAME|Viga de fundação sobre o terreno|3
+TUBULAO|Fundação profunda de grande diâmetro|3
+MOMENTO|Esforço que provoca rotação|3
+CISALHAMENTO|Esforço que corta a peça|3
+FLAMBAGEM|Instabilidade lateral de peças comprimidas|3
+TORCAO|Esforço de giro da peça|3
+APOIO|Ponto que sustenta a estrutura|2
+ENGASTE|Ligação rígida de uma peça|3
+ARTICULACAO|Ligação que permite girar|3
+DILATACAO|Aumento das dimensões por calor|3
+RETRACAO|Redução de volume do concreto ao secar|3
+UMIDADE|Água presente na parede ou no solo|3
+INFILTRACAO|Entrada de água em locais indesejados|3
+MANTA|Membrana asfáltica impermeabilizante|2
+RUFO|Peça que veda o encontro entre telhado e parede|3
+CALHA|Canal que recolhe água da chuva do telhado|2
+CONDUTOR|Tubo vertical que leva água da calha|2
+BEIRAL|Parte do telhado que passa da parede|3
+CUMEEIRA|Linha mais alta do telhado|3
+TERCA|Peça de madeira que apoia as telhas|3
+CAIBRO|Peça de madeira que apoia as telhas, sobre as terças|3
+RIPA|Tira de madeira onde se fixam as telhas|3
+MADEIRAMENTO|Conjunto de peças de madeira do telhado|3
+VIGOTA|Pequena viga pré-moldada|3
+TAVELA|Peça cerâmica entre vigotas|3
+NERVURA|Pequena viga na laje|3
+HIDRAULICA|Instalação de água|2
+ELETRICA|Instalação de energia|2
+TUBO|Condutor de água, esgoto ou cabos|2
+CONEXOES|Peças que ligam tubos|2
+REGISTRO|Válvula que controla a passagem de água|2
+TORNEIRA|Peça por onde a água sai|1
+CAIXADAGUA|Reservatório de água|3
+CISTERNA|Reservatório subterrâneo de água|3
+RALO|Ponto de captação de água no piso|2
+SIFAO|Peça que impede o retorno de mau cheiro|3
+VASO|Aparelho sanitário|1
+PIA|Cuba com torneira|1
+CAIXASEPTICA|Tanque que trata esgoto doméstico|3
+FOSSA|Cavidade que recebe esgoto|3
+INSPECAO|Caixa que permite acesso à tubulação|2
+BUEIRO|Passagem de água sob estrada|2
+SARJETA|Canal lateral da rua que leva a água da chuva|3
+BOCADELOBO|Abertura que capta água da rua|3
+GALERIA|Tubulação subterrânea de águas pluviais|3
+POCODEVISITA|Acesso vertical a uma rede subterrânea|3
+FIACAO|Conjunto de fios elétricos|1
+ELETRODUTO|Tubo que protege os fios|3
+DISJUNTOR|Dispositivo que desliga o circuito em sobrecarga|3
+QUADRO|Painel onde ficam os disjuntores|2
+ATERRAMENTO|Ligação elétrica de segurança à terra|3
+PARARAIO|Protege a construção contra descargas|3
+INTERRUPTOR|Peça que liga e desliga a luz|1
+LUMINARIA|Aparelho de iluminação|2
+ILUMINACAO|Sistema de luz de um ambiente|2
+VENTILACAO|Renovação do ar|2
+INSOLACAO|Incidência de luz solar|3
+ISOLAMENTO|Proteção térmica ou acústica|3
+ACUSTICA|Estudo do som nos ambientes|3
+MEMORIAL|Documento que descreve a obra|3
+ART|Documento que registra a responsabilidade técnica do engenheiro|3
+ALVARA|Licença para construir|3
+HABITESE|Documento que autoriza o uso da edificação|3
+NORMA|Regra técnica de execução|2
+CREA|Conselho que fiscaliza engenheiros|3
+ABNT|Entidade que publica normas técnicas no Brasil|3
+BIM|Modelagem digital da informação da construção|3
+AUTOCAD|Programa de desenho técnico|3
+CALCULISTA|Engenheiro que dimensiona a estrutura|3
+FISCAL|Profissional que acompanha a execução da obra|2
+ENCARREGADO|Responsável por uma equipe na obra|3
+CARPINTEIRO|Quem faz as formas de madeira|2
+ARMADOR|Quem prepara as armaduras de aço|3
+ELETRICISTA|Profissional de instalações elétricas|2
+ENCANADOR|Profissional de instalações hidráulicas|2
+AZULEJISTA|Profissional que assenta azulejos|3
+GESSEIRO|Profissional que trabalha com gesso|3
+SOLDADOR|Profissional que une peças de metal|3
+TOPOGRAFO|Profissional que mede o terreno|3
+SEGURANCA|Cuidados para evitar acidentes na obra|2
+EPI|Equipamento de proteção individual|2
+CINTO|Equipamento de proteção contra quedas|2
+BOTINA|Calçado de segurança na obra|2
+OCULOS|Proteção dos olhos na obra|2
+SINALIZACAO|Placas e avisos na obra|2
+TAPUME|Cerca provisória ao redor da obra|1
+STEELFRAME|Estrutura leve de perfis de aço|3
+DRYWALL|Parede de placas de gesso acartonado|3
+PLACA|Elemento plano de acabamento|2
+PERFIL|Barra de aço com seção definida|2
+CHAPA|Lâmina de aço ou outro material|2
+GALVANIZADO|Metal protegido com zinco|3
+SOLDA|União de peças por fusão|2
+VIDRACARIA|Fornecimento e instalação de vidros|2
+ESQUADRIA|Porta ou janela com seus caixilhos|3
+CAIXILHO|Moldura da janela|3
+PERSIANA|Cortina de lâminas ajustáveis|3
+FACHADA|Face externa de uma edificação|3
+PILOTIS|Pavimento térreo sustentado por pilares|3
+MEZANINO|Andar intermediário entre dois pisos|3
+COBOGO|Elemento vazado que deixa passar luz e ar|3
+BRISE|Proteção solar na fachada|3
+CALCADAO|Rua larga destinada a pedestres|3
+CICLOVIA|Via exclusiva para bicicletas|3
+RODOVIA|Estrada para tráfego intenso|3
+FERROVIA|Via de trilhos|3`]
 };
 const THEMES = {};
 for (const k in RAW){
   const seen = new Set(), entries = [];
   RAW[k][1].split('\n').forEach(l=>{
     const i = l.indexOf('|'); if (i<0) return;
-    const w = l.slice(0,i).trim(), c = l.slice(i+1).trim();
-    if (w && !seen.has(w)){seen.add(w);entries.push({w,c})}
+    const w = l.slice(0,i).trim(); let c = l.slice(i+1).trim(), t = 2;
+    const j = c.lastIndexOf('|'); if (j>=0){t = +c.slice(j+1) || 2; c = c.slice(0,j).trim()}
+    if (w && !seen.has(w)){seen.add(w);entries.push({w,c,t})}
   });
   THEMES[k] = {nome:RAW[k][0], entries, list:entries.map(e=>e.w)};
 }
 
+// Profundidade das palavras por nível: 1 = comum, 2 = intermediária, 3 = específica/técnica
+const TIERW = {facil:{1:10,2:1.2,3:0.03}, medio:{1:1.2,2:6,3:1.5}, dificil:{1:0.08,2:2,3:10}};
+function tierOrder(entries, diff){
+  const W = TIERW[diff];
+  return entries.map(e=>({e, k:Math.pow(Math.random(), 1/W[e.t||2])}))
+                .sort((a,b)=>b.k-a.k).map(o=>o.e);
+}
 const DIFFS = {
   facil:  {nome:'Fácil',         n:8,  count:6,  maxLen:7,  dirs:[[1,0],[0,1]],
            cw:{ws:11, count:8,  maxLen:7,  given:.3}},
@@ -539,11 +1799,12 @@ function tryPlace(grid, n, word, dirs){
 }
 function generateWS(){
   const d = DIFFS[wsDiff], n = d.n;
-  const pool = THEMES[wsTheme].list.filter(w => w.length<=d.maxLen && w.length<=n && w.length>=3);
+  const pool = THEMES[wsTheme].entries.filter(e => e.w.length<=d.maxLen && e.w.length<=n && e.w.length>=3);
   for (let attempt=0; attempt<60; attempt++){
     const grid = Array.from({length:n},()=>Array(n).fill(''));
     const placed = [];
-    for (const w of shuffle(pool)){
+    for (const e of tierOrder(pool, wsDiff)){
+      const w = e.w;
       if (placed.length>=d.count) break;
       if (placed.some(p => p.word.includes(w) || w.includes(p.word) || p.word.includes(rev(w)) || w.includes(rev(p.word)))) continue;
       const pos = tryPlace(grid, n, w, d.dirs);
@@ -685,7 +1946,7 @@ function cwFit(g, m, N, word, x, y, dir){
   }
   return cross;
 }
-function cwBuild(entries, N, target){
+function cwBuild(entries, N, target, diff){
   const g = Array.from({length:N},()=>Array(N).fill(''));
   const m = Array.from({length:N},()=>Array(N).fill(0));
   const placed = [], used = new Set();
@@ -694,7 +1955,7 @@ function cwBuild(entries, N, target){
     for (let i=0;i<e.w.length;i++){g[y+dy*i][x+dx*i]=e.w[i]; m[y+dy*i][x+dx*i] |= dir===0?1:2}
     placed.push({word:e.w,clue:e.c,x,y,dir}); used.add(e.w);
   };
-  const order = shuffle(entries);
+  const order = tierOrder(entries, diff);
   const first = order[0];
   put(first, Math.floor((N-first.w.length)/2), Math.floor(N/2), 0);
   for (let pass=0; pass<3 && placed.length<target; pass++){
@@ -723,7 +1984,7 @@ function generateCW(){
   const pool = THEMES[cwTheme].entries.filter(e=>e.w.length>=3 && e.w.length<=Math.min(d.maxLen,N));
   let best = null, bestScore = -1;
   for (let at=0; at<40; at++){
-    const placed = cwBuild(pool, N, d.count);
+    const placed = cwBuild(pool, N, d.count, cwDiff);
     let x0=N,y0=N,x1=0,y1=0;
     placed.forEach(p=>{
       const ex = p.dir===0?p.x+p.word.length-1:p.x, ey = p.dir===1?p.y+p.word.length-1:p.y;

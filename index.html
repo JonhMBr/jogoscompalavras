@@ -337,7 +337,7 @@ body.arcv .homeHead{display:none}
   <button class="btn primary" id="cfYes">Iniciar novo jogo</button>
   <button class="btn" id="cfNo">Cancelar</button>
 </div></div>
-<footer>Versão: 25102026.5</footer>
+<footer>Versão: 25102026.6</footer>
 
 <script>
 'use strict';
@@ -8791,7 +8791,8 @@ function arcGen(type){
 }
 function applyModeUI(){
   const isArc = gameMode==='arcade';
-  ['wsDiff','wsTheme','cwDiff','cwTheme'].forEach(id=>$(id).hidden = isArc);
+  // tema e dificuldade só aparecem no modo Livre (no Arcade e no Aleatório são definidos automaticamente)
+  ['wsDiff','wsTheme','cwDiff','cwTheme','foDiff','foTheme'].forEach(id=>$(id).hidden = gameMode!=='livre');
   $('topNew').hidden = isArc;
   $('arcLbl').textContent = arcLabel();
   $('arcLbl').hidden = !(isArc && arc.playing);
@@ -9508,8 +9509,8 @@ $('modeBack').onclick = ()=>homeView('games');
 $('arcBack').onclick = ()=>homeView('modes');
 $('homeBtn').onclick = ()=>{ if (history.state && history.state.g) history.back(); else goHome(); };
 window.addEventListener('popstate',()=>{ if (!onHome) goHome(); });
-$('topNew').onclick = ()=>{ const g = gameKey;
-  if (isActive(g)) askNew('Iniciar um novo jogo nesta dificuldade? O progresso atual será perdido.', ()=>startNew(g)); else startNew(g) };
+$('topNew').onclick = ()=>{ const g = gameKey, novo = ()=> gameMode==='aleatorio' ? randomStart(g) : startNew(g);
+  if (isActive(g)) askNew('Iniciar um novo jogo? O progresso atual será perdido.', novo); else novo() };
 $('again').onclick = ()=>{ if (gameMode==='arcade') return arcNext(); startNew(gameKey) };
 document.addEventListener('visibilitychange',()=>{
   const t = gTimer(gameKey), done = gDone(gameKey);

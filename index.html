@@ -345,7 +345,7 @@ body.arcv .homeHead{display:none}
   <button class="btn primary" id="cfYes">Iniciar novo jogo</button>
   <button class="btn" id="cfNo">Cancelar</button>
 </div></div>
-<footer>Versão: 27102026.2</footer>
+<footer>Versão: 27102026.3</footer>
 
 <script>
 'use strict';
@@ -8926,8 +8926,8 @@ function foRender(){
   const ok = !!fo;
   $('foClue').textContent = ok ? 'Dica: '+fo.clue : '';
   $('foWord').innerHTML = ok ? fo.word.split('').map(c=>{
-    const shown = fo.guessed.includes(c) || (fo.done && fo.wrong>=FO_MAX);
-    return `<span class="fl${!fo.guessed.includes(c) && fo.done ? ' miss':''}">${shown ? c : '_'}</span>`;
+    const shown = fo.guessed.includes(c) || (fo.done && fo.wrong>=FO_MAX && gameMode!=='arcade');
+    return `<span class="fl${!fo.guessed.includes(c) && fo.done && gameMode!=='arcade' ? ' miss':''}">${shown ? c : '_'}</span>`;
   }).join('') : '';
   $('foErr').textContent = (ok ? fo.wrong : 0)+'/'+FO_MAX;
   for (let i=1;i<=FO_MAX;i++) $('fp'+i).style.visibility = (ok && fo.wrong>=i) ? 'visible' : 'hidden';
@@ -8971,7 +8971,7 @@ function foLose(){
 }
 function showLose(w){
   $('winTitle').textContent = '😵 Que pena!';
-  $('res1').innerHTML = 'A palavra era <b>'+w+'</b>';
+  $('res1').innerHTML = gameMode==='arcade' ? 'Você pode tentar a mesma palavra de novo.' : 'A palavra era <b>'+w+'</b>';
   $('res2').textContent = '';
   $('again').textContent = gameMode==='arcade' ? 'Tentar de novo' : 'Jogar de novo';
   setTimeout(()=>$('overlay').classList.add('show'), 350);
@@ -8984,10 +8984,10 @@ document.addEventListener('keydown', e=>{
 
 
 /* ---------- Arcade da Forca: conjuntos de 10 palavras por nível (50 fáceis, 150 médias, 300 difíceis) ---------- */
-const FOARC_LEVELS = [{k:'facil',nome:'Fácil',tier:1,max:7,words:500},{k:'medio',nome:'Média',tier:2,max:9,words:1500},{k:'dificil',nome:'Difícil',tier:3,max:12,words:3000}];
-const FOARC_SET = 10;
-let foarc = {}; try{ foarc = JSON.parse(store('jp_foarc')||'{}') || {} }catch(e){}
-const saveFoarc = () => store('jp_foarc', JSON.stringify(foarc));
+const FOARC_LEVELS = [{k:'facil',nome:'Fácil',tier:1,max:7,words:50},{k:'medio',nome:'Média',tier:2,max:9,words:150},{k:'dificil',nome:'Difícil',tier:3,max:12,words:600}];
+const FOARC_SET = 1;   // cada fase é uma única palavra
+let foarc = {}; try{ foarc = JSON.parse(store('jp_foarc2')||'{}') || {} }catch(e){}
+const saveFoarc = () => store('jp_foarc2', JSON.stringify(foarc));
 let foScope = 'all';   // 'all' = todos os temas (aleatório) ou a chave do tema escolhido
 let foCur = null;      // conjunto em jogo: {li, si, gi, isRep, key}
 const foState = sc => foarc[sc] || (foarc[sc] = {sets:{}, prog:{}, rg:{}});
@@ -9013,7 +9013,7 @@ function foLevelSets(sc, li){   // conjuntos do nível: palavras sorteadas, as m
 }
 function foList(sc){ const lst = []; FOARC_LEVELS.forEach((L,li)=>{ const n = foSetCount(sc,li); for (let si=0; si<n; si++) lst.push([li,si]) }); return lst }
 const foLabel = () => { if (!foCur) return ''; const L = FOARC_LEVELS[foCur.li], n = foSetCount(foScope, foCur.li);
-  return `${L.nome} · Conjunto ${foCur.si+1}/${n} · Palavra ${foCur.gi+1}/${FOARC_SET}${foCur.isRep?' · repetição':''}` };
+  return `${L.nome} · Fase ${foCur.si+1}/${n}${foCur.isRep?' · repetição':''}` };
 const curArcLabel = () => gameKey==='fo' ? foLabel() : arcLabel();
 let foView = {li:0, page:0};
 function renderFoSets(first){
@@ -9036,7 +9036,7 @@ function renderFoSets(first){
   for (let si=foView.page*50; si<Math.min(n,(foView.page+1)*50); si++){
     const idx = lst.findIndex(p=>p[0]===li&&p[1]===si), p = foProg(st,li,si), locked = idx > fr;
     const b = document.createElement('button'); b.className = 'arcSet'; b.disabled = locked;
-    b.innerHTML = `<b>${si+1}</b><small>${p>=FOARC_SET ? '✔' : locked ? '🔒' : p>0 ? p*10+'%' : '▶'}</small>`;
+    b.innerHTML = `<b>${si+1}</b><small>${p>=FOARC_SET ? '✔' : locked ? '🔒' : '▶'}</small>`;
     b.onclick = ()=>openFoSet(li,si);
     grid.appendChild(b);
   }
@@ -9056,25 +9056,27 @@ function foArcWord(){
   tFO.reset(); fo = {word:w, clue:e?e.c:'', guessed:[], wrong:0, done:false};
   $('foMsg').textContent = ''; foRender(); applyModeUI();
 }
+function foNextPhase(){   // próxima fase já liberada, se houver
+  const st = foState(foScope), lst = foList(foScope), i = lst.findIndex(p=>p[0]===foCur.li&&p[1]===foCur.si);
+  const fr = (j => j<0 ? lst.length : j)(lst.findIndex(([a,b]) => foProg(st,a,b) < FOARC_SET));
+  return (i>=0 && i+1<lst.length && i+1<=fr) ? lst[i+1] : null;
+}
+function foHasNext(){ const lst = foList(foScope), i = lst.findIndex(p=>p[0]===foCur.li&&p[1]===foCur.si); return i>=0 && i+1<lst.length }
 function openFoSet(li,si){
-  const st = foState(foScope), key = li+'-'+si, lst = foList(foScope);
+  const st = foState(foScope), lst = foList(foScope);
   const fr = (i => i<0 ? lst.length : i)(lst.findIndex(([a,b]) => foProg(st,a,b) < FOARC_SET));
   if (lst.findIndex(p=>p[0]===li&&p[1]===si) > fr) return;
-  const isRep = foProg(st,li,si) >= FOARC_SET;
-  foCur = {li, si, key, isRep, gi: isRep ? (st.rg[key]||0) : foProg(st,li,si)};
+  foCur = {li, si, key:li+'-'+si, isRep: foProg(st,li,si) >= FOARC_SET, gi:0};
+  foView = {li, page:Math.floor(si/50)};
   foArcWord(); openGame('fo');
 }
-function foArcNext(){   // próxima palavra do conjunto (ou tentar de novo, se errou)
+function foArcNext(){   // próxima fase (ou tentar de novo, se errou)
   hideWin();
   if (fo && fo.done && fo.wrong>=FO_MAX){ foArcWord(); return }
-  const st = foState(foScope), key = foCur.key;
-  foCur.gi++;
-  if (foCur.isRep) st.rg[key] = foCur.gi; else st.prog[key] = Math.max(foProg(st,foCur.li,foCur.si), foCur.gi);
-  if (foCur.gi >= FOARC_SET){
-    if (foCur.isRep) delete st.rg[key];
-    foCur = null; saveFoarc(); goHome(); homeView('arcade'); return;
-  }
-  saveFoarc(); foArcWord();
+  const st = foState(foScope); st.prog[foCur.key] = FOARC_SET; saveFoarc();
+  const nx = foNextPhase();
+  if (nx){ foCur = {li:nx[0], si:nx[1], key:nx[0]+'-'+nx[1], isRep:false, gi:0}; foView = {li:nx[0], page:Math.floor(nx[1]/50)}; foArcWord(); return }
+  foCur = null; goHome(); homeView('arcade');
 }
 
 function newWS(){
@@ -9559,8 +9561,8 @@ window.addEventListener('pagehide',()=>{wsSave();cwSave()});
 function showWin(line1, rec, prev){
   $('winTitle').textContent = '🎉 Parabéns!';
   $('res1').innerHTML = (gameMode==='arcade' ? '<b>'+curArcLabel()+'</b><br>' : '') + line1;
-  const ultimo = gameKey==='fo' ? (foCur && foCur.gi===9) : arc.gi===9;
-  $('again').textContent = gameMode==='arcade' ? (ultimo ? 'Ver conjuntos ▶' : (gameKey==='fo' ? 'Próxima palavra ▶' : 'Próximo jogo ▶')) : 'Jogar de novo';
+  const ultimo = gameKey==='fo' ? !foHasNext() : arc.gi===9;
+  $('again').textContent = gameMode==='arcade' ? (ultimo ? (gameKey==='fo' ? 'Ver fases ▶' : 'Ver conjuntos ▶') : (gameKey==='fo' ? 'Próxima fase ▶' : 'Próximo jogo ▶')) : 'Jogar de novo';
   $('res2').innerHTML = rec===null ? '' : rec ? '<b>🏆 Novo recorde!</b>' : `Seu recorde: <b>${fmt(prev)}</b>`;
   setTimeout(()=>$('overlay').classList.add('show'), 350);
 }

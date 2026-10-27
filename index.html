@@ -181,7 +181,8 @@ body.arcv .homeHead{display:none}
 .arcSet:disabled{opacity:.4;cursor:default}
 .arcSet:not(:disabled):active{transform:scale(.97)}
 @media(min-width:700px){.homeArc{max-width:400px}}
-#foSvg{height:min(400px,max(170px,calc(100vh - 430px)));width:auto;max-width:100%;display:block;margin:0 auto}
+#foSvg{height:min(400px,max(56px,calc(100vh - 450px)));width:auto;max-width:100%;display:block;margin:0 auto}
+@supports (height:100dvh){#foSvg{height:min(400px,max(56px,calc(100dvh - 450px)))}}
 .fp{visibility:hidden}
 .fp.on{visibility:visible}
 .fe{visibility:hidden}
@@ -352,7 +353,7 @@ body.arcv .homeHead{display:none}
   <button class="btn primary" id="cfYes">Iniciar novo jogo</button>
   <button class="btn" id="cfNo">Cancelar</button>
 </div></div>
-<footer>Versão: 27102026.5</footer>
+<footer>Versão: 27102026.6</footer>
 
 <script>
 'use strict';
@@ -8089,6 +8090,28 @@ function newFO(){
   fo = {word:e.w, clue:e.c, guessed:[], wrong:0, done:false, pen:Array(e.w.length).fill(''), sel:0};
   $('foMsg').textContent=''; foShowBest(); foRender(); foSave();
 }
+function foFit(){
+  const svg=document.getElementById('foSvg'), kb=document.getElementById('kb'); if(!svg||!svg.offsetParent) return;
+  const main=svg.parentElement; let below=0, n=0;
+  for(const el of main.children){ if(el!==svg && el.offsetParent){ below+=el.getBoundingClientRect().height; n++ } }
+  const gap=parseFloat(getComputedStyle(main).rowGap)||8; below+=gap*n;
+  const vv=(window.visualViewport&&window.visualViewport.height)||innerHeight;
+  const kbTop=(kb&&kb.offsetParent)?kb.getBoundingClientRect().top:vv;
+  const top=svg.getBoundingClientRect().top+(window.scrollY||0)-(window.scrollY||0);
+  const h=Math.max(56,Math.min(400,Math.min(kbTop,vv)-top-below-14));
+  svg.style.height=h+'px';
+}
+function foFitSoon(){requestAnimationFrame(()=>{foFit();requestAnimationFrame(foFit)})}
+(function(){ if(!window.ResizeObserver) return;
+  const ro=new ResizeObserver(foFitSoon);
+  ['kb','foWord','foMsg'].forEach(id=>{const e=document.getElementById(id); if(e) ro.observe(e)});
+  const c=document.querySelector('.foClue'); if(c) ro.observe(c);
+  ro.observe(document.body);
+  setTimeout(foFitSoon,300); window.addEventListener('load',foFitSoon);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(foFitSoon);
+})();
+window.addEventListener('resize',foFitSoon);window.addEventListener('orientationchange',foFitSoon);
+if(window.visualViewport)window.visualViewport.addEventListener('resize',foFitSoon);
 function foRender(){
   const ok = !!fo;
   $('foClue').textContent = ok ? 'Dica: '+fo.clue : '';
@@ -8101,6 +8124,7 @@ function foRender(){
   for (let i=1;i<=FO_MAX;i++) $('fp'+i).style.visibility = (ok && fo.wrong>=i) ? 'visible' : 'hidden';
   for (let k=1;k<=FO_MAX;k++) $('fe'+k).classList.toggle('on', ok && fo.wrong===k);   // expressão conforme o número de erros
   document.querySelectorAll('#kb .key[data-l]').forEach(k=>k.classList.toggle('off', ok && fo.guessed.includes(k.dataset.l)));
+  foFit();foFitSoon();
 }
 function foSave(){
   if (!fo || gameMode==='arcade') return;

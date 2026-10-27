@@ -142,9 +142,9 @@ body:not(.home) footer,body.mode-ws footer,body.mode-cw footer{display:none}   /
   .homeArc{grid-row:1;grid-column:1/-1;justify-self:center;align-self:center;max-width:540px}
   #arcSets .arcGrid{grid-template-columns:repeat(11,1fr)}
   #arcSets .arcSet{height:40px}
-  #modeBack,#arcBack,#foScopeBack,#foThemeBack{height:34px;width:200px;align-self:center;margin-top:0}
-  #foThemeList{grid-template-columns:repeat(4,1fr)}
-  #foThemeList .homeBtn{height:40px}
+  #modeBack,#arcBack{height:34px;width:200px;align-self:center;margin-top:0}
+  #arcSets .arcGrid.g10 .arcSet{height:26px}
+  #arcSets .arcGrid.g10 .arcSet small{display:none}
   body.home footer{padding:4px 0}
   h1{display:none}
   body{padding-top:8px}
@@ -163,9 +163,13 @@ body:not(.home) footer,body.mode-ws footer,body.mode-cw footer{display:none}   /
 .arcLbl{text-align:center;font-weight:800;font-size:15px;padding:8px 10px;border-radius:14px;background:var(--amber-bg);border:1px solid var(--amber-line);box-shadow:var(--shadow)}
 .homeTitle2{font-weight:800;font-size:17px;text-align:center;margin-bottom:4px}
 .homeArc{grid-row:2;width:100%;max-width:320px;display:flex;flex-direction:column;gap:8px;align-items:stretch}
-#modeBack,#arcBack,#foScopeBack,#foThemeBack{flex:none;height:44px;width:100%;font-size:15px;margin-top:4px}
-#foThemeList{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-#foThemeList .homeBtn{height:48px;font-size:13px;padding:0 6px;text-align:center;line-height:1.15}
+#modeBack,#arcBack{flex:none;height:44px;width:100%;font-size:15px;margin-top:4px}
+#arcSets .arcGrid.g10{grid-template-columns:repeat(10,1fr);gap:4px;margin:8px 0 6px}
+#arcSets .arcGrid.g10 .arcSet{height:40px;border-radius:9px}
+#arcSets .arcGrid.g10 .arcSet b{font-size:12px}
+#arcSets .arcGrid.g10 .arcSet small{font-size:9px}
+.foPager{align-items:center;gap:8px}.foPager .btn{flex:none;width:44px;height:36px;font-size:18px;padding:0}.foPg{flex:1;text-align:center;font-size:13px;color:var(--muted);font-weight:700}
+#arcSets .row .tab{font-size:12px;padding:8px 2px}
 #arcSets .arcGrid.g8{grid-template-columns:repeat(8,1fr)}
 #arcSets .arcGrid.g8 .arcSet{height:42px}
 body.arcv .homeHead{display:none}
@@ -196,8 +200,8 @@ body.arcv .homeHead{display:none}
 <div id="home">
   <div class="homeHead"><svg class="logo" viewBox="0 0 120 120" role="img" aria-label="Logotipo Jogos de Palavras"><rect width="120" height="120" rx="27" fill="#1d3f9a"/><rect x="10" y="23" width="22" height="22" rx="5" fill="#ffffff"/><text x="21" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">P</text><rect x="36" y="23" width="22" height="22" rx="5" fill="#ffffff"/><text x="47" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">A</text><rect x="62" y="23" width="22" height="22" rx="5" fill="#ffffff"/><text x="73" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">L</text><rect x="88" y="23" width="22" height="22" rx="5" fill="#ffffff"/><text x="99" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">A</text><rect x="10" y="49" width="22" height="22" rx="5" fill="#fbeab9"/><text x="21" y="65" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">J</text><rect x="36" y="49" width="22" height="22" rx="5" fill="#fbeab9"/><text x="47" y="65" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">O</text><rect x="62" y="49" width="22" height="22" rx="5" fill="#fbeab9"/><text x="73" y="65" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">G</text><rect x="88" y="49" width="22" height="22" rx="5" fill="#fbeab9"/><text x="99" y="65" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">O</text><rect x="10" y="75" width="22" height="22" rx="5" fill="#ffffff"/><text x="21" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">V</text><rect x="36" y="75" width="22" height="22" rx="5" fill="#ffffff"/><text x="47" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">R</text><rect x="62" y="75" width="22" height="22" rx="5" fill="#ffffff"/><text x="73" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">A</text><rect x="88" y="75" width="22" height="22" rx="5" fill="#ffffff"/><text x="99" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">S</text><rect x="8" y="49" width="104" height="26" rx="8" fill="none" stroke="#d9962b" stroke-width="3"/></svg></div>
   <div class="homeBtns" id="homeGames">
-    <button class="homeBtn" data-g="ws"><span>🔎</span>Caça-Palavras</button>
     <button class="homeBtn" data-g="fo"><span><img src="data:image/png;base64,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" alt="" height="32" style="display:block;height:32px;width:auto"></span>Forca</button>
+    <button class="homeBtn" data-g="ws"><span>🔎</span>Caça-Palavras</button>
     <button class="homeBtn" data-g="cw"><span>✏️</span>Palavras Cruzadas</button>
   </div>
   <div class="homeBtns" id="homeModes" hidden>
@@ -206,17 +210,6 @@ body.arcv .homeHead{display:none}
     <button class="homeBtn" data-m="arcade" id="mArcade"><span>🏁</span>Arcade</button>
     <button class="homeBtn" data-m="aleatorio"><span>🎲</span>Aleatório</button>
     <button class="btn" id="modeBack">← Voltar</button>
-  </div>
-  <div class="homeBtns" id="homeFoScope" hidden>
-    <div class="homeTitle2">Forca · Arcade</div>
-    <button class="homeBtn" id="foScTema"><span>🎨</span>Escolher tema</button>
-    <button class="homeBtn" id="foScAll"><span>🎲</span>Aleatório</button>
-    <button class="btn" id="foScopeBack">← Voltar</button>
-  </div>
-  <div class="homeArc" id="homeFoTheme" hidden>
-    <div class="homeTitle2">Forca · Escolha o tema</div>
-    <div id="foThemeList"></div>
-    <button class="btn" id="foThemeBack">← Voltar</button>
   </div>
   <div class="homeArc" id="homeArc" hidden>
     <div class="homeTitle2" id="arcTitle">Arcade · Escolha o conjunto</div>
@@ -352,7 +345,7 @@ body.arcv .homeHead{display:none}
   <button class="btn primary" id="cfYes">Iniciar novo jogo</button>
   <button class="btn" id="cfNo">Cancelar</button>
 </div></div>
-<footer>Versão: 27102026.1</footer>
+<footer>Versão: 27102026.2</footer>
 
 <script>
 'use strict';
@@ -8854,8 +8847,8 @@ function randomStart(g){   // Aleatório: tema e dificuldade sorteados a cada pa
   else { foTheme = temas[rnd(temas.length)]; foDiff = difs[rnd(difs.length)]; store('jp_fo_theme',foTheme); store('jp_fo_diff',foDiff); hideWin(); newFO(); buildControls('fo') }
 }
 /* tela de conjuntos do Arcade */
-function renderArcSets(){
-  if (homeG==='fo') return renderFoSets();
+function renderArcSets(first){
+  if (homeG==='fo') return renderFoSets(first);
   $('arcTitle').textContent = 'Arcade · Escolha o conjunto';
   const box = $('arcSets'); box.innerHTML = '';
   const fr = arcFrontier();
@@ -8905,11 +8898,9 @@ function arcNext(){   // próximo jogo do conjunto; ao completar o conjunto, vol
 /* ---------- Telas da página inicial: jogos > modos > conjuntos ---------- */
 function homeView(v){
   $('homeGames').hidden = v!=='games'; $('homeModes').hidden = v!=='modes'; $('homeArc').hidden = v!=='arcade';
-  $('homeFoScope').hidden = v!=='foscope'; $('homeFoTheme').hidden = v!=='fotheme';
-  document.body.classList.toggle('arcv', v==='arcade' || v==='fotheme');
+  document.body.classList.toggle('arcv', v==='arcade');
   if (v==='modes') $('modeTitle').textContent = GAME_NAME[homeG];
-  if (v==='fotheme') renderFoThemes();
-  if (v==='arcade') renderArcSets();
+  if (v==='arcade') renderArcSets(true);
 }
 /* ---------- Forca ---------- */
 const FO_MAX = 6;
@@ -8993,7 +8984,7 @@ document.addEventListener('keydown', e=>{
 
 
 /* ---------- Arcade da Forca: conjuntos de 10 palavras por nível (50 fáceis, 150 médias, 300 difíceis) ---------- */
-const FOARC_LEVELS = [{k:'facil',nome:'Fácil',tier:1,max:7,words:50},{k:'medio',nome:'Média',tier:2,max:9,words:150},{k:'dificil',nome:'Difícil',tier:3,max:12,words:300}];
+const FOARC_LEVELS = [{k:'facil',nome:'Fácil',tier:1,max:7,words:500},{k:'medio',nome:'Média',tier:2,max:9,words:1500},{k:'dificil',nome:'Difícil',tier:3,max:12,words:3000}];
 const FOARC_SET = 10;
 let foarc = {}; try{ foarc = JSON.parse(store('jp_foarc')||'{}') || {} }catch(e){}
 const saveFoarc = () => store('jp_foarc', JSON.stringify(foarc));
@@ -9001,7 +8992,6 @@ let foScope = 'all';   // 'all' = todos os temas (aleatório) ou a chave do tema
 let foCur = null;      // conjunto em jogo: {li, si, gi, isRep, key}
 const foState = sc => foarc[sc] || (foarc[sc] = {sets:{}, prog:{}, rg:{}});
 const foProg = (st,li,si) => st.prog[li+'-'+si]||0;
-const foScopeName = sc => sc==='all' ? 'Aleatório' : THEMES[sc].nome;
 function foPool(sc, li){
   const L = FOARC_LEVELS[li], seen = new Set(), out = [];
   for (const k of (sc==='all' ? Object.keys(THEMES) : [sc])) for (const e of THEMES[k].entries){
@@ -9025,33 +9015,41 @@ function foList(sc){ const lst = []; FOARC_LEVELS.forEach((L,li)=>{ const n = fo
 const foLabel = () => { if (!foCur) return ''; const L = FOARC_LEVELS[foCur.li], n = foSetCount(foScope, foCur.li);
   return `${L.nome} · Conjunto ${foCur.si+1}/${n} · Palavra ${foCur.gi+1}/${FOARC_SET}${foCur.isRep?' · repetição':''}` };
 const curArcLabel = () => gameKey==='fo' ? foLabel() : arcLabel();
-function renderFoThemes(){
-  const box = $('foThemeList'); box.innerHTML = '';
-  Object.keys(THEMES).sort((a,b)=>THEMES[a].nome.localeCompare(THEMES[b].nome,'pt-BR')).forEach(k=>{
-    const b = document.createElement('button'); b.className = 'homeBtn'; b.textContent = THEMES[k].nome;
-    b.onclick = ()=>{ foScope = k; homeView('arcade') };
-    box.appendChild(b);
-  });
-}
-function renderFoSets(){
-  $('arcTitle').textContent = 'Forca · '+foScopeName(foScope);
-  const box = $('arcSets'); box.innerHTML = '';
-  const st = foState(foScope), lst = foList(foScope);
+let foView = {li:0, page:0};
+function renderFoSets(first){
+  $('arcTitle').textContent = 'Forca · Arcade';
+  const st = foState('all'), lst = foList('all');
   const fr = (i => i<0 ? lst.length : i)(lst.findIndex(([li,si]) => foProg(st,li,si) < FOARC_SET));
+  if (first){ const f = lst[Math.min(fr, lst.length-1)] || [0,0]; foView = {li:f[0], page:Math.floor(f[1]/50)} }
+  const box = $('arcSets'); box.innerHTML = '';
+  const tabs = document.createElement('div'); tabs.className = 'row';
   FOARC_LEVELS.forEach((L,li)=>{
-    const n = foSetCount(foScope, li); if (!n) return;
-    const h = document.createElement('div'); h.className = 'arcHead'; h.textContent = `${L.nome} · ${n*FOARC_SET} palavras`; box.appendChild(h);
-    const grid = document.createElement('div'); grid.className = 'arcGrid g8';
-    for (let si=0; si<n; si++){
-      const idx = lst.findIndex(p=>p[0]===li&&p[1]===si), p = foProg(st,li,si), locked = idx > fr;
-      const b = document.createElement('button'); b.className = 'arcSet'; b.disabled = locked;
-      b.innerHTML = `<b>${si+1}</b><small>${p>=FOARC_SET ? '✔' : locked ? '🔒' : p>0 ? p*10+'%' : '▶'}</small>`;
-      b.onclick = ()=>openFoSet(li,si);
-      grid.appendChild(b);
-    }
-    box.appendChild(grid);
+    const n = foSetCount('all', li), b = document.createElement('button');
+    b.className = 'tab'+(li===foView.li?' on':''); b.textContent = `${L.nome} (${n})`; b.disabled = !n;
+    b.onclick = ()=>{ foView = {li, page:0}; renderFoSets() };
+    tabs.appendChild(b);
   });
-  if (!box.children.length) box.textContent = 'Este tema não tem palavras suficientes.';
+  box.appendChild(tabs);
+  const li = foView.li, n = foSetCount('all', li), pages = Math.max(1, Math.ceil(n/50));
+  foView.page = Math.min(foView.page, pages-1);
+  const grid = document.createElement('div'); grid.className = 'arcGrid g10';
+  for (let si=foView.page*50; si<Math.min(n,(foView.page+1)*50); si++){
+    const idx = lst.findIndex(p=>p[0]===li&&p[1]===si), p = foProg(st,li,si), locked = idx > fr;
+    const b = document.createElement('button'); b.className = 'arcSet'; b.disabled = locked;
+    b.innerHTML = `<b>${si+1}</b><small>${p>=FOARC_SET ? '✔' : locked ? '🔒' : p>0 ? p*10+'%' : '▶'}</small>`;
+    b.onclick = ()=>openFoSet(li,si);
+    grid.appendChild(b);
+  }
+  box.appendChild(grid);
+  if (pages>1){
+    const pg = document.createElement('div'); pg.className = 'row foPager';
+    const prev = document.createElement('button'); prev.className = 'btn'; prev.textContent = '‹'; prev.disabled = foView.page===0;
+    prev.onclick = ()=>{ foView.page--; renderFoSets() };
+    const lbl = document.createElement('div'); lbl.className = 'foPg'; lbl.textContent = `Fases ${foView.page*50+1}–${Math.min(n,(foView.page+1)*50)} de ${n}`;
+    const next = document.createElement('button'); next.className = 'btn'; next.textContent = '›'; next.disabled = foView.page>=pages-1;
+    next.onclick = ()=>{ foView.page++; renderFoSets() };
+    pg.append(prev, lbl, next); box.appendChild(pg);
+  }
 }
 function foArcWord(){
   const w = foLevelSets(foScope, foCur.li)[foCur.si][foCur.gi], e = entryFor(w);
@@ -9635,17 +9633,14 @@ function openGame(g){
 document.querySelectorAll('#homeGames .homeBtn').forEach(b=>b.onclick=()=>{ homeG = b.dataset.g; homeView('modes') });
 document.querySelectorAll('#homeModes [data-m]').forEach(b=>b.onclick=()=>{
   const m = b.dataset.m;
-  if (m==='arcade'){ setMode('arcade'); if (homeG!=='fo') arcUse(homeG); homeView(homeG==='fo' ? 'foscope' : 'arcade'); return }
+  if (m==='arcade'){ setMode('arcade'); if (homeG==='fo') foScope = 'all'; else arcUse(homeG); homeView('arcade'); return }
   setMode(m);
   if (m==='aleatorio') randomStart(homeG);
   openGame(homeG);
 });
 $('modeBack').onclick = ()=>homeView('games');
-$('arcBack').onclick = ()=>homeView(homeG==='fo' ? 'foscope' : 'modes');
-$('foScopeBack').onclick = ()=>homeView('modes');
-$('foThemeBack').onclick = ()=>homeView('foscope');
-$('foScTema').onclick = ()=>homeView('fotheme');
-$('foScAll').onclick = ()=>{ foScope = 'all'; homeView('arcade') };
+$('arcBack').onclick = ()=>homeView('modes');
+
 $('homeBtn').onclick = ()=>{ if (history.state && history.state.g) history.back(); else goHome(); };
 window.addEventListener('popstate',()=>{ if (!onHome) goHome(); });
 $('topNew').onclick = ()=>{ const g = gameKey, novo = ()=> gameMode==='aleatorio' ? randomStart(g) : startNew(g);

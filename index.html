@@ -191,6 +191,12 @@ body.arcv .homeHead{display:none}
 .foWord{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;min-height:40px;margin:4px 0}
 .fl{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:34px;padding:0 3px;border-bottom:3px solid var(--text);font-weight:800;font-size:20px}
 .fl.miss{color:var(--bad)}
+.fl{cursor:pointer;position:relative}
+.okb{position:absolute;top:-12px;right:-9px;width:22px;height:22px;border-radius:50%;background:#2e9e5b;color:#fff;font-size:13px;line-height:22px;text-align:center;font-style:normal;font-weight:800;box-shadow:0 1px 4px rgba(0,0,0,.35);z-index:5}
+.fl.pen{color:#9aa1b0;font-style:italic;font-weight:600}
+.fl.sel{background:var(--amber-bg);border-radius:6px 6px 0 0}
+.cw.pen .l{color:#9aa1b0;font-style:italic;font-weight:600}
+.key.tog.on{background:linear-gradient(#ffe9a8,#f5cf62);border-color:var(--amber-line)}
 .foMsg{min-height:18px;text-align:center;font-size:13px;color:var(--muted)}
 .key.off{opacity:.35;pointer-events:none}
 </style>
@@ -245,6 +251,7 @@ body.arcv .homeHead{display:none}
     </div>
     <div class="stats">
       <span>Letras: <b id="cwFilled">0/0</b></span>
+      <span>Erros: <b id="cwErr">0/0</b></span>
       <span>Tempo: <b id="cwTime">00:00</b></span>
       <span>Recorde: <b id="cwBest">--</b></span>
     </div>
@@ -345,7 +352,7 @@ body.arcv .homeHead{display:none}
   <button class="btn primary" id="cfYes">Iniciar novo jogo</button>
   <button class="btn" id="cfNo">Cancelar</button>
 </div></div>
-<footer>Versão: 27102026.3</footer>
+<footer>Versão: 27102026.4</footer>
 
 <script>
 'use strict';
@@ -8904,7 +8911,14 @@ function homeView(v){
 }
 /* ---------- Forca ---------- */
 const FO_MAX = 6;
-const keyPress = l => { if (gameKey==='fo') foGuess(l); else cwType(l) };
+let penMode = false;   // modo rascunho: as letras ficam em cinza e só são conferidas ao confirmar (✔)
+const keyPress = l => { if (gameKey==='fo') (penMode ? foPen(l) : foGuess(l)); else cwType(l) };
+function togglePen(){
+  penMode = !penMode; $('kPen').classList.toggle('on', penMode);
+  if (gameKey==='fo'){ if (fo) foRender(); $('foMsg').textContent = penMode ? '✏️ Rascunho: toque numa casa, rabisque e confirme com ✔' : '' }
+  else if (cw) cwSay(penMode ? '✏️ Rascunho: as letras ficam em cinza até você confirmar com ✔' : '', 'muted');
+}
+const confirmPen = () => gameKey==='fo' ? foConfirm() : cwConfirm();
 let foDiff  = pick('jp_fo_diff',  DIFFS,  'facil');
 let foTheme = pick('jp_fo_theme', THEMES, 'geral');
 let fo = null;   // {word, clue, guessed:[], wrong, done}
@@ -8919,15 +8933,16 @@ function newFO(){
     : THEMES[foTheme].entries.filter(e => e.t===DIFF_TIER[foDiff] && e.w.length>=3 && e.w.length<=DIFFS[foDiff].maxLen && /^[A-Z]+$/.test(e.w));
   if (!pool.length){ fo = null; foRender(); $('foMsg').textContent='Sem palavras para este tema e dificuldade.'; return }
   const e = pool[rnd(pool.length)];
-  fo = {word:e.w, clue:e.c, guessed:[], wrong:0, done:false};
+  fo = {word:e.w, clue:e.c, guessed:[], wrong:0, done:false, pen:Array(e.w.length).fill(''), sel:0};
   $('foMsg').textContent=''; foShowBest(); foRender(); foSave();
 }
 function foRender(){
   const ok = !!fo;
   $('foClue').textContent = ok ? 'Dica: '+fo.clue : '';
-  $('foWord').innerHTML = ok ? fo.word.split('').map(c=>{
+  $('foWord').innerHTML = ok ? fo.word.split('').map((c,i)=>{
     const shown = fo.guessed.includes(c) || (fo.done && fo.wrong>=FO_MAX && gameMode!=='arcade');
-    return `<span class="fl${!fo.guessed.includes(c) && fo.done && gameMode!=='arcade' ? ' miss':''}">${shown ? c : '_'}</span>`;
+    const pen = !shown && !fo.done && fo.pen && fo.pen[i];
+    return `<span class="fl${!fo.guessed.includes(c) && fo.done && gameMode!=='arcade' ? ' miss':''}${pen?' pen':''}${penMode && !shown && !fo.done && i===fo.sel?' sel':''}" data-i="${i}">${shown ? c : (pen || '_')}${pen && i===fo.sel ? '<i class="okb">✔</i>' : ''}</span>`;
   }).join('') : '';
   $('foErr').textContent = (ok ? fo.wrong : 0)+'/'+FO_MAX;
   for (let i=1;i<=FO_MAX;i++) $('fp'+i).style.visibility = (ok && fo.wrong>=i) ? 'visible' : 'hidden';
@@ -8937,7 +8952,7 @@ function foRender(){
 function foSave(){
   if (!fo || gameMode==='arcade') return;
   if (fo.done){ drop(foSlot()); return }
-  store(foSlot(), JSON.stringify({diff:foDiff, theme:foTheme, word:fo.word, clue:fo.clue, guessed:fo.guessed, wrong:fo.wrong, acc:elapsedMs(tFO)}));
+  store(foSlot(), JSON.stringify({diff:foDiff, theme:foTheme, word:fo.word, clue:fo.clue, guessed:fo.guessed, wrong:fo.wrong, pen:fo.pen, acc:elapsedMs(tFO)}));
 }
 function foLoad(diff){
   try{
@@ -8945,10 +8960,43 @@ function foLoad(diff){
     const d = JSON.parse(raw);
     if (!(d.diff in DIFFS) || !(d.theme in THEMES) || typeof d.word!=='string' || !Array.isArray(d.guessed) || d.wrong>=FO_MAX) return false;
     foDiff=d.diff; foTheme=d.theme; store('jp_fo_theme',foTheme); store('jp_fo_diff',foDiff);
-    fo = {word:d.word, clue:d.clue, guessed:d.guessed, wrong:d.wrong|0, done:false};
+    fo = {word:d.word, clue:d.clue, guessed:d.guessed, wrong:d.wrong|0, done:false, pen:(Array.isArray(d.pen)&&d.pen.length===d.word.length)?d.pen:Array(d.word.length).fill(''), sel:0};
     tFO.reset(); tFO.acc = d.acc|0; tFO.draw(); foShowBest(); foRender(); return true;
   }catch(e){ return false }
 }
+const foRevealed = i => fo.guessed.includes(fo.word[i]);
+function foNextFree(from){   // próxima casa ainda não revelada (a partir de 'from')
+  for (let k=0;k<fo.word.length;k++){ const i = (from+k)%fo.word.length; if (!foRevealed(i)) return i }
+  return -1;
+}
+function foPen(l){   // rabisca a letra na casa selecionada
+  if (!fo || fo.done) return;
+  let i = fo.sel; if (i<0 || i>=fo.word.length || foRevealed(i)) i = foNextFree(0); if (i<0) return;
+  fo.pen[i] = l;
+  const n = foNextFree(i+1); fo.sel = (n>=0 ? n : i);
+  foRender(); foSave();
+}
+function foPenClear(){
+  if (!fo || fo.done) return;
+  let i = fo.sel; if (!(fo.pen[i])){ for (let k=i-1;k>=0;k--) if (!foRevealed(k)){ i = k; break } }
+  fo.pen[i] = ''; fo.sel = i; foRender(); foSave();
+}
+function foConfirm(){   // confere o rabisco da casa selecionada
+  if (!fo || fo.done) return;
+  let i = fo.sel;
+  if (!(fo.pen[i]) || foRevealed(i)){ const j = fo.pen.findIndex((p,k)=>p && !foRevealed(k)); if (j<0){ $('foMsg').textContent = 'Rabisque uma letra primeiro'; return } fo.sel = j; foRender(); return }
+  const l = fo.pen[i]; fo.pen[i] = '';
+  if (fo.word[i]===l){ $('foMsg').textContent = ''; foGuess(l); const n = fo.done ? -1 : fo.pen.findIndex((p,k)=>p && !foRevealed(k)); if (n>=0){ fo.sel = n; foRender() } else if (!fo.done){ const f = foNextFree(0); if (f>=0){ fo.sel = f; foRender() } } return }
+  tFO.start(); fo.wrong++;
+  $('foMsg').textContent = '✘ Essa letra não vai nessa casa';
+  if (fo.wrong >= FO_MAX) return foLose();
+  foRender(); foSave();
+}
+document.addEventListener('click', e=>{
+  if (e.target.closest && e.target.closest('#foWord .okb')){ if (fo && !fo.done) foConfirm(); return }
+  const sp = e.target.closest && e.target.closest('#foWord .fl'); if (!sp || !fo || fo.done) return;
+  const i = +sp.dataset.i; if (foRevealed(i)) return; fo.sel = i; foRender();
+});
 function foGuess(l){
   if (!fo || fo.done || fo.guessed.includes(l)) return;
   tFO.start(); fo.guessed.push(l);
@@ -8978,8 +9026,10 @@ function showLose(w){
 }
 document.addEventListener('keydown', e=>{
   if (gameKey!=='fo' || onHome || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.key==='Enter'){ e.preventDefault(); foConfirm(); return }
+  if (e.key==='Backspace'){ e.preventDefault(); foPenClear(); return }
   const k = e.key.normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase();
-  if (/^[A-Z]$/.test(k)) foGuess(k);
+  if (/^[A-Z]$/.test(k)) keyPress(k);
 });
 
 
@@ -9053,7 +9103,7 @@ function renderFoSets(first){
 }
 function foArcWord(){
   const w = foLevelSets(foScope, foCur.li)[foCur.si][foCur.gi], e = entryFor(w);
-  tFO.reset(); fo = {word:w, clue:e?e.c:'', guessed:[], wrong:0, done:false};
+  tFO.reset(); fo = {word:w, clue:e?e.c:'', guessed:[], wrong:0, done:false, pen:Array(w.length).fill(''), sel:0};
   $('foMsg').textContent = ''; foRender(); applyModeUI();
 }
 function foNextPhase(){   // próxima fase já liberada, se houver
@@ -9270,7 +9320,11 @@ function cwModel({placed,x0,y0,W,H}){
     const all=[]; for(let y=0;y<H;y++)for(let x=0;x<W;x++) if(ch[y][x]) all.push([x,y]);
     shuffle(all).slice(0,Math.round(all.length*ratio)).forEach(([x,y])=>{given[y][x]=true;user[y][x]=ch[y][x]});
   }
-  return {W,H,ch,num,cA,cD,across,down,user,given,bad,ok,total:placed.length,placed,els:[]};
+  // limite de letras erradas: 30% das letras que o jogador precisa digitar
+  let letters = 0, givenN = 0; for (let y=0;y<H;y++) for (let x=0;x<W;x++){ if (ch[y][x]) letters++; if (given[y][x]) givenN++ }
+  const maxErr = Math.max(1, Math.round(0.3*(letters-givenN)));
+  const cl = a => a.map(r=>r.slice());
+  return {W,H,ch,num,cA,cD,across,down,user,given,bad,ok,pen:Array.from({length:H},()=>Array(W).fill('')),total:placed.length,placed,els:[],errors:0,maxErr,lost:false,init:{user:cl(user),given:cl(given)}};
 }
 function cwBest(){return 'cw_best_'+cwDiff+'_'+cwTheme}
 function cwShowBest(){const b=store(cwBest());$('cwBest').textContent = b? fmt(+b):'--'}
@@ -9330,10 +9384,17 @@ function cwPaint(){
     if (cw.given[y][x]) c+=' g';
     if (cw.ok[y][x]) c+=' ok';
     if (cw.bad[y][x]) c+=' bad';
+    if (!cw.user[y][x] && cw.pen[y][x]) c+=' pen';
     d.className = c;
-    d.querySelector('.l').textContent = cw.user[y][x];
+    d.querySelector('.l').textContent = cw.user[y][x] || cw.pen[y][x];
+    let ob = d.querySelector('.okb');
+    const showOk = sel && sel.x===x && sel.y===y && !cw.user[y][x] && cw.pen[y][x];
+    if (showOk && !ob){ ob = document.createElement('i'); ob.className='okb'; ob.textContent='✔'; ob.setAttribute('aria-label','Confirmar letra');
+      ob.addEventListener('click',e=>{e.stopPropagation(); cwConfirm()}); d.appendChild(ob) }
+    else if (!showOk && ob) ob.remove();
   }
   $('cwFilled').textContent = filled+'/'+total;
+  $('cwErr').textContent = cw.errors+'/'+cw.maxErr;
   [...cw.across,...cw.down].forEach(w=>{
     w.li.classList.toggle('act', w===aw);
     w.li.classList.toggle('ok', cwWordDone(w));
@@ -9402,6 +9463,11 @@ function cwType(letter){
   tCW.start();
   const {x,y} = sel;
   if (cwLocked(x,y)){cwAdvance(); cwPaint(); return}      // letra certa fica travada
+  if (penMode){   // rascunho: só marca em cinza, sem conferir
+    if (cw.user[y][x]){ cw.user[y][x]=''; cw.bad[y][x]=false }
+    cw.pen[y][x] = letter; cwAdvance(); cwPaint(); cwSave(); return;
+  }
+  cw.pen[y][x] = '';
   cw.user[y][x] = letter;
   if (letter===cw.ch[y][x]){
     cw.ok[y][x]=true; cw.bad[y][x]=false; cwSay('','');
@@ -9409,14 +9475,44 @@ function cwType(letter){
     const doneW = cwActive(); if (doneW && cwWordDone(doneW)) cwStep(1);   // palavra completa: vai para a próxima palavra que falta
     cwPaint(); cwFlash(x,y,'flashok'); cwCheckWin();
   } else {
-    cw.bad[y][x]=true; cwSay('✘ Letra errada, tente outra','bad');
+    cw.bad[y][x]=true; cw.errors++; cwSay('✘ Letra errada, tente outra','bad');
     cwPaint(); cwFlash(x,y,'flashbad');
+    if (cw.errors >= cw.maxErr) cwLose();
   }
+}
+function cwConfirm(){   // confere o rabisco da casa selecionada
+  if (!sel || cwDone) return;
+  const w = cwActive(); if (!w) return;
+  const {x,y} = sel, l = cw.pen[y][x];
+  const nextPen = () => w.cells.find(([a,b])=>cw.pen[b][a] && !cwLocked(a,b));
+  if (!l || cwLocked(x,y)){ const n = nextPen(); if (n){ sel.x=n[0]; sel.y=n[1]; cwPaint() } else cwSay('Rabisque uma letra primeiro','muted'); return }
+  const wasPen = penMode; penMode = false; cwType(l); penMode = wasPen;   // confere como uma letra digitada
+  if (cwDone) return;
+  const cur = cw.pen[sel.y][sel.x]; if (!cur){ const n = nextPen(); if (n){ sel.x=n[0]; sel.y=n[1]; cwPaint() } }
+}
+function cwLose(){   // atingiu o limite de letras erradas
+  cwDone = true; cw.lost = true; tCW.pause(); cwSave();
+  $('winTitle').textContent = '😵 Que pena!';
+  $('res1').innerHTML = 'Você atingiu o limite de <b>'+cw.maxErr+'</b> letras erradas.';
+  $('res2').textContent = '';
+  $('again').textContent = gameMode==='arcade' ? 'Tentar de novo' : 'Jogar de novo';
+  setTimeout(()=>$('overlay').classList.add('show'), 350);
+}
+function cwRestart(){   // Arcade: repete a mesma fase do início
+  hideWin();
+  const cl = a => a.map(r=>r.slice());
+  cw.user = cl(cw.init.user); cw.given = cl(cw.init.given);
+  cw.bad = cw.ch.map(r=>r.map(()=>false)); cw.ok = cw.ch.map(r=>r.map(()=>false));
+  cw.pen = cw.ch.map(r=>r.map(()=>'')); cw.errors = 0; cw.lost = false; cwReveals = 0; cwDone = false; sel = null; tCW.reset(); $('cwMsg').textContent = '';
+  cwRender();
+  const f = cw.across[0] || cw.down[0]; if (f){ sel = {x:f.cells[0][0],y:f.cells[0][1],dir:f.dir}; cwPaint() }
+  cwSave();
 }
 function cwBack(){
   if (!sel || cwDone) return;
   const w = cwActive(); if (!w) return;
   const {x,y} = sel;
+  if (!cwLocked(x,y) && cw.pen[y][x]){cw.pen[y][x]='';cwPaint();cwSave();return}
   if (!cwLocked(x,y) && cw.user[y][x]){cw.user[y][x]='';cw.bad[y][x]=false;cwSay('','');cwPaint();return}
   const i = w.cells.findIndex(([a,b])=>a===x&&b===y);
   for (let j=i-1;j>=0;j--){
@@ -9461,12 +9557,15 @@ function newCW(){
   const rows = ['QWERTYUIOP','ASDFGHJKL','ZXCVBNM'];
   rows.forEach((r,ri)=>{
     const d = document.createElement('div'); d.className='krow';
+    if (ri===2){const b=document.createElement('button');b.className='key tog';b.id='kPen';b.textContent='✏️';b.setAttribute('aria-label','Rascunho');
+      b.addEventListener('pointerdown',e=>e.preventDefault()); b.onclick=()=>togglePen(); d.appendChild(b)}
     r.split('').forEach(l=>{const b=document.createElement('button');b.className='key';b.textContent=l;
       b.addEventListener('pointerdown',e=>e.preventDefault());
       b.dataset.l=l; b.onclick=()=>keyPress(l);d.appendChild(b)});
-    if (ri===2){const b=document.createElement('button');b.className='key wide';b.textContent='⌫';b.setAttribute('aria-label','Apagar');
+    if (ri===2){
+      const b=document.createElement('button');b.className='key wide';b.textContent='⌫';b.setAttribute('aria-label','Apagar');
       b.addEventListener('pointerdown',e=>e.preventDefault());
-      b.onclick=()=>{ if (gameKey!=='fo') cwBack() };d.appendChild(b)}
+      b.onclick=()=>{ if (gameKey==='fo') foPenClear(); else cwBack() };d.appendChild(b)}
     kb.appendChild(d);
   });
 })();
@@ -9532,7 +9631,7 @@ function cwSave(){
   if (cwDone){drop(slotKey('cw',id));return}
   store(slotKey('cw',id), JSON.stringify({diff:cwDiff,theme:cwTheme,W:cw.W,H:cw.H,
     placed:cw.placed.map(p=>({word:p.word,clue:p.clue,x:p.x,y:p.y,dir:p.dir})),
-    user:cw.user,given:cw.given,bad:cw.bad,ok:cw.ok,reveals:cwReveals,sel,acc:elapsedMs(tCW),pct:cwStat().pct}));
+    user:cw.user,given:cw.given,bad:cw.bad,ok:cw.ok,reveals:cwReveals,pen:cw.pen,errors:cw.errors,maxErr:cw.maxErr,init:cw.init,sel,acc:elapsedMs(tCW),pct:cwStat().pct}));
 }
 function cwLoad(diff){
   try{
@@ -9545,6 +9644,9 @@ function cwLoad(diff){
     const m = cwModel({placed:d.placed.map(p=>({...p})),x0:0,y0:0,W:d.W,H:d.H});
     m.user=d.user; m.given=d.given; m.bad=d.bad;
     m.ok = Array.isArray(d.ok) ? d.ok : m.ch.map((r,y)=>r.map((c,x)=>!!(c && d.user[y][x]===c && !d.given[y][x])));
+    if (Number.isInteger(d.maxErr)){ m.errors = d.errors|0; m.maxErr = d.maxErr; if (d.init && d.init.user) m.init = d.init }
+    else { m.init = {user:m.user.map(r=>r.slice()), given:m.given.map(r=>r.slice())}; m.errors = 0; m.maxErr = Math.max(1, Math.round(0.3*(m.ch.flat().filter(Boolean).length - m.given.flat().filter(Boolean).length))) }
+    if (Array.isArray(d.pen) && d.pen.length===m.H) m.pen = d.pen;
     cw = m; cwDone = false; cwReveals = d.reveals|0;
     tCW.acc = d.acc|0; tCW.draw();
     const f = cw.across[0] || cw.down[0];
@@ -9647,7 +9749,7 @@ $('homeBtn').onclick = ()=>{ if (history.state && history.state.g) history.back(
 window.addEventListener('popstate',()=>{ if (!onHome) goHome(); });
 $('topNew').onclick = ()=>{ const g = gameKey, novo = ()=> gameMode==='aleatorio' ? randomStart(g) : startNew(g);
   if (isActive(g)) askNew('Iniciar um novo jogo? O progresso atual será perdido.', novo); else novo() };
-$('again').onclick = ()=>{ if (gameMode==='arcade') return gameKey==='fo' ? foArcNext() : arcNext(); startNew(gameKey) };
+$('again').onclick = ()=>{ if (gameMode==='arcade'){ if (gameKey==='fo') return foArcNext(); if (gameKey==='cw' && cw && cw.lost) return cwRestart(); return arcNext() } startNew(gameKey) };
 document.addEventListener('visibilitychange',()=>{
   const t = gTimer(gameKey), done = gDone(gameKey);
   if (document.hidden){wsSave();cwSave();foSave()}

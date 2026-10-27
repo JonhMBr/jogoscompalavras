@@ -111,7 +111,7 @@ body.home footer{position:fixed;left:0;right:0;bottom:0;padding:10px 0}
 .homeBtn span{font-size:19px}
 .homeBtn:active{transform:scale(.98)}
 footer{margin-top:auto;padding:16px 0 12px;font-size:12px;color:var(--muted);text-align:center}
-body.mode-ws footer,body.mode-cw footer{display:none}   /* jogos: sem rodapé (versão aparece só na tela inicial) */
+body:not(.home) footer,body.mode-ws footer,body.mode-cw footer{display:none}   /* jogos: sem rodapé (versão aparece só na tela inicial) */
 #cwClue{flex:1;min-width:0}
 #cwReveal{flex:none;width:72px;padding:0;font-size:16px}
 .clues{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -142,7 +142,9 @@ body.mode-ws footer,body.mode-cw footer{display:none}   /* jogos: sem rodapé (v
   .homeArc{grid-row:1;grid-column:1/-1;justify-self:center;align-self:center;max-width:540px}
   #arcSets .arcGrid{grid-template-columns:repeat(11,1fr)}
   #arcSets .arcSet{height:40px}
-  #modeBack,#arcBack{height:34px;width:200px;align-self:center;margin-top:0}
+  #modeBack,#arcBack,#foScopeBack,#foThemeBack{height:34px;width:200px;align-self:center;margin-top:0}
+  #foThemeList{grid-template-columns:repeat(4,1fr)}
+  #foThemeList .homeBtn{height:40px}
   body.home footer{padding:4px 0}
   h1{display:none}
   body{padding-top:8px}
@@ -161,7 +163,11 @@ body.mode-ws footer,body.mode-cw footer{display:none}   /* jogos: sem rodapé (v
 .arcLbl{text-align:center;font-weight:800;font-size:15px;padding:8px 10px;border-radius:14px;background:var(--amber-bg);border:1px solid var(--amber-line);box-shadow:var(--shadow)}
 .homeTitle2{font-weight:800;font-size:17px;text-align:center;margin-bottom:4px}
 .homeArc{grid-row:2;width:100%;max-width:320px;display:flex;flex-direction:column;gap:8px;align-items:stretch}
-#modeBack,#arcBack{flex:none;height:44px;width:100%;font-size:15px;margin-top:4px}
+#modeBack,#arcBack,#foScopeBack,#foThemeBack{flex:none;height:44px;width:100%;font-size:15px;margin-top:4px}
+#foThemeList{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#foThemeList .homeBtn{height:48px;font-size:13px;padding:0 6px;text-align:center;line-height:1.15}
+#arcSets .arcGrid.g8{grid-template-columns:repeat(8,1fr)}
+#arcSets .arcGrid.g8 .arcSet{height:42px}
 body.arcv .homeHead{display:none}
 .arcHead{font-weight:800;font-size:13px;color:var(--muted);margin-top:4px}
 .arcGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:2px}
@@ -174,6 +180,8 @@ body.arcv .homeHead{display:none}
 #foSvg{height:min(400px,max(170px,calc(100vh - 430px)));width:auto;max-width:100%;display:block;margin:0 auto}
 .fp{visibility:hidden}
 .fp.on{visibility:visible}
+.fe{visibility:hidden}
+.fe.on{visibility:visible}
 .foMain{display:flex;flex-direction:column;align-items:center;gap:8px}
 .foClue{text-align:center;font-size:14px;line-height:1.3;padding:8px 12px;border-radius:14px;background:linear-gradient(var(--card1),var(--card2));border:1px solid var(--line);box-shadow:var(--shadow);width:100%;box-sizing:border-box}
 .foWord{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;min-height:40px;margin:4px 0}
@@ -189,8 +197,8 @@ body.arcv .homeHead{display:none}
   <div class="homeHead"><svg class="logo" viewBox="0 0 120 120" role="img" aria-label="Logotipo Jogos de Palavras"><rect width="120" height="120" rx="27" fill="#1d3f9a"/><rect x="10" y="23" width="22" height="22" rx="5" fill="#ffffff"/><text x="21" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">P</text><rect x="36" y="23" width="22" height="22" rx="5" fill="#ffffff"/><text x="47" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">A</text><rect x="62" y="23" width="22" height="22" rx="5" fill="#ffffff"/><text x="73" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">L</text><rect x="88" y="23" width="22" height="22" rx="5" fill="#ffffff"/><text x="99" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">A</text><rect x="10" y="49" width="22" height="22" rx="5" fill="#fbeab9"/><text x="21" y="65" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">J</text><rect x="36" y="49" width="22" height="22" rx="5" fill="#fbeab9"/><text x="47" y="65" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">O</text><rect x="62" y="49" width="22" height="22" rx="5" fill="#fbeab9"/><text x="73" y="65" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">G</text><rect x="88" y="49" width="22" height="22" rx="5" fill="#fbeab9"/><text x="99" y="65" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">O</text><rect x="10" y="75" width="22" height="22" rx="5" fill="#ffffff"/><text x="21" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">V</text><rect x="36" y="75" width="22" height="22" rx="5" fill="#ffffff"/><text x="47" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">R</text><rect x="62" y="75" width="22" height="22" rx="5" fill="#ffffff"/><text x="73" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">A</text><rect x="88" y="75" width="22" height="22" rx="5" fill="#ffffff"/><text x="99" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#1c1d21" font-family="Segoe UI,system-ui,sans-serif">S</text><rect x="8" y="49" width="104" height="26" rx="8" fill="none" stroke="#d9962b" stroke-width="3"/></svg></div>
   <div class="homeBtns" id="homeGames">
     <button class="homeBtn" data-g="ws"><span>🔎</span>Caça-Palavras</button>
-    <button class="homeBtn" data-g="cw"><span>✏️</span>Palavras Cruzadas</button>
     <button class="homeBtn" data-g="fo"><span><img src="data:image/png;base64,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" alt="" height="32" style="display:block;height:32px;width:auto"></span>Forca</button>
+    <button class="homeBtn" data-g="cw"><span>✏️</span>Palavras Cruzadas</button>
   </div>
   <div class="homeBtns" id="homeModes" hidden>
     <div class="homeTitle2" id="modeTitle"></div>
@@ -199,8 +207,19 @@ body.arcv .homeHead{display:none}
     <button class="homeBtn" data-m="aleatorio"><span>🎲</span>Aleatório</button>
     <button class="btn" id="modeBack">← Voltar</button>
   </div>
+  <div class="homeBtns" id="homeFoScope" hidden>
+    <div class="homeTitle2">Forca · Arcade</div>
+    <button class="homeBtn" id="foScTema"><span>🎨</span>Escolher tema</button>
+    <button class="homeBtn" id="foScAll"><span>🎲</span>Aleatório</button>
+    <button class="btn" id="foScopeBack">← Voltar</button>
+  </div>
+  <div class="homeArc" id="homeFoTheme" hidden>
+    <div class="homeTitle2">Forca · Escolha o tema</div>
+    <div id="foThemeList"></div>
+    <button class="btn" id="foThemeBack">← Voltar</button>
+  </div>
   <div class="homeArc" id="homeArc" hidden>
-    <div class="homeTitle2">Arcade · Escolha o conjunto</div>
+    <div class="homeTitle2" id="arcTitle">Arcade · Escolha o conjunto</div>
     <div id="arcSets"></div>
     <button class="btn" id="arcBack">← Voltar</button>
   </div>
@@ -289,11 +308,7 @@ body.arcv .homeHead{display:none}
         <path d="M112 26 L112 74" stroke="url(#gRope)" stroke-width="3.2" stroke-linecap="round"/>
         <path d="M113.4 26 L113.4 74" stroke="#000" stroke-width="1" opacity=".22"/>
         <g filter="url(#fSh)">
-          <g id="fp1" class="fp">
-            <circle cx="112" cy="72" r="13" fill="url(#gSkin)" stroke="#8a5530" stroke-width="1.2"/>
-            <path d="M106 75 Q112 80 118 75" fill="none" stroke="#7a4524" stroke-width="1.4" stroke-linecap="round"/>
-            <circle cx="107.5" cy="69" r="1.4" fill="#3a2010"/><circle cx="116.5" cy="69" r="1.4" fill="#3a2010"/>
-          </g>
+          <g id="fp1" class="fp"><circle cx="112" cy="72" r="13" fill="url(#gSkin)" stroke="#8a5530" stroke-width="1.2"/><g class="fe" id="fe1"><path d="M106 75 Q112 80 118 75" fill="none" stroke="#7a4524" stroke-width="1.4" stroke-linecap="round"/><circle cx="107.5" cy="69" r="1.4" fill="#3a2010"/><circle cx="116.5" cy="69" r="1.4" fill="#3a2010"/></g><g class="fe" id="fe2"><path d="M106.5 76.5 Q112 78 117.5 76.5" fill="none" stroke="#7a4524" stroke-width="1.4" stroke-linecap="round"/><circle cx="107.5" cy="69" r="1.4" fill="#3a2010"/><circle cx="116.5" cy="69" r="1.4" fill="#3a2010"/></g><g class="fe" id="fe3"><path d="M107 77.5 L117 77.5" fill="none" stroke="#7a4524" stroke-width="1.5" stroke-linecap="round"/><path d="M104 66.5 L109.5 64.8" stroke="#5a3418" stroke-width="1.3" stroke-linecap="round"/><path d="M120 66.5 L114.5 64.8" stroke="#5a3418" stroke-width="1.3" stroke-linecap="round"/><circle cx="107.5" cy="69.5" r="1.4" fill="#3a2010"/><circle cx="116.5" cy="69.5" r="1.4" fill="#3a2010"/></g><g class="fe" id="fe4"><path d="M106 79.5 Q112 75 118 79.5" fill="none" stroke="#7a4524" stroke-width="1.5" stroke-linecap="round"/><path d="M104 65.2 L109.5 63.2" stroke="#5a3418" stroke-width="1.4" stroke-linecap="round"/><path d="M120 65.2 L114.5 63.2" stroke="#5a3418" stroke-width="1.4" stroke-linecap="round"/><circle cx="107.5" cy="69.5" r="1.4" fill="#3a2010"/><circle cx="116.5" cy="69.5" r="1.4" fill="#3a2010"/></g><g class="fe" id="fe5"><path d="M105.5 80.5 Q112 74.5 118.5 80.5" fill="none" stroke="#7a4524" stroke-width="1.6" stroke-linecap="round"/><path d="M104 64.5 L109.5 62.8" stroke="#5a3418" stroke-width="1.4" stroke-linecap="round"/><path d="M120 64.5 L114.5 62.8" stroke="#5a3418" stroke-width="1.4" stroke-linecap="round"/><path d="M106.5 70 q-.6 3 0 4.5 q.6-1.5 0-4.5z" fill="#5fb8ff"/><path d="M117.5 70 q-.6 3 0 4.5 q.6-1.5 0-4.5z" fill="#5fb8ff"/><circle cx="107.5" cy="68.5" r="1.4" fill="#3a2010"/><circle cx="116.5" cy="68.5" r="1.4" fill="#3a2010"/></g><g class="fe" id="fe6"><ellipse cx="112" cy="80.5" rx="3.2" ry="3.8" fill="#4a1c10"/><path d="M104 64.5 L109.5 62.8" stroke="#5a3418" stroke-width="1.5" stroke-linecap="round"/><path d="M120 64.5 L114.5 62.8" stroke="#5a3418" stroke-width="1.5" stroke-linecap="round"/><path d="M106 68 Q107.5 66.5 109 68" fill="none" stroke="#3a2010" stroke-width="1.2" stroke-linecap="round"/><path d="M115 68 Q116.5 66.5 118 68" fill="none" stroke="#3a2010" stroke-width="1.2" stroke-linecap="round"/><path d="M106.5 70 q-.8 3.5 0 5.5 q.8-2 0-5.5z" fill="#5fb8ff"/><path d="M117.5 70 q-.8 3.5 0 5.5 q.8-2 0-5.5z" fill="#5fb8ff"/><path d="M104.5 72.5 q-.5 2.2 0 3 q.5-.8 0-3z" fill="#5fb8ff" opacity=".9"/><path d="M119.5 72.5 q-.5 2.2 0 3 q.5-.8 0-3z" fill="#5fb8ff" opacity=".9"/></g></g>
           <g id="fp3" class="fp">
             <line x1="106" y1="92" x2="92" y2="110" stroke="#1f3d7a" stroke-width="9" stroke-linecap="round"/>
             <line x1="106" y1="92" x2="92" y2="110" stroke="url(#gShirt)" stroke-width="6.5" stroke-linecap="round"/>
@@ -337,7 +352,7 @@ body.arcv .homeHead{display:none}
   <button class="btn primary" id="cfYes">Iniciar novo jogo</button>
   <button class="btn" id="cfNo">Cancelar</button>
 </div></div>
-<footer>Versão: 25102026.6</footer>
+<footer>Versão: 27102026.1</footer>
 
 <script>
 'use strict';
@@ -8590,7 +8605,7 @@ for (const k in RAW){
 }
 
 // Profundidade das palavras por nível: 1 = comum, 2 = intermediária, 3 = específica/técnica
-const TIERW = {facil:{1:10,2:1.2,3:0.03}, medio:{1:1.2,2:6,3:1.5}, dificil:{1:0.08,2:2,3:10}};
+const TIERW = {facil:{1:10,2:1.2,3:0.03}, medio:{1:1.2,2:6,3:1.5}, dificil:{1:0.08,2:2,3:10}, mix:{1:1,2:1,3:1}};
 function tierOrder(entries, diff){
   const W = TIERW[diff];
   return entries.map(e=>({e, k:Math.pow(Math.random(), 1/W[e.t||2])}))
@@ -8726,10 +8741,11 @@ const GAME_NAME = {ws:'Caça-Palavras', cw:'Palavras Cruzadas', fo:'Forca'};
    arc.words[li-si] = palavras já usadas no conjunto (para repetir o conjunto)
    arc.rg[li-si]    = jogos concluídos numa repetição em andamento
    arc.rep[li-si]   = palavras já usadas na repetição atual                    */
-const arcFresh = () => ({li:0, si:0, gi:0, playing:false, isRep:false, prog:{}, words:{}, rg:{}, rep:{}});
-const loadArc = () => {
+const arcFresh = () => ({li:0, si:0, gi:0, playing:false, isRep:false, prog:{}, words:{}, rg:{}, rep:{}, start:{}});
+let arcG = 'ws';   // jogo do Arcade em uso: cada jogo (ws, cw) tem progresso e palavras próprios
+const loadArc = (g=arcG) => {
   try{
-    const a = JSON.parse(store('jp_arc_pos')||'null');
+    const a = JSON.parse(store('jp_arc_pos_'+g) || store('jp_arc_pos') || 'null');
     if (a && a.prog) return {...arcFresh(), ...a, playing:false};
     if (a && a.li!==undefined){   // formato antigo (posição única)
       const f = arcFresh(), cur = ARC_LIST.findIndex(([li,si])=>li===a.li&&si===a.si);
@@ -8739,12 +8755,13 @@ const loadArc = () => {
   }catch(e){}
   return arcFresh();
 };
-let arc = loadArc();
-const arcUsed = new Set(); try{ JSON.parse(store('jp_arc_used')||'[]').forEach(w=>arcUsed.add(w)) }catch(e){}
-const saveArc = () => { store('jp_arc_pos', JSON.stringify(arc)); store('jp_arc_used', JSON.stringify([...arcUsed])) };
+const loadUsed = (g=arcG) => { const u = new Set(); try{ JSON.parse(store('jp_arc_used_'+g)||'[]').forEach(w=>u.add(w)) }catch(e){} return u };
+let arc = loadArc(), arcUsed = loadUsed();
+const saveArc = () => { store('jp_arc_pos_'+arcG, JSON.stringify(arc)); store('jp_arc_used_'+arcG, JSON.stringify([...arcUsed])) };
+function arcUse(g){ if (g===arcG) return; if (arc.playing===false || true) saveArc(); arcG = g; arc = loadArc(g); arcUsed = loadUsed(g) }
 const arcKey  = () => arc.li+'-'+arc.si;
 const arcProg = (li,si) => arc.prog[li+'-'+si]||0;
-const arcType = () => arc.gi % 2 === 0 ? 'ws' : 'cw';   // alterna Caça-Palavras e Palavras Cruzadas
+const arcType = () => arcG;   // Arcade independente: só o jogo escolhido na tela inicial
 const arcAllDone = () => ARC_LIST.every(([li,si]) => arcProg(li,si) >= 10);
 const arcFrontier = () => { const i = ARC_LIST.findIndex(([li,si]) => arcProg(li,si) < 10); return i<0 ? ARC_LIST.length : i };
 const arcLabel = () => { const L = ARC_LEVELS[arc.li];
@@ -8794,8 +8811,8 @@ function applyModeUI(){
   // tema e dificuldade só aparecem no modo Livre (no Arcade e no Aleatório são definidos automaticamente)
   ['wsDiff','wsTheme','cwDiff','cwTheme','foDiff','foTheme'].forEach(id=>$(id).hidden = gameMode!=='livre');
   $('topNew').hidden = isArc;
-  $('arcLbl').textContent = arcLabel();
-  $('arcLbl').hidden = !(isArc && arc.playing);
+  $('arcLbl').textContent = curArcLabel();
+  $('arcLbl').hidden = !(isArc && (gameKey==='fo' ? !!foCur : arc.playing));
 }
 function setMode(m){
   if (m===gameMode) return;
@@ -8809,6 +8826,27 @@ function setMode(m){
   }
   buildControls('ws'); buildControls('cw'); buildControls('fo'); applyModeUI();
 }
+/* Aleatório total: palavras de todos os temas e de todas as dificuldades no mesmo jogo */
+function aleEntries(cap){
+  const seen = new Set(), out = [];
+  for (const k in THEMES) for (const e of THEMES[k].entries){
+    if (e.w.length<3 || e.w.length>cap || seen.has(e.w)) continue;
+    seen.add(e.w); out.push(e);
+  }
+  return out;
+}
+function aleGen(type){
+  for (let tries=0; tries<3; tries++){
+    let g;
+    if (type==='ws'){ const d = DIFFS[wsDiff];
+      g = generateWS({n:d.n, count:d.count, maxLen:d.maxLen, dirs:d.dirs, diff:'mix', pool:aleEntries(Math.min(d.maxLen,d.n))});
+    } else { const d = DIFFS[cwDiff].cw;
+      g = generateCW({ws:d.ws, count:d.count, maxLen:d.maxLen, diff:'mix', pool:aleEntries(Math.min(d.maxLen,d.ws))});
+    }
+    if (g) return g;
+  }
+  return null;
+}
 function randomStart(g){   // Aleatório: tema e dificuldade sorteados a cada partida
   const temas = Object.keys(THEMES), difs = Object.keys(DIFFS);
   if (g==='ws'){ wsTheme = temas[rnd(temas.length)]; wsDiff = difs[rnd(difs.length)]; store('jp_ws_theme',wsTheme); store('jp_ws_diff',wsDiff); hideWin(); newWS(); buildControls('ws') }
@@ -8817,6 +8855,8 @@ function randomStart(g){   // Aleatório: tema e dificuldade sorteados a cada pa
 }
 /* tela de conjuntos do Arcade */
 function renderArcSets(){
+  if (homeG==='fo') return renderFoSets();
+  $('arcTitle').textContent = 'Arcade · Escolha o conjunto';
   const box = $('arcSets'); box.innerHTML = '';
   const fr = arcFrontier();
   ARC_LEVELS.forEach((L,li)=>{
@@ -8837,6 +8877,7 @@ function openArcSet(li,si){   // abre um conjunto desbloqueado (em andamento, co
   const L = ARC_LEVELS[li], key = li+'-'+si;
   if (ARC_LIST.findIndex(p=>p[0]===li&&p[1]===si) > arcFrontier()) return;
   arc.li = li; arc.si = si; arc.isRep = arcProg(li,si) >= 10;
+  if (!arc.start[key]) arc.start[key] = homeG==='cw' ? 'cw' : 'ws';
   if (arc.isRep){
     if (!(arc.rg[key]>0)){   // repetição nova: começa do zero, com as palavras do próprio conjunto
       arc.rep[key] = []; arc.gi = 0;
@@ -8864,8 +8905,10 @@ function arcNext(){   // próximo jogo do conjunto; ao completar o conjunto, vol
 /* ---------- Telas da página inicial: jogos > modos > conjuntos ---------- */
 function homeView(v){
   $('homeGames').hidden = v!=='games'; $('homeModes').hidden = v!=='modes'; $('homeArc').hidden = v!=='arcade';
-  document.body.classList.toggle('arcv', v==='arcade');
-  if (v==='modes'){ $('modeTitle').textContent = GAME_NAME[homeG]; $('mArcade').hidden = homeG==='fo' }
+  $('homeFoScope').hidden = v!=='foscope'; $('homeFoTheme').hidden = v!=='fotheme';
+  document.body.classList.toggle('arcv', v==='arcade' || v==='fotheme');
+  if (v==='modes') $('modeTitle').textContent = GAME_NAME[homeG];
+  if (v==='fotheme') renderFoThemes();
   if (v==='arcade') renderArcSets();
 }
 /* ---------- Forca ---------- */
@@ -8880,7 +8923,9 @@ const foSlot = () => 'jp_fo_save_'+foDiff;
 function foShowBest(){const b=store(foBest());$('foBest').textContent = b? fmt(+b):'--'}
 function newFO(){
   tFO.reset();
-  const pool = THEMES[foTheme].entries.filter(e => e.t===DIFF_TIER[foDiff] && e.w.length>=3 && e.w.length<=DIFFS[foDiff].maxLen && /^[A-Z]+$/.test(e.w));
+  const pool = gameMode==='aleatorio'
+    ? aleEntries(12).filter(e => /^[A-Z]+$/.test(e.w))
+    : THEMES[foTheme].entries.filter(e => e.t===DIFF_TIER[foDiff] && e.w.length>=3 && e.w.length<=DIFFS[foDiff].maxLen && /^[A-Z]+$/.test(e.w));
   if (!pool.length){ fo = null; foRender(); $('foMsg').textContent='Sem palavras para este tema e dificuldade.'; return }
   const e = pool[rnd(pool.length)];
   fo = {word:e.w, clue:e.c, guessed:[], wrong:0, done:false};
@@ -8895,10 +8940,11 @@ function foRender(){
   }).join('') : '';
   $('foErr').textContent = (ok ? fo.wrong : 0)+'/'+FO_MAX;
   for (let i=1;i<=FO_MAX;i++) $('fp'+i).style.visibility = (ok && fo.wrong>=i) ? 'visible' : 'hidden';
+  for (let k=1;k<=FO_MAX;k++) $('fe'+k).classList.toggle('on', ok && fo.wrong===k);   // expressão conforme o número de erros
   document.querySelectorAll('#kb .key[data-l]').forEach(k=>k.classList.toggle('off', ok && fo.guessed.includes(k.dataset.l)));
 }
 function foSave(){
-  if (!fo) return;
+  if (!fo || gameMode==='arcade') return;
   if (fo.done){ drop(foSlot()); return }
   store(foSlot(), JSON.stringify({diff:foDiff, theme:foTheme, word:fo.word, clue:fo.clue, guessed:fo.guessed, wrong:fo.wrong, acc:elapsedMs(tFO)}));
 }
@@ -8924,10 +8970,9 @@ function foGuess(l){
 }
 function foWin(){
   fo.done = true; tFO.pause(); foSave(); foRender();
-  const el = tFO.sec(), prev = +store(foBest()) || 0; let rec = false;
-  if (!prev || el<prev){ store(foBest(), String(el)); rec = true }
-  foShowBest();
-  showWin(`Tempo: <b>${fmt(el)}</b> · Erros: <b>${fo.wrong}</b>`, rec, prev);
+  const arcF = gameMode==='arcade', el = tFO.sec(), prev = arcF ? 0 : (+store(foBest()) || 0); let rec = false;
+  if (!arcF){ if (!prev || el<prev){ store(foBest(), String(el)); rec = true } foShowBest() }
+  showWin(`Tempo: <b>${fmt(el)}</b> · Erros: <b>${fo.wrong}</b>`, arcF ? null : rec, prev);
 }
 function foLose(){
   fo.done = true; tFO.pause(); foSave(); foRender();
@@ -8937,7 +8982,7 @@ function showLose(w){
   $('winTitle').textContent = '😵 Que pena!';
   $('res1').innerHTML = 'A palavra era <b>'+w+'</b>';
   $('res2').textContent = '';
-  $('again').textContent = 'Jogar de novo';
+  $('again').textContent = gameMode==='arcade' ? 'Tentar de novo' : 'Jogar de novo';
   setTimeout(()=>$('overlay').classList.add('show'), 350);
 }
 document.addEventListener('keydown', e=>{
@@ -8946,9 +8991,97 @@ document.addEventListener('keydown', e=>{
   if (/^[A-Z]$/.test(k)) foGuess(k);
 });
 
+
+/* ---------- Arcade da Forca: conjuntos de 10 palavras por nível (50 fáceis, 150 médias, 300 difíceis) ---------- */
+const FOARC_LEVELS = [{k:'facil',nome:'Fácil',tier:1,max:7,words:50},{k:'medio',nome:'Média',tier:2,max:9,words:150},{k:'dificil',nome:'Difícil',tier:3,max:12,words:300}];
+const FOARC_SET = 10;
+let foarc = {}; try{ foarc = JSON.parse(store('jp_foarc')||'{}') || {} }catch(e){}
+const saveFoarc = () => store('jp_foarc', JSON.stringify(foarc));
+let foScope = 'all';   // 'all' = todos os temas (aleatório) ou a chave do tema escolhido
+let foCur = null;      // conjunto em jogo: {li, si, gi, isRep, key}
+const foState = sc => foarc[sc] || (foarc[sc] = {sets:{}, prog:{}, rg:{}});
+const foProg = (st,li,si) => st.prog[li+'-'+si]||0;
+const foScopeName = sc => sc==='all' ? 'Aleatório' : THEMES[sc].nome;
+function foPool(sc, li){
+  const L = FOARC_LEVELS[li], seen = new Set(), out = [];
+  for (const k of (sc==='all' ? Object.keys(THEMES) : [sc])) for (const e of THEMES[k].entries){
+    if (e.t!==L.tier || e.w.length<3 || e.w.length>L.max || !/^[A-Z]+$/.test(e.w) || seen.has(e.w)) continue;
+    seen.add(e.w); out.push(e);
+  }
+  return out;
+}
+function foSetCount(sc, li){ return Math.min(FOARC_LEVELS[li].words/FOARC_SET, Math.floor(foPool(sc,li).length/FOARC_SET)) }
+function foLevelSets(sc, li){   // conjuntos do nível: palavras sorteadas, as mais curtas primeiro
+  const st = foState(sc), key = 'L'+li, n = foSetCount(sc,li);
+  if (!st.sets[key] || st.sets[key].length!==n){
+    const pool = foPool(sc,li).sort(()=>Math.random()-.5).slice(0, n*FOARC_SET)
+      .map(e=>({w:e.w, k:e.w.length+Math.random()*2.5})).sort((a,b)=>a.k-b.k).map(o=>o.w);
+    st.sets[key] = Array.from({length:n}, (_,i)=>pool.slice(i*FOARC_SET,(i+1)*FOARC_SET));
+    saveFoarc();
+  }
+  return st.sets[key];
+}
+function foList(sc){ const lst = []; FOARC_LEVELS.forEach((L,li)=>{ const n = foSetCount(sc,li); for (let si=0; si<n; si++) lst.push([li,si]) }); return lst }
+const foLabel = () => { if (!foCur) return ''; const L = FOARC_LEVELS[foCur.li], n = foSetCount(foScope, foCur.li);
+  return `${L.nome} · Conjunto ${foCur.si+1}/${n} · Palavra ${foCur.gi+1}/${FOARC_SET}${foCur.isRep?' · repetição':''}` };
+const curArcLabel = () => gameKey==='fo' ? foLabel() : arcLabel();
+function renderFoThemes(){
+  const box = $('foThemeList'); box.innerHTML = '';
+  Object.keys(THEMES).sort((a,b)=>THEMES[a].nome.localeCompare(THEMES[b].nome,'pt-BR')).forEach(k=>{
+    const b = document.createElement('button'); b.className = 'homeBtn'; b.textContent = THEMES[k].nome;
+    b.onclick = ()=>{ foScope = k; homeView('arcade') };
+    box.appendChild(b);
+  });
+}
+function renderFoSets(){
+  $('arcTitle').textContent = 'Forca · '+foScopeName(foScope);
+  const box = $('arcSets'); box.innerHTML = '';
+  const st = foState(foScope), lst = foList(foScope);
+  const fr = (i => i<0 ? lst.length : i)(lst.findIndex(([li,si]) => foProg(st,li,si) < FOARC_SET));
+  FOARC_LEVELS.forEach((L,li)=>{
+    const n = foSetCount(foScope, li); if (!n) return;
+    const h = document.createElement('div'); h.className = 'arcHead'; h.textContent = `${L.nome} · ${n*FOARC_SET} palavras`; box.appendChild(h);
+    const grid = document.createElement('div'); grid.className = 'arcGrid g8';
+    for (let si=0; si<n; si++){
+      const idx = lst.findIndex(p=>p[0]===li&&p[1]===si), p = foProg(st,li,si), locked = idx > fr;
+      const b = document.createElement('button'); b.className = 'arcSet'; b.disabled = locked;
+      b.innerHTML = `<b>${si+1}</b><small>${p>=FOARC_SET ? '✔' : locked ? '🔒' : p>0 ? p*10+'%' : '▶'}</small>`;
+      b.onclick = ()=>openFoSet(li,si);
+      grid.appendChild(b);
+    }
+    box.appendChild(grid);
+  });
+  if (!box.children.length) box.textContent = 'Este tema não tem palavras suficientes.';
+}
+function foArcWord(){
+  const w = foLevelSets(foScope, foCur.li)[foCur.si][foCur.gi], e = entryFor(w);
+  tFO.reset(); fo = {word:w, clue:e?e.c:'', guessed:[], wrong:0, done:false};
+  $('foMsg').textContent = ''; foRender(); applyModeUI();
+}
+function openFoSet(li,si){
+  const st = foState(foScope), key = li+'-'+si, lst = foList(foScope);
+  const fr = (i => i<0 ? lst.length : i)(lst.findIndex(([a,b]) => foProg(st,a,b) < FOARC_SET));
+  if (lst.findIndex(p=>p[0]===li&&p[1]===si) > fr) return;
+  const isRep = foProg(st,li,si) >= FOARC_SET;
+  foCur = {li, si, key, isRep, gi: isRep ? (st.rg[key]||0) : foProg(st,li,si)};
+  foArcWord(); openGame('fo');
+}
+function foArcNext(){   // próxima palavra do conjunto (ou tentar de novo, se errou)
+  hideWin();
+  if (fo && fo.done && fo.wrong>=FO_MAX){ foArcWord(); return }
+  const st = foState(foScope), key = foCur.key;
+  foCur.gi++;
+  if (foCur.isRep) st.rg[key] = foCur.gi; else st.prog[key] = Math.max(foProg(st,foCur.li,foCur.si), foCur.gi);
+  if (foCur.gi >= FOARC_SET){
+    if (foCur.isRep) delete st.rg[key];
+    foCur = null; saveFoarc(); goHome(); homeView('arcade'); return;
+  }
+  saveFoarc(); foArcWord();
+}
+
 function newWS(){
   tWS.reset(); wsFound=new Set(); wsHints=0; wsDone=false;
-  ws = gameMode==='arcade' ? arcGen('ws') : generateWS();
+  ws = gameMode==='arcade' ? arcGen('ws') : gameMode==='aleatorio' ? aleGen('ws') : generateWS();
   if (!ws){ $('words').textContent='Não consegui gerar a grade. Toque em Novo jogo.'; $('board').innerHTML=''; return }
   wsShowBest(); wsRender(); wsSave();
 }
@@ -9314,7 +9447,7 @@ $('cwPrev').onclick = ()=>cwStep(-1);
 $('cwNext').onclick = ()=>cwStep(1);
 function newCW(){
   tCW.reset(); cwDone=false; cwReveals=0; sel=null; $('cwMsg').textContent='';
-  cw = gameMode==='arcade' ? arcGen('cw') : generateCW();
+  cw = gameMode==='arcade' ? arcGen('cw') : gameMode==='aleatorio' ? aleGen('cw') : generateCW();
   if (!cw){ $('cwClueTxt').textContent='Não consegui gerar. Toque em Novo jogo.'; $('cwBoard').innerHTML=''; return }
   cwShowBest(); cwRender();
   // seleciona a primeira palavra
@@ -9427,9 +9560,10 @@ window.addEventListener('pagehide',()=>{wsSave();cwSave()});
    ===================================================================== */
 function showWin(line1, rec, prev){
   $('winTitle').textContent = '🎉 Parabéns!';
-  $('res1').innerHTML = (gameMode==='arcade' ? '<b>'+arcLabel()+'</b><br>' : '') + line1;
-  $('again').textContent = gameMode==='arcade' ? (arc.gi===9 ? 'Ver conjuntos ▶' : 'Próximo jogo ▶') : 'Jogar de novo';
-  $('res2').innerHTML = rec ? '<b>🏆 Novo recorde!</b>' : `Seu recorde: <b>${fmt(prev)}</b>`;
+  $('res1').innerHTML = (gameMode==='arcade' ? '<b>'+curArcLabel()+'</b><br>' : '') + line1;
+  const ultimo = gameKey==='fo' ? (foCur && foCur.gi===9) : arc.gi===9;
+  $('again').textContent = gameMode==='arcade' ? (ultimo ? 'Ver conjuntos ▶' : (gameKey==='fo' ? 'Próxima palavra ▶' : 'Próximo jogo ▶')) : 'Jogar de novo';
+  $('res2').innerHTML = rec===null ? '' : rec ? '<b>🏆 Novo recorde!</b>' : `Seu recorde: <b>${fmt(prev)}</b>`;
   setTimeout(()=>$('overlay').classList.add('show'), 350);
 }
 function hideWin(){$('overlay').classList.remove('show')}
@@ -9485,6 +9619,7 @@ function setGame(g){
   document.body.classList.toggle("mode-cw", g!=="ws");
   const t = gTimer(g), done = gDone(g);
   if (t.began && !done) t.start();
+  applyModeUI();
 }
 let onHome = true;
 function goHome(){
@@ -9500,18 +9635,22 @@ function openGame(g){
 document.querySelectorAll('#homeGames .homeBtn').forEach(b=>b.onclick=()=>{ homeG = b.dataset.g; homeView('modes') });
 document.querySelectorAll('#homeModes [data-m]').forEach(b=>b.onclick=()=>{
   const m = b.dataset.m;
-  if (m==='arcade'){ setMode('arcade'); homeView('arcade'); return }
+  if (m==='arcade'){ setMode('arcade'); if (homeG!=='fo') arcUse(homeG); homeView(homeG==='fo' ? 'foscope' : 'arcade'); return }
   setMode(m);
   if (m==='aleatorio') randomStart(homeG);
   openGame(homeG);
 });
 $('modeBack').onclick = ()=>homeView('games');
-$('arcBack').onclick = ()=>homeView('modes');
+$('arcBack').onclick = ()=>homeView(homeG==='fo' ? 'foscope' : 'modes');
+$('foScopeBack').onclick = ()=>homeView('modes');
+$('foThemeBack').onclick = ()=>homeView('foscope');
+$('foScTema').onclick = ()=>homeView('fotheme');
+$('foScAll').onclick = ()=>{ foScope = 'all'; homeView('arcade') };
 $('homeBtn').onclick = ()=>{ if (history.state && history.state.g) history.back(); else goHome(); };
 window.addEventListener('popstate',()=>{ if (!onHome) goHome(); });
 $('topNew').onclick = ()=>{ const g = gameKey, novo = ()=> gameMode==='aleatorio' ? randomStart(g) : startNew(g);
   if (isActive(g)) askNew('Iniciar um novo jogo? O progresso atual será perdido.', novo); else novo() };
-$('again').onclick = ()=>{ if (gameMode==='arcade') return arcNext(); startNew(gameKey) };
+$('again').onclick = ()=>{ if (gameMode==='arcade') return gameKey==='fo' ? foArcNext() : arcNext(); startNew(gameKey) };
 document.addEventListener('visibilitychange',()=>{
   const t = gTimer(gameKey), done = gDone(gameKey);
   if (document.hidden){wsSave();cwSave();foSave()}

@@ -353,7 +353,7 @@ body.arcv .homeHead{display:none}
   <button class="btn primary" id="cfYes">Iniciar novo jogo</button>
   <button class="btn" id="cfNo">Cancelar</button>
 </div></div>
-<footer>Versão: 27102026.6</footer>
+<footer>Versão: 27102026.7</footer>
 
 <script>
 'use strict';
@@ -8236,6 +8236,15 @@ function foLevelSets(sc, li){   // conjuntos do nível: palavras sorteadas, as m
     st.sets[key] = Array.from({length:n}, (_,i)=>pool.slice(i*FOARC_SET,(i+1)*FOARC_SET));
     saveFoarc();
   }
+  // cura: palavras salvas que saíram da base (ou sem dica) são trocadas por outras do mesmo nível, mantendo a posição
+  const okSet = new Set(foPool(sc,li).map(e=>e.w)), usedW = new Set(st.sets[key].flat());
+  let spare = null, changed = false;
+  st.sets[key].forEach(g=>g.forEach((w,i)=>{
+    if (okSet.has(w)) return;
+    if (!spare) spare = foPool(sc,li).map(e=>e.w).filter(x=>!usedW.has(x)).sort(()=>Math.random()-.5);
+    const nw = spare.pop(); if (nw){ g[i]=nw; usedW.add(nw); changed = true }
+  }));
+  if (changed) saveFoarc();
   return st.sets[key];
 }
 function foList(sc){ const lst = []; FOARC_LEVELS.forEach((L,li)=>{ const n = foSetCount(sc,li); for (let si=0; si<n; si++) lst.push([li,si]) }); return lst }
